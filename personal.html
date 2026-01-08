@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý Nhân sự - Đội Thiết bị TTDĐ</title>
+    <title>Quản lý Nhân sự - Chương trình QLKT</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -199,7 +199,7 @@
             width: 100%;
             border-collapse: collapse;
             font-size: 13px;
-            min-width: 1200px;
+            min-width: 2000px;
         }
         
         .personnel-table thead {
@@ -224,14 +224,9 @@
             vertical-align: middle;
             border-right: 1px solid var(--border);
             text-align: center;
-            cursor: pointer;
         }
         
-        .personnel-table tr:hover {
-            background-color: #f8fafc;
-        }
-        
-        /* Các cột đặc biệt */
+        /* Các cột đặc biệt - vẫn giữ nguyên */
         .col-name, .col-team, .col-specialty, .col-note, .col-birthplace, .col-hometown, .col-address, .col-residence {
             text-align: left !important;
             padding-left: 12px !important;
@@ -252,7 +247,7 @@
         .col-education { width: 100px; }
         .col-specialty { width: 280px; }
         .col-note { width: 130px; }
-        .col-action { width: 70px; cursor: default !important; }
+        .col-action { width: 120px; }
         .col-birthplace { width: 180px; }
         .col-hometown { width: 150px; }
         .col-address { width: 200px; }
@@ -563,56 +558,6 @@
             margin: 10px auto;
             display: block;
         }
-        
-        .view-btn {
-            background: none;
-            border: none;
-            font-size: 18px;
-            cursor: pointer;
-            color: #3498db;
-            transition: transform 0.2s;
-        }
-        
-        .view-btn:hover {
-            transform: scale(1.2);
-        }
-        
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .table-controls {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .filter-controls {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .filter-input, .filter-select {
-                min-width: 100%;
-            }
-            
-            .page-title {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .title-left {
-                flex-direction: column;
-                align-items: flex-start;
-                width: 100%;
-            }
-            
-            .back-btn {
-                align-self: flex-start;
-            }
-            
-            .user-info {
-                align-self: flex-start;
-                margin-top: 10px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -626,7 +571,7 @@
             <h2 style="color: var(--primary); margin-bottom: 25px; display: flex; align-items: center; justify-content: center; gap: 12px;">
                 <i class="fas fa-user-shield"></i> ĐĂNG NHẬP QUYỀN ADMIN
             </h2>
-            <p style="color: var(--dark); margin-bottom: 25px; font-size: 14px;">
+            <p style="color: var(--gray); margin-bottom: 25px; font-size: 14px;">
                 Nhập mật khẩu admin để truy cập chức năng chỉnh sửa và xem đầy đủ thông tin
             </p>
             
@@ -634,7 +579,7 @@
                 <label style="font-weight: 600; color: var(--dark); font-size: 14px; margin-bottom: 8px; display: block;">
                     <i class="fas fa-key"></i> MẬT KHẨU ADMIN:
                 </label>
-                <input type="password" id="adminPassword" placeholder="Nhập mật khẩu admin"
+                <input type="password" id="adminPassword" placeholder="Nhập mật khẩu admin" value="admin123"
                        style="width: 100%; padding: 14px; border: 2px solid var(--border); border-radius: 8px; font-size: 15px; margin-bottom: 10px;">
                 <div style="display: flex; align-items: center; gap: 8px; margin-top: 10px;">
                     <input type="checkbox" id="showPassword" onchange="togglePasswordVisibility()">
@@ -670,7 +615,7 @@
                 </div>
             </div>
             <p style="margin: 0; opacity: 0.9; font-size: 14px; display: flex; align-items: center; gap: 10px;">
-                <i class="fas fa-map-marker-alt"></i> Đội Thiết bị Thông tin dẫn đường | Trung tâm Khai thác khu bay Nội Bài 
+                <i class="fas fa-map-marker-alt"></i> Đội Thiết bị Thiết bị Thông tin dẫn đường | Trung tâm Khai thác khu bay Nội Bài 
             </p>
         </div>
 
@@ -679,26 +624,26 @@
             <div class="stats-row">
                 <div class="stat-card">
                     <h3><i class="fas fa-users"></i> TỔNG NHÂN SỰ</h3>
-                    <div class="stat-number" id="total-personnel">25</div>
-                    <p style="color: var(--dark); font-size: 13px; margin: 0;">Người</p>
+                    <div class="stat-number" id="total-personnel">26</div>
+                    <p style="color: var(--gray); font-size: 13px; margin: 0;">Người</p>
                 </div>
                 
                 <div class="stat-card">
                     <h3><i class="fas fa-user-graduate"></i> TRÌNH ĐỘ ĐẠI HỌC</h3>
-                    <div class="stat-number" id="total-university">25</div>
-                    <p style="color: var(--dark); font-size: 13px; margin: 0;">Nhân viên</p>
+                    <div class="stat-number" id="total-university">15</div>
+                    <p style="color: var(--gray); font-size: 13px; margin: 0;">Nhân viên</p>
                 </div>
                 
                 <div class="stat-card">
                     <h3><i class="fas fa-user-check"></i> KỸ SƯ</h3>
                     <div class="stat-number" id="total-engineer">13</div>
-                    <p style="color: var(--dark); font-size: 13px; margin: 0;">Chức danh</p>
+                    <p style="color: var(--gray); font-size: 13px; margin: 0;">Chức danh</p>
                 </div>
                 
                 <div class="stat-card">
                     <h3><i class="fas fa-tools"></i> KỸ THUẬT VIÊN</h3>
-                    <div class="stat-number" id="total-technician">12</div>
-                    <p style="color: var(--dark); font-size: 13px; margin: 0;">Chức danh</p>
+                    <div class="stat-number" id="total-technician">13</div>
+                    <p style="color: var(--gray); font-size: 13px; margin: 0;">Chức danh</p>
                 </div>
             </div>
 
@@ -712,7 +657,12 @@
                     <input type="text" class="filter-input" id="search-name" placeholder="🔍 Tìm theo tên hoặc mã NV...">
                     
                     <select class="filter-select" id="filter-team">
-                        <option value="">👥 Tất cả đội/tổ</option>
+                        <option value="">👥 Tất cả</option>
+						<option value="Ban Giám đốc">Ban GĐ</option>
+						<option value="Văn phòng Trung tâm">Văn phòng TT</option>
+						<option value="Đội Thiết bị Cơ điện đèn sân bay">Đội Thiết bị CĐĐSB</option>
+						<option value="Đội Bảo trì sân đường">Đội BTSĐ</option>
+						<option value="Đội Môi trường khu bay">Đội MTKB</option>
                         <option value="Đội Thiết bị TTDĐ">Đội Thiết bị TTDĐ</option>
                         <option value="Tổ Kỹ thuật dẫn đường">Tổ Kỹ thuật dẫn đường</option>
                         <option value="Tổ Đài dẫn đường">Tổ Đài dẫn đường</option>
@@ -721,12 +671,14 @@
                     
                     <select class="filter-select" id="filter-position">
                         <option value="">🎖️ Tất cả chức vụ</option>
+						<option value="Đội trưởng">Giám đốc</option>
+						<option value="Đội trưởng">Phó Giám đốc</option>
+						<option value="Trưởng Văn phòng">Trưởng VP</option>
+						<option value="Phó trưởng Văn phòng">Phó trưởng VP</option>
                         <option value="Đội trưởng">Đội trưởng</option>
-                        <option value="Phó đội trưởng">Phó đội trưởng</option>
-                        <option value="Tổ trưởng">Tổ trưởng</option>
+                        <option value="Phó đội trưởng/Tổ trưởng">Phó đội trưởng kiêm Tổ trưởng</option>
+                        <option value="Chuyên viên">Chuyên viên</option>
                         <option value="Phó tổ trưởng">Phó tổ trưởng</option>
-                        <option value="Kỹ sư">Kỹ sư</option>
-                        <option value="Kỹ thuật viên">Kỹ thuật viên</option>
                         <option value="Nhân viên">Nhân viên</option>
                     </select>
                     
@@ -734,11 +686,17 @@
                         <option value="">🎓 Tất cả chức danh</option>
                         <option value="Kỹ sư">Kỹ sư</option>
                         <option value="Kỹ thuật viên">Kỹ thuật viên</option>
+                        <option value="Chuyên viên">Chuyên viên</option>
                     </select>
                     
                     <select class="filter-select" id="filter-education">
                         <option value="">📚 Tất cả trình độ</option>
+						<option value="Trên Đại học">Trên Đại học</option>
                         <option value="Đại học">Đại học</option>
+                        <option value="Cao đẳng">Cao đẳng</option>
+                        <option value="Trung cấp">Trung cấp</option>
+						<option value="Sơ cấp">Sơ cấp</option>
+						<option value="Lao động phổ thông">Lao động phổ thông</option>
                     </select>
                 </div>
             </div>
@@ -764,11 +722,12 @@
                             <th rowspan="2" class="col-idcard">SỐ CCCD</th>
                             <th rowspan="2" class="col-idcard-date">NGÀY CẤP CCCD</th>
                             <th rowspan="2" class="col-phone">ĐIỆN THOẠI</th>
-                            <th rowspan="2" class="col-specialty">CHUYÊN MÔN ĐÀO TẠO</th>
+                            <th rowspan="2" class="col-specialty">CHUYÊN MÔN ĐÀO TẠO, HUẤN LUYỆN</th>
                             <th rowspan="2" class="col-note">GHI CHÚ</th>
-                            <th rowspan="2" class="col-action">XEM</th>
+                            <th rowspan="2" class="col-action" id="actionColumn">THAO TÁC</th>
                         </tr>
                         <tr>
+                            <!-- CÁC CỘT NÀY ĐƯỢC CĂN GIỮA -->
                             <th class="sub-header col-position" style="text-align: center;">Chính quyền</th>
                             <th class="sub-header col-party" style="text-align: center;">Đảng</th>
                             <th class="sub-header col-union" style="text-align: center;">Công đoàn</th>
@@ -785,8 +744,8 @@
             <!-- PAGINATION -->
             <div class="pagination-container">
                 <div class="pagination-info">
-                    <i class="fas fa-info-circle"></i> Tổng cộng: <strong id="total-count">25</strong> nhân sự | 
-                    Đang hiển thị: <span id="display-count">25</span> nhân sự
+                    <i class="fas fa-info-circle"></i> Tổng cộng: <strong id="total-count">26</strong> nhân sự | 
+                    Đang hiển thị: <span id="display-count">26</span> nhân sự
                 </div>
                 <div class="pagination" id="pagination">
                     <!-- Pagination will be populated by JavaScript -->
@@ -829,10 +788,10 @@
                             <i class="fas fa-file-excel"></i> Xuất Excel
                         </button>
                     </div>
-                    <p style="margin: 15px 0 0 0; font-size: 13px; color: var(--dark);"><i class="fas fa-database"></i> Cập nhật lần cuối: <strong id="update-date"></strong></p>
+                    <p style="margin: 15px 0 0 0; font-size: 13px; color: var(--gray);"><i class="fas fa-database"></i> Cập nhật lần cuối: <strong id="update-date"></strong></p>
                 </div>
             </div>
-            <div style="text-align: center; padding-top: 20px; border-top: 1px solid var(--border); color: var(--dark); font-size: 13px;">
+            <div style="text-align: center; padding-top: 20px; border-top: 1px solid var(--border); color: var(--gray); font-size: 13px;">
                 <p><i class="fas fa-copyright"></i> 2025 Đội Thiết bị Thông tin dẫn đường - Trung tâm Khai thác khu bay Nội Bài | Quản lý Nhân sự QLKT</p>
             </div>
         </footer>
@@ -849,7 +808,7 @@
         let isAdmin = false;
         let currentAvatarFile = null;
 
-        // Initial data from Excel - 25 RECORDS
+        // Initial data from Excel - ALL 26 RECORDS
         let personnelData = [
             {
                 id: 1,
@@ -954,7 +913,7 @@
                 dateOfBirth: "01/11/1982",
                 gender: "Nam",
                 team: "Tổ Thông tin và đường dây",
-                position: "Phó đội trưởng/Tổ trưởng tổ Thông tin và đường dây",
+                position: "Phó đội trưởng/Tổ trưởng tổThông tin và đường dây",
                 partyPosition: "Đảng viên",
                 unionPosition: "Đoàn viên công đoàn",
                 title: "Kỹ sư",
@@ -1505,7 +1464,7 @@
         // Show admin login
         function showAdminLogin() {
             document.getElementById('loginPanel').style.display = 'flex';
-            document.getElementById('adminPassword').value = '';
+            document.getElementById('adminPassword').value = 'admin123';
             document.getElementById('adminPassword').focus();
         }
 
@@ -1530,7 +1489,7 @@
         function loginAsAdmin() {
             const password = document.getElementById('adminPassword').value;
             
-            if (password === 'Naoc@Cns') {
+            if (password === 'admin123') {
                 isAdmin = true;
                 document.getElementById('loginPanel').style.display = 'none';
                 document.getElementById('adminLoginBtn').style.display = 'none';
@@ -1570,11 +1529,14 @@
         // Setup permissions
         function setupUserPermissions() {
             const addBtn = document.getElementById('addBtn');
+            const actionColumn = document.getElementById('actionColumn');
             
             if (isAdmin) {
                 addBtn.style.display = 'flex';
+                if (actionColumn) actionColumn.style.display = '';
             } else {
                 addBtn.style.display = 'none';
+                if (actionColumn) actionColumn.style.display = 'none';
             }
         }
 
@@ -1665,7 +1627,7 @@
             if (pageData.length === 0) {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td colspan="23" style="text-align: center; padding: 60px 20px; color: var(--dark);">
+                    <td colspan="23" style="text-align: center; padding: 60px 20px; color: var(--gray);">
                         <i class="fas fa-users-slash" style="font-size: 48px; margin-bottom: 20px; display: block;"></i>
                         <h3>Không tìm thấy nhân sự</h3>
                     </td>
@@ -1691,38 +1653,12 @@
                             <i class="fas fa-camera"></i>
                         </div>` : '';
                     
-                    // Xác định cần hiển thị thông tin gì
-                    const displayDateOfBirth = isAdmin ? person.dateOfBirth : '—';
-                    const displaySpecialty = isAdmin ? person.specialty : '—';
-                    const displayIdCard = isAdmin ? person.idCard : '—';
-                    const displayIdCardDate = isAdmin ? person.idCardDate : '—';
-                    const displayPhone = isAdmin ? person.phone : '—';
-                    const displayBirthplace = isAdmin ? person.birthplace : '—';
-                    const displayHometown = isAdmin ? person.hometown : '—';
-                    const displayAddress = isAdmin ? person.address : '—';
-                    const displayResidence = isAdmin ? person.residence : '—';
-                    const displayPartyPosition = isAdmin ? person.partyPosition : '—';
-                    const displayUnionPosition = isAdmin ? person.unionPosition : '—';
-                    
-                    // View button HTML
-                    const viewButtonHTML = `
-                        <span style="color: #3498db; cursor: pointer; font-size: 16px;" 
-                              onclick="event.stopPropagation(); viewPersonnel(${person.id})">
-                            👁️
-                        </span>
-                    `;
-                    
-                    // Action buttons for admin
-                    const actionButtonsHTML = isAdmin ? `
-                        <div class="action-buttons">
-                            <button class="action-btn edit-btn" onclick="event.stopPropagation(); editPersonnel(${person.id})">
-                                <i class="fas fa-edit"></i> Sửa
-                            </button>
-                            <button class="action-btn delete-btn" onclick="event.stopPropagation(); deletePersonnel(${person.id})">
-                                <i class="fas fa-trash"></i> Xóa
-                            </button>
-                        </div>
-                    ` : viewButtonHTML;
+                    // Determine what to show based on permissions
+                    const displayDateOfBirth = isAdmin ? person.dateOfBirth : '••/••/••••';
+                    const displaySpecialty = isAdmin ? person.specialty : '•••••••••••••••';
+                    const displayIdCard = isAdmin ? person.idCard : '••••••••••';
+                    const displayIdCardDate = isAdmin ? person.idCardDate : '••/••/••••';
+                    const displayPhone = isAdmin ? person.phone : '••••••••••';
                     
                     row.innerHTML = `
                         <td>${actualIndex}</td>
@@ -1738,25 +1674,33 @@
                         <td>${person.gender || '—'}</td>
                         <td class="col-team">${person.team || '—'}</td>
                         <td class="col-position" style="text-align: center;">${person.position || '—'}</td>
-                        <td class="col-party" style="text-align: center;">${displayPartyPosition}</td>
-                        <td class="col-union" style="text-align: center;">${displayUnionPosition}</td>
+                        <td class="col-party" style="text-align: center;">${person.partyPosition || ''}</td>
+                        <td class="col-union" style="text-align: center;">${person.unionPosition || ''}</td>
                         <td class="col-title" style="text-align: center;">${person.title || '—'}</td>
                         <td style="text-align: center;">${person.education || '—'}</td>
-                        <td class="col-birthplace">${displayBirthplace}</td>
-                        <td class="col-hometown">${displayHometown}</td>
-                        <td class="col-address">${displayAddress}</td>
-                        <td class="col-residence">${displayResidence}</td>
+                        <td class="col-birthplace">${person.birthplace || '—'}</td>
+                        <td class="col-hometown">${person.hometown || '—'}</td>
+                        <td class="col-address">${person.address || '—'}</td>
+                        <td class="col-residence">${person.residence || '—'}</td>
                         <td>${displayIdCard}</td>
                         <td>${displayIdCardDate}</td>
                         <td>${displayPhone}</td>
                         <td class="col-specialty">${displaySpecialty}</td>
                         <td class="col-note">${person.note || ''}</td>
                         <td class="col-action">
-                            ${actionButtonsHTML}
+                            ${isAdmin ? `
+                            <div class="action-buttons">
+                                <button class="action-btn edit-btn" onclick="event.stopPropagation(); editPersonnel(${person.id})">
+                                    <i class="fas fa-edit"></i> Sửa
+                                </button>
+                                <button class="action-btn delete-btn" onclick="event.stopPropagation(); deletePersonnel(${person.id})">
+                                    <i class="fas fa-trash"></i> Xóa
+                                </button>
+                            </div>
+                            ` : '<span style="color: #999; font-size: 11px;">Chỉ xem</span>'}
                         </td>
                     `;
                     
-                    // Click on row to view details
                     row.onclick = () => viewPersonnel(person.id);
                     tableBody.appendChild(row);
                 });
@@ -1827,19 +1771,17 @@
                 <i class="fas fa-user-circle"></i> THÔNG TIN CHI TIẾT: ${person.name}
             `;
             
-            // Xác định cần hiển thị thông tin gì trong modal
-            const displayDateOfBirth = isAdmin ? person.dateOfBirth : '—';
-            const displaySpecialty = isAdmin ? person.specialty : '—';
-            const displayNote = isAdmin ? person.note : '—';
-            const displayIdCard = isAdmin ? person.idCard : '—';
-            const displayIdCardDate = isAdmin ? person.idCardDate : '—';
-            const displayPhone = isAdmin ? person.phone : '—';
-            const displayBirthplace = isAdmin ? person.birthplace : '—';
-            const displayHometown = isAdmin ? person.hometown : '—';
-            const displayAddress = isAdmin ? person.address : '—';
-            const displayResidence = isAdmin ? person.residence : '—';
-            const displayPartyPosition = isAdmin ? person.partyPosition : '—';
-            const displayUnionPosition = isAdmin ? person.unionPosition : '—';
+            // Determine what to show
+            const displayDateOfBirth = isAdmin ? person.dateOfBirth : '••/••/••••';
+            const displaySpecialty = isAdmin ? person.specialty : '•••••••••••••••';
+            const displayNote = isAdmin ? person.note : '';
+            const displayIdCard = isAdmin ? person.idCard : '••••••••••';
+            const displayIdCardDate = isAdmin ? person.idCardDate : '••/••/••••';
+            const displayPhone = isAdmin ? person.phone : '••••••••••';
+            const displayBirthplace = isAdmin ? person.birthplace : '•••••••••••••••';
+            const displayHometown = isAdmin ? person.hometown : '•••••••••••••••';
+            const displayAddress = isAdmin ? person.address : '•••••••••••••••';
+            const displayResidence = isAdmin ? person.residence : '•••••••••••••••';
             
             document.getElementById('modal-content-body').innerHTML = `
                 <div style="display: flex; align-items: center; gap: 25px; margin-bottom: 30px; padding-bottom: 25px; border-bottom: 2px solid var(--border);">
@@ -1875,23 +1817,23 @@
                         </h4>
                         <div style="font-size: 14px;">
                             <p style="margin: 12px 0; display: flex; justify-content: space-between;">
-                                <span style="color: var(--dark);">Ngày sinh:</span>
+                                <span style="color: var(--gray);">Ngày sinh:</span>
                                 <strong>${displayDateOfBirth}</strong>
                             </p>
                             <p style="margin: 12px 0; display: flex; justify-content: space-between;">
-                                <span style="color: var(--dark);">Giới tính:</span>
+                                <span style="color: var(--gray);">Giới tính:</span>
                                 <strong>${person.gender || '—'}</strong>
                             </p>
                             <p style="margin: 12px 0; display: flex; justify-content: space-between;">
-                                <span style="color: var(--dark);">Trình độ:</span>
+                                <span style="color: var(--gray);">Trình độ:</span>
                                 <strong>${person.education || '—'}</strong>
                             </p>
                             <p style="margin: 12px 0; display: flex; justify-content: space-between;">
-                                <span style="color: var(--dark);">Nơi sinh:</span>
+                                <span style="color: var(--gray);">Nơi sinh:</span>
                                 <strong>${displayBirthplace}</strong>
                             </p>
                             <p style="margin: 12px 0; display: flex; justify-content: space-between;">
-                                <span style="color: var(--dark);">Quê quán:</span>
+                                <span style="color: var(--gray);">Quê quán:</span>
                                 <strong>${displayHometown}</strong>
                             </p>
                         </div>
@@ -1903,19 +1845,19 @@
                         </h4>
                         <div style="font-size: 14px;">
                             <p style="margin: 12px 0; display: flex; justify-content: space-between;">
-                                <span style="color: var(--dark);">Chức vụ:</span>
+                                <span style="color: var(--gray);">Chức vụ:</span>
                                 <strong>${person.position || '—'}</strong>
                             </p>
-                            ${displayPartyPosition !== '—' ? `
+                            ${person.partyPosition ? `
                             <p style="margin: 12px 0; display: flex; justify-content: space-between;">
-                                <span style="color: var(--dark);">Chức vụ Đảng:</span>
-                                <strong style="color: #c0392b;">${displayPartyPosition}</strong>
+                                <span style="color: var(--gray);">Chức vụ Đảng:</span>
+                                <strong style="color: #c0392b;">${person.partyPosition}</strong>
                             </p>
                             ` : ''}
-                            ${displayUnionPosition !== '—' ? `
+                            ${person.unionPosition ? `
                             <p style="margin: 12px 0; display: flex; justify-content: space-between;">
-                                <span style="color: var(--dark);">Chức vụ Công đoàn:</span>
-                                <strong style="color: var(--success);">${displayUnionPosition}</strong>
+                                <span style="color: var(--gray);">Chức vụ Công đoàn:</span>
+                                <strong style="color: var(--success);">${person.unionPosition}</strong>
                             </p>
                             ` : ''}
                         </div>
@@ -1927,19 +1869,19 @@
                         </h4>
                         <div style="font-size: 14px;">
                             <p style="margin: 12px 0; display: flex; justify-content: space-between;">
-                                <span style="color: var(--dark);">Địa chỉ thường trú:</span>
+                                <span style="color: var(--gray);">Địa chỉ thường trú:</span>
                                 <strong>${displayAddress}</strong>
                             </p>
                             <p style="margin: 12px 0; display: flex; justify-content: space-between;">
-                                <span style="color: var(--dark);">Địa chỉ tạm trú:</span>
+                                <span style="color: var(--gray);">Địa chỉ tạm trú:</span>
                                 <strong>${displayResidence}</strong>
                             </p>
                             <p style="margin: 12px 0; display: flex; justify-content: space-between;">
-                                <span style="color: var(--dark);">Số CCCD:</span>
+                                <span style="color: var(--gray);">Số CCCD:</span>
                                 <strong>${displayIdCard}</strong>
                             </p>
                             <p style="margin: 12px 0; display: flex; justify-content: space-between;">
-                                <span style="color: var(--dark);">Ngày cấp CCCD:</span>
+                                <span style="color: var(--gray);">Ngày cấp CCCD:</span>
                                 <strong>${displayIdCardDate}</strong>
                             </p>
                         </div>
@@ -1955,7 +1897,7 @@
                     </div>
                 </div>
                 
-                ${displayNote !== '—' && displayNote ? `
+                ${displayNote ? `
                 <div style="background: var(--light); padding: 20px; border-radius: 10px; border: 1px solid var(--border); margin-top: 20px;">
                     <h4 style="margin: 0 0 15px 0; color: var(--primary); font-size: 15px;">
                         <i class="fas fa-sticky-note"></i> Ghi chú
@@ -1990,7 +1932,7 @@
             currentAvatarFile = null;
         }
 
-        // Edit personnel
+        // Edit personnel - ĐÃ SỬA VỚI CÁC LỰA CHỌN ĐẦY ĐỦ
         function editPersonnel(id) {
             if (!isAdmin) {
                 showNotification('Chỉ quản trị viên mới có quyền chỉnh sửa!', 'error');
@@ -2056,6 +1998,11 @@
                             <label><i class="fas fa-users"></i> Đội/tổ *</label>
                             <select id="edit-team" required>
                                 <option value="">Chọn đội/tổ</option>
+                                <option value="Ban Giám đốc" ${person.team === 'Ban Giám đốc' ? 'selected' : ''}>Ban Giám đốc</option>
+                                <option value="Văn phòng Trung tâm" ${person.team === 'Văn phòng Trung tâm' ? 'selected' : ''}>Văn phòng Trung tâm</option>
+                                <option value="Đội Thiết bị Cơ điện đèn sân bay" ${person.team === 'Đội Thiết bị Cơ điện đèn sân bay' ? 'selected' : ''}>Đội Thiết bị Cơ điện đèn sân bay</option>
+                                <option value="Đội Bảo trì sân đường" ${person.team === 'Đội Bảo trì sân đường' ? 'selected' : ''}>Đội Bảo trì sân đường</option>
+                                <option value="Đội Môi trường khu bay" ${person.team === 'Đội Môi trường khu bay' ? 'selected' : ''}>Đội Môi trường khu bay</option>
                                 <option value="Đội Thiết bị TTDĐ" ${person.team === 'Đội Thiết bị TTDĐ' ? 'selected' : ''}>Đội Thiết bị TTDĐ</option>
                                 <option value="Tổ Kỹ thuật dẫn đường" ${person.team === 'Tổ Kỹ thuật dẫn đường' ? 'selected' : ''}>Tổ Kỹ thuật dẫn đường</option>
                                 <option value="Tổ Đài dẫn đường" ${person.team === 'Tổ Đài dẫn đường' ? 'selected' : ''}>Tổ Đài dẫn đường</option>
@@ -2066,12 +2013,14 @@
                             <label><i class="fas fa-briefcase"></i> Chức vụ (Chính quyền)</label>
                             <select id="edit-position">
                                 <option value="">Chọn chức vụ</option>
+                                <option value="Giám đốc" ${person.position === 'Giám đốc' ? 'selected' : ''}>Giám đốc</option>
+                                <option value="Phó Giám đốc" ${person.position === 'Phó Giám đốc' ? 'selected' : ''}>Phó Giám đốc</option>
+                                <option value="Trưởng Văn phòng" ${person.position === 'Trưởng Văn phòng' ? 'selected' : ''}>Trưởng Văn phòng</option>
+                                <option value="Phó trưởng Văn phòng" ${person.position === 'Phó trưởng Văn phòng' ? 'selected' : ''}>Phó trưởng Văn phòng</option>
                                 <option value="Đội trưởng" ${person.position === 'Đội trưởng' ? 'selected' : ''}>Đội trưởng</option>
-                                <option value="Phó đội trưởng" ${person.position === 'Phó đội trưởng' ? 'selected' : ''}>Phó đội trưởng</option>
-                                <option value="Tổ trưởng" ${person.position === 'Tổ trưởng' ? 'selected' : ''}>Tổ trưởng</option>
+                                <option value="Phó đội trưởng/Tổ trưởng" ${person.position === 'Phó đội trưởng/Tổ trưởng' ? 'selected' : ''}>Phó đội trưởng/Tổ trưởng</option>
+                                <option value="Chuyên viên" ${person.position === 'Chuyên viên' ? 'selected' : ''}>Chuyên viên</option>
                                 <option value="Phó tổ trưởng" ${person.position === 'Phó tổ trưởng' ? 'selected' : ''}>Phó tổ trưởng</option>
-                                <option value="Kỹ sư" ${person.position === 'Kỹ sư' ? 'selected' : ''}>Kỹ sư</option>
-                                <option value="Kỹ thuật viên" ${person.position === 'Kỹ thuật viên' ? 'selected' : ''}>Kỹ thuật viên</option>
                                 <option value="Nhân viên" ${person.position === 'Nhân viên' ? 'selected' : ''}>Nhân viên</option>
                             </select>
                         </div>
@@ -2084,13 +2033,19 @@
                                 <option value="">Chọn chức danh</option>
                                 <option value="Kỹ sư" ${person.title === 'Kỹ sư' ? 'selected' : ''}>Kỹ sư</option>
                                 <option value="Kỹ thuật viên" ${person.title === 'Kỹ thuật viên' ? 'selected' : ''}>Kỹ thuật viên</option>
+                                <option value="Chuyên viên" ${person.title === 'Chuyên viên' ? 'selected' : ''}>Chuyên viên</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label><i class="fas fa-graduation-cap"></i> Trình độ</label>
                             <select id="edit-education">
                                 <option value="">Chọn trình độ</option>
+                                <option value="Trên Đại học" ${person.education === 'Trên Đại học' ? 'selected' : ''}>Trên Đại học</option>
                                 <option value="Đại học" ${person.education === 'Đại học' ? 'selected' : ''}>Đại học</option>
+                                <option value="Cao đẳng" ${person.education === 'Cao đẳng' ? 'selected' : ''}>Cao đẳng</option>
+                                <option value="Trung cấp" ${person.education === 'Trung cấp' ? 'selected' : ''}>Trung cấp</option>
+                                <option value="Sơ cấp" ${person.education === 'Sơ cấp' ? 'selected' : ''}>Sơ cấp</option>
+                                <option value="Lao động phổ thông" ${person.education === 'Lao động phổ thông' ? 'selected' : ''}>Lao động phổ thông</option>
                             </select>
                         </div>
                     </div>
@@ -2140,8 +2095,11 @@
                             <label><i class="fas fa-flag" style="color: #c0392b;"></i> Chức vụ Đảng</label>
                             <select id="edit-partyPosition">
                                 <option value="" ${!person.partyPosition ? 'selected' : ''}>Không có</option>
+                                <option value="Bí thư Đảng ủy" ${person.partyPosition === 'Bí thư Đảng ủy' ? 'selected' : ''}>Bí thư Đảng ủy</option>
+                                <option value="Phó Bí thư Đảng ủy" ${person.partyPosition === 'Phó Bí thư Đảng ủy' ? 'selected' : ''}>Phó Bí thư Đảng ủy</option>
+                                <option value="Đảng Ủy viên" ${person.partyPosition === 'Đảng Ủy viên' ? 'selected' : ''}>Đảng Ủy viên</option>
                                 <option value="Bí thư chi bộ" ${person.partyPosition === 'Bí thư chi bộ' ? 'selected' : ''}>Bí thư chi bộ</option>
-                                <option value="Phó bí thư chi bộ" ${person.partyPosition === 'Phó bí thư chi bộ' ? 'selected' : ''}>Phó bí thư chi bộ</option>
+                                <option value="Phó Bí thư chi bộ" ${person.partyPosition === 'Phó Bí thư chi bộ' ? 'selected' : ''}>Phó Bí thư chi bộ</option>
                                 <option value="Chi ủy viên" ${person.partyPosition === 'Chi ủy viên' ? 'selected' : ''}>Chi ủy viên</option>
                                 <option value="Đảng viên" ${person.partyPosition === 'Đảng viên' ? 'selected' : ''}>Đảng viên</option>
                             </select>
@@ -2257,7 +2215,7 @@
             showNotification(`Đã cập nhật thông tin thành công!`, 'success');
         }
 
-        // Open add form
+        // Open add form - ĐÃ SỬA VỚI CÁC LỰA CHỌN ĐẦY ĐỦ
         function openAddForm() {
             if (!isAdmin) {
                 showNotification('Chỉ quản trị viên mới có quyền thêm nhân sự!', 'error');
@@ -2314,6 +2272,11 @@
                             <label><i class="fas fa-users"></i> Đội/tổ *</label>
                             <select id="add-team" required>
                                 <option value="">Chọn đội/tổ</option>
+                                <option value="Ban Giám đốc">Ban Giám đốc</option>
+                                <option value="Văn phòng Trung tâm">Văn phòng Trung tâm</option>
+                                <option value="Đội Thiết bị Cơ điện đèn sân bay">Đội Thiết bị Cơ điện đèn sân bay</option>
+                                <option value="Đội Bảo trì sân đường">Đội Bảo trì sân đường</option>
+                                <option value="Đội Môi trường khu bay">Đội Môi trường khu bay</option>
                                 <option value="Đội Thiết bị TTDĐ">Đội Thiết bị TTDĐ</option>
                                 <option value="Tổ Kỹ thuật dẫn đường">Tổ Kỹ thuật dẫn đường</option>
                                 <option value="Tổ Đài dẫn đường">Tổ Đài dẫn đường</option>
@@ -2324,12 +2287,14 @@
                             <label><i class="fas fa-briefcase"></i> Chức vụ (Chính quyền)</label>
                             <select id="add-position">
                                 <option value="">Chọn chức vụ</option>
+                                <option value="Giám đốc">Giám đốc</option>
+                                <option value="Phó Giám đốc">Phó Giám đốc</option>
+                                <option value="Trưởng Văn phòng">Trưởng Văn phòng</option>
+                                <option value="Phó trưởng Văn phòng">Phó trưởng Văn phòng</option>
                                 <option value="Đội trưởng">Đội trưởng</option>
-                                <option value="Phó đội trưởng">Phó đội trưởng</option>
-                                <option value="Tổ trưởng">Tổ trưởng</option>
+                                <option value="Phó đội trưởng/Tổ trưởng">Phó đội trưởng/Tổ trưởng</option>
+                                <option value="Chuyên viên">Chuyên viên</option>
                                 <option value="Phó tổ trưởng">Phó tổ trưởng</option>
-                                <option value="Kỹ sư">Kỹ sư</option>
-                                <option value="Kỹ thuật viên">Kỹ thuật viên</option>
                                 <option value="Nhân viên">Nhân viên</option>
                             </select>
                         </div>
@@ -2342,13 +2307,19 @@
                                 <option value="">Chọn chức danh</option>
                                 <option value="Kỹ sư">Kỹ sư</option>
                                 <option value="Kỹ thuật viên">Kỹ thuật viên</option>
+                                <option value="Chuyên viên">Chuyên viên</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label><i class="fas fa-graduation-cap"></i> Trình độ</label>
                             <select id="add-education">
                                 <option value="">Chọn trình độ</option>
+                                <option value="Trên Đại học">Trên Đại học</option>
                                 <option value="Đại học">Đại học</option>
+                                <option value="Cao đẳng">Cao đẳng</option>
+                                <option value="Trung cấp">Trung cấp</option>
+                                <option value="Sơ cấp">Sơ cấp</option>
+                                <option value="Lao động phổ thông">Lao động phổ thông</option>
                             </select>
                         </div>
                     </div>
@@ -2397,9 +2368,12 @@
                         <div class="form-group">
                             <label><i class="fas fa-flag" style="color: #c0392b;"></i> Chức vụ Đảng</label>
                             <select id="add-partyPosition">
-                                <option value="">Không có</option>
+                                <option value="">Chọn chức vụ</option>
+                                <option value="Bí thư Đảng ủy">Bí thư Đảng ủy</option>
+                                <option value="Phó Bí thư Đảng ủy">Phó Bí thư Đảng ủy</option>
+                                <option value="Đảng Ủy viên">Đảng Ủy viên</option>
                                 <option value="Bí thư chi bộ">Bí thư chi bộ</option>
-                                <option value="Phó bí thư chi bộ">Phó bí thư chi bộ</option>
+                                <option value="Phó Bí thư chi bộ">Phó Bí thư chi bộ</option>
                                 <option value="Chi ủy viên">Chi ủy viên</option>
                                 <option value="Đảng viên">Đảng viên</option>
                             </select>
