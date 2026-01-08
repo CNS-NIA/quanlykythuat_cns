@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý Nhân sự - Chương trình QLKT</title>
+    <title>Quản lý Nhân sự - Đội Thiết bị TTDĐ</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -199,7 +199,7 @@
             width: 100%;
             border-collapse: collapse;
             font-size: 13px;
-            min-width: 1400px;
+            min-width: 1200px;
         }
         
         .personnel-table thead {
@@ -223,11 +223,16 @@
             font-size: 12px;
             vertical-align: middle;
             border-right: 1px solid var(--border);
-            text-align: center; /* CĂN GIỮA TẤT CẢ CÁC Ô */
+            text-align: center;
+            cursor: pointer;
         }
         
-        /* Các cột đặc biệt - vẫn giữ nguyên */
-        .col-name, .col-team, .col-specialty, .col-note {
+        .personnel-table tr:hover {
+            background-color: #f8fafc;
+        }
+        
+        /* Các cột đặc biệt */
+        .col-name, .col-team, .col-specialty, .col-note, .col-birthplace, .col-hometown, .col-address, .col-residence {
             text-align: left !important;
             padding-left: 12px !important;
         }
@@ -236,17 +241,25 @@
         .col-stt { width: 50px; }
         .col-manv { width: 85px; }
         .col-avatar { width: 75px; }
-        .col-name { width: 170px; }
+        .col-name { width: 180px; }
         .col-birthday { width: 115px; }
+        .col-gender { width: 60px; }
         .col-team { width: 160px; }
         .col-position { width: 170px; }
         .col-party { width: 130px; }
         .col-union { width: 160px; }
         .col-title { width: 110px; }
         .col-education { width: 100px; }
-        .col-specialty { width: 360px; }
+        .col-specialty { width: 280px; }
         .col-note { width: 130px; }
-        .col-action { width: 120px; }
+        .col-action { width: 70px; cursor: default !important; }
+        .col-birthplace { width: 180px; }
+        .col-hometown { width: 150px; }
+        .col-address { width: 200px; }
+        .col-residence { width: 200px; }
+        .col-idcard { width: 140px; }
+        .col-idcard-date { width: 120px; }
+        .col-phone { width: 120px; }
         
         .employee-code {
             font-weight: 700;
@@ -269,6 +282,8 @@
             width: 48px;
             height: 48px;
             margin: 0 auto;
+            position: relative;
+            cursor: pointer;
         }
         
         .avatar {
@@ -285,6 +300,28 @@
             color: white;
             font-weight: bold;
             font-size: 16px;
+        }
+        
+        .avatar-upload {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .avatar-container:hover .avatar-upload {
+            opacity: 1;
         }
         
         .header-row th {
@@ -347,7 +384,7 @@
             border-radius: 15px;
             padding: 30px;
             width: 90%;
-            max-width: 800px;
+            max-width: 1000px;
             max-height: 85vh;
             overflow-y: auto;
         }
@@ -464,49 +501,160 @@
             border: 1px solid var(--border);
             box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
         }
+
+        .admin-login-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(26, 41, 128, 0.2);
+        }
+        
+        .admin-logout-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--danger), #c0392b);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.2);
+        }
+        
+        .upload-avatar-btn {
+            background: linear-gradient(135deg, var(--info), #2980b9);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        
+        .avatar-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--border);
+            margin: 10px auto;
+            display: block;
+        }
+        
+        .view-btn {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: #3498db;
+            transition: transform 0.2s;
+        }
+        
+        .view-btn:hover {
+            transform: scale(1.2);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .table-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-input, .filter-select {
+                min-width: 100%;
+            }
+            
+            .page-title {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .title-left {
+                flex-direction: column;
+                align-items: flex-start;
+                width: 100%;
+            }
+            
+            .back-btn {
+                align-self: flex-start;
+            }
+            
+            .user-info {
+                align-self: flex-start;
+                margin-top: 10px;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- LOGIN PANEL -->
-    <div class="login-panel" id="loginPanel">
+    <!-- ADMIN LOGIN BUTTON -->
+    <button class="admin-login-btn" id="adminLoginBtn" onclick="showAdminLogin()">
+        <i class="fas fa-lock"></i> ĐĂNG NHẬP ADMIN
+    </button>
+
+    <div class="login-panel" id="loginPanel" style="display: none;">
         <div class="login-box">
-            <h2 style="color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 12px;">
-                <i class="fas fa-lock"></i> ĐĂNG NHẬP HỆ THỐNG
+            <h2 style="color: var(--primary); margin-bottom: 25px; display: flex; align-items: center; justify-content: center; gap: 12px;">
+                <i class="fas fa-user-shield"></i> ĐĂNG NHẬP QUYỀN ADMIN
             </h2>
-            <p style="color: var(--gray); margin-bottom: 25px;">Vui lòng đăng nhập để truy cập hệ thống quản lý nhân sự</p>
-            
-            <div style="text-align: left; margin-bottom: 20px;">
-                <label style="font-weight: 600; color: var(--dark); font-size: 14px; margin-bottom: 6px; display: block;">
-                    <i class="fas fa-user"></i> Tên đăng nhập:
-                </label>
-                <input type="text" id="username" placeholder="Nhập tên đăng nhập" value="admin" 
-                       style="width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: 8px; font-size: 14px;">
-            </div>
+            <p style="color: var(--dark); margin-bottom: 25px; font-size: 14px;">
+                Nhập mật khẩu admin để truy cập chức năng chỉnh sửa và xem đầy đủ thông tin
+            </p>
             
             <div style="text-align: left; margin-bottom: 25px;">
-                <label style="font-weight: 600; color: var(--dark); font-size: 14px; margin-bottom: 6px; display: block;">
-                    <i class="fas fa-key"></i> Mật khẩu:
+                <label style="font-weight: 600; color: var(--dark); font-size: 14px; margin-bottom: 8px; display: block;">
+                    <i class="fas fa-key"></i> MẬT KHẨU ADMIN:
                 </label>
-                <input type="password" id="password" placeholder="Nhập mật khẩu" value="admin123"
-                       style="width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: 8px; font-size: 14px;">
+                <input type="password" id="adminPassword" placeholder="Nhập mật khẩu admin"
+                       style="width: 100%; padding: 14px; border: 2px solid var(--border); border-radius: 8px; font-size: 15px; margin-bottom: 10px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-top: 10px;">
+                    <input type="checkbox" id="showPassword" onchange="togglePasswordVisibility()">
+                    <label for="showPassword" style="font-size: 13px; color: var(--dark);">Hiển thị mật khẩu</label>
+                </div>
             </div>
             
-            <button class="login-btn" onclick="login()" 
+            <button class="login-btn" onclick="loginAsAdmin()" 
                     style="background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 16px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 10px;">
                 <i class="fas fa-sign-in-alt"></i> ĐĂNG NHẬP
             </button>
             
-            <div style="margin-top: 25px; font-size: 13px; color: var(--gray); text-align: left; background: var(--light); padding: 15px; border-radius: 8px; border: 1px solid var(--border);">
-                <p style="margin: 0 0 10px 0; font-weight: 600; color: var(--primary);">
-                    <i class="fas fa-info-circle"></i> Thông tin đăng nhập mẫu:
-                </p>
-                <p style="margin: 5px 0;"><i class="fas fa-user-shield" style="color: var(--primary);"></i> Quản trị viên: admin / admin123</p>
-                <p style="margin: 5px 0;"><i class="fas fa-user" style="color: var(--secondary);"></i> Người dùng: user / user123</p>
-            </div>
+            <button onclick="hideAdminLogin()" 
+                    style="background: var(--light); color: var(--dark); border: 1px solid var(--border); padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; width: 100%; margin-top: 15px;">
+                <i class="fas fa-times"></i> HỦY BỎ
+            </button>
         </div>
     </div>
 
-    <div class="container" id="mainContent" style="display: none;">
+    <div class="container" id="mainContent">
         <!-- PAGE HEADER -->
         <div class="page-header">
             <div class="page-title">
@@ -518,14 +666,11 @@
                 </div>
                 <div class="user-info" id="userInfo">
                     <i class="fas fa-user-circle" style="font-size: 20px;"></i>
-                    <span id="userDisplayName" style="font-weight: 600;">Admin</span>
-                    <button class="logout-btn" onclick="logout()">
-                        <i class="fas fa-sign-out-alt"></i> Đăng xuất
-                    </button>
+                    <span id="userDisplayName" style="font-weight: 600;">Khách</span>
                 </div>
             </div>
             <p style="margin: 0; opacity: 0.9; font-size: 14px; display: flex; align-items: center; gap: 10px;">
-                <i class="fas fa-map-marker-alt"></i> Đội Thiết bị Thiết bị Thông tin dẫn đường | Trung tâm Khai thác khu bay Nội Bài 
+                <i class="fas fa-map-marker-alt"></i> Đội Thiết bị Thông tin dẫn đường | Trung tâm Khai thác khu bay Nội Bài 
             </p>
         </div>
 
@@ -534,32 +679,32 @@
             <div class="stats-row">
                 <div class="stat-card">
                     <h3><i class="fas fa-users"></i> TỔNG NHÂN SỰ</h3>
-                    <div class="stat-number" id="total-personnel">0</div>
-                    <p style="color: var(--gray); font-size: 13px; margin: 0;">Người</p>
+                    <div class="stat-number" id="total-personnel">25</div>
+                    <p style="color: var(--dark); font-size: 13px; margin: 0;">Người</p>
                 </div>
                 
                 <div class="stat-card">
                     <h3><i class="fas fa-user-graduate"></i> TRÌNH ĐỘ ĐẠI HỌC</h3>
-                    <div class="stat-number" id="total-university">0</div>
-                    <p style="color: var(--gray); font-size: 13px; margin: 0;">Nhân viên</p>
+                    <div class="stat-number" id="total-university">25</div>
+                    <p style="color: var(--dark); font-size: 13px; margin: 0;">Nhân viên</p>
                 </div>
                 
                 <div class="stat-card">
                     <h3><i class="fas fa-user-check"></i> KỸ SƯ</h3>
-                    <div class="stat-number" id="total-engineer">0</div>
-                    <p style="color: var(--gray); font-size: 13px; margin: 0;">Chức danh</p>
+                    <div class="stat-number" id="total-engineer">13</div>
+                    <p style="color: var(--dark); font-size: 13px; margin: 0;">Chức danh</p>
                 </div>
                 
                 <div class="stat-card">
                     <h3><i class="fas fa-tools"></i> KỸ THUẬT VIÊN</h3>
-                    <div class="stat-number" id="total-technician">0</div>
-                    <p style="color: var(--gray); font-size: 13px; margin: 0;">Chức danh</p>
+                    <div class="stat-number" id="total-technician">12</div>
+                    <p style="color: var(--dark); font-size: 13px; margin: 0;">Chức danh</p>
                 </div>
             </div>
 
             <!-- TABLE CONTROLS -->
             <div class="table-controls">
-                <button class="add-btn" id="addBtn" onclick="openAddForm()">
+                <button class="add-btn" id="addBtn" onclick="openAddForm()" style="display: none;">
                     <i class="fas fa-user-plus"></i> THÊM NHÂN SỰ MỚI
                 </button>
                 
@@ -580,6 +725,8 @@
                         <option value="Phó đội trưởng">Phó đội trưởng</option>
                         <option value="Tổ trưởng">Tổ trưởng</option>
                         <option value="Phó tổ trưởng">Phó tổ trưởng</option>
+                        <option value="Kỹ sư">Kỹ sư</option>
+                        <option value="Kỹ thuật viên">Kỹ thuật viên</option>
                         <option value="Nhân viên">Nhân viên</option>
                     </select>
                     
@@ -587,14 +734,11 @@
                         <option value="">🎓 Tất cả chức danh</option>
                         <option value="Kỹ sư">Kỹ sư</option>
                         <option value="Kỹ thuật viên">Kỹ thuật viên</option>
-                        <option value="Chuyên viên">Chuyên viên</option>
                     </select>
                     
                     <select class="filter-select" id="filter-education">
                         <option value="">📚 Tất cả trình độ</option>
                         <option value="Đại học">Đại học</option>
-                        <option value="Cao đẳng">Cao đẳng</option>
-                        <option value="Trung cấp">Trung cấp</option>
                     </select>
                 </div>
             </div>
@@ -608,20 +752,28 @@
                             <th rowspan="2" class="col-manv">MÃ NV</th>
                             <th rowspan="2" class="col-avatar">ẢNH</th>
                             <th rowspan="2" class="col-name">HỌ VÀ TÊN</th>
-                            <th rowspan="2" class="col-birthday">NGÀY SINH<br>(dd/mm/yyyy)</th>
-                            <th rowspan="2" class="col-team">ĐỘI/TỔ</th>
-                            <th colspan="3">CHỨC VỤ / CÔNG ĐOÀN</th>
+                            <th rowspan="2" class="col-birthday">NGÀY SINH</th>
+                            <th rowspan="2" class="col-gender">GIỚI TÍNH</th>
+                            <th rowspan="2" class="col-team">VỊ TRÍ LÀM VIỆC</th>
+                            <th colspan="3">CHỨC VỤ</th>
                             <th rowspan="2" class="col-title">CHỨC DANH</th>
                             <th rowspan="2" class="col-education">TRÌNH ĐỘ</th>
-                            <th rowspan="2" class="col-specialty">CHUYÊN MÔN ĐÀO TẠO, HUẤN LUYỆN</th>
+                            <th rowspan="2" class="col-birthplace">NƠI SINH</th>
+                            <th rowspan="2" class="col-hometown">QUÊ QUÁN</th>
+                            <th colspan="2">ĐỊA CHỈ</th>
+                            <th rowspan="2" class="col-idcard">SỐ CCCD</th>
+                            <th rowspan="2" class="col-idcard-date">NGÀY CẤP CCCD</th>
+                            <th rowspan="2" class="col-phone">ĐIỆN THOẠI</th>
+                            <th rowspan="2" class="col-specialty">CHUYÊN MÔN ĐÀO TẠO</th>
                             <th rowspan="2" class="col-note">GHI CHÚ</th>
-                            <th rowspan="2" class="col-action" id="actionColumn">THAO TÁC</th>
+                            <th rowspan="2" class="col-action">XEM</th>
                         </tr>
                         <tr>
-                            <!-- CÁC CỘT NÀY ĐƯỢC CĂN GIỮA -->
                             <th class="sub-header col-position" style="text-align: center;">Chính quyền</th>
                             <th class="sub-header col-party" style="text-align: center;">Đảng</th>
                             <th class="sub-header col-union" style="text-align: center;">Công đoàn</th>
+                            <th class="sub-header col-address" style="text-align: center;">Thường trú</th>
+                            <th class="sub-header col-residence" style="text-align: center;">Tạm trú</th>
                         </tr>
                     </thead>
                     <tbody id="personnel-table-body">
@@ -633,8 +785,8 @@
             <!-- PAGINATION -->
             <div class="pagination-container">
                 <div class="pagination-info">
-                    <i class="fas fa-info-circle"></i> Tổng cộng: <strong id="total-count">0</strong> nhân sự | 
-                    Đang hiển thị: <span id="display-count">0</span> nhân sự
+                    <i class="fas fa-info-circle"></i> Tổng cộng: <strong id="total-count">25</strong> nhân sự | 
+                    Đang hiển thị: <span id="display-count">25</span> nhân sự
                 </div>
                 <div class="pagination" id="pagination">
                     <!-- Pagination will be populated by JavaScript -->
@@ -659,7 +811,7 @@
         <footer class="footer">
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 25px;">
                 <div>
-                    <h4 style="margin: 0 0 15px 0; color: var(--primary); font-size: 16px;">
+                    <h4 style="margin: 0 0 10px 0; color: var(--primary); font-size: 16px;">
                         <i class="fas fa-headset"></i> HỖ TRỢ NHÂN SỰ QLKT
                     </h4>
                     <p style="margin: 10px 0; font-size: 14px; color: var(--dark);"><i class="fas fa-phone"></i> Hotline: <strong>(+84) 9199xxx86</strong></p>
@@ -677,10 +829,10 @@
                             <i class="fas fa-file-excel"></i> Xuất Excel
                         </button>
                     </div>
-                    <p style="margin: 15px 0 0 0; font-size: 13px; color: var(--gray);"><i class="fas fa-database"></i> Cập nhật lần cuối: <strong id="update-date"></strong></p>
+                    <p style="margin: 15px 0 0 0; font-size: 13px; color: var(--dark);"><i class="fas fa-database"></i> Cập nhật lần cuối: <strong id="update-date"></strong></p>
                 </div>
             </div>
-            <div style="text-align: center; padding-top: 20px; border-top: 1px solid var(--border); color: var(--gray); font-size: 13px;">
+            <div style="text-align: center; padding-top: 20px; border-top: 1px solid var(--border); color: var(--dark); font-size: 13px;">
                 <p><i class="fas fa-copyright"></i> 2025 Đội Thiết bị Thông tin dẫn đường - Trung tâm Khai thác khu bay Nội Bài | Quản lý Nhân sự QLKT</p>
             </div>
         </footer>
@@ -694,22 +846,30 @@
         const ITEMS_PER_PAGE = 10;
         let currentPage = 1;
         let currentPersonnelId = null;
-        let currentUser = null;
         let isAdmin = false;
+        let currentAvatarFile = null;
 
-        // Initial data
+        // Initial data from Excel - 25 RECORDS
         let personnelData = [
             {
                 id: 1,
                 employeeCode: "008516",
-                name: "Trần Đỗ Hải",
+                name: "TRẦN ĐỖ HẢI",
                 dateOfBirth: "27/12/1971",
+                gender: "Nam",
                 team: "Đội Thiết bị TTDĐ",
                 position: "Đội trưởng",
                 partyPosition: "Bí thư chi bộ",
                 unionPosition: "Đoàn viên công đoàn",
                 title: "Kỹ sư",
                 education: "Đại học",
+                birthplace: "Phường Hà Đông - Thành phố Hà Nội",
+                hometown: "Xã Bát Tràng - Thành Phố Hà Nội",
+                address: "Số 30 ngách 155/206- Trường Chinh - Phường Phương Liệt - Thành phố Hà Nội",
+                residence: "Số 69 Ngõ 294/11/6 Phố Đội Cấn - Phường Ngọc Hà - Thành Phố Hà Nội",
+                idCard: "001071022664",
+                idCardDate: "19/08/2022",
+                phone: "0984419571",
                 specialty: "HLV Bảo dưỡng, sửa chữa trang thiết bị ILS/DME/Marker và NDB",
                 note: "",
                 avatar: null,
@@ -717,15 +877,23 @@
             },
             {
                 id: 2,
-                employeeCode: "008518",
-                name: "Đỗ Thanh Tùng",
-                dateOfBirth: "22/05/1973",
-                team: "Đội Thiết bị TTDĐ",
-                position: "Phó đội trưởng/Tổ trưởng",
-                partyPosition: "Chi ủy viên",
-                unionPosition: "Phó chủ tịch Công đoàn",
+                employeeCode: "008530",
+                name: "NGUYỄN TUẤN ANH",
+                dateOfBirth: "23/09/1972",
+                gender: "Nam",
+                team: "Tổ Kỹ thuật dẫn đường",
+                position: "Phó đội trưởng/Tổ trưởng tổ Kỹ thuật dẫn đường",
+                partyPosition: "Phó bí thư chi bộ",
+                unionPosition: "kiêm Tổ trưởng tổ Kỹ thuật dẫn đường - Đội Thiết bị thông tin dẫn đường",
                 title: "Kỹ sư",
                 education: "Đại học",
+                birthplace: "Thành phố Hà Nội",
+                hometown: "Phường Vinh Phú - Tỉnh Nghệ An",
+                address: "Số 22 Nguyễn Ngọc Nại - Phường Phương Liệt - Thành Phố Hà Nội",
+                residence: "Số 22 Nguyễn Ngọc Nại - Phường Phương Liệt - Thành Phố Hà Nội",
+                idCard: "001072021226",
+                idCardDate: "09/05/2021",
+                phone: "0903292299",
                 specialty: "HLV Bảo dưỡng, sửa chữa trang thiết bị ILS/DME/Marker và NDB",
                 note: "",
                 avatar: null,
@@ -733,19 +901,555 @@
             },
             {
                 id: 3,
-                employeeCode: "003568",
-                name: "Lê Duy Khải",
-                dateOfBirth: "09/09/1976",
-                team: "Đội Thiết bị TTDĐ",
-                position: "Nhân viên",
-                partyPosition: "",
-                unionPosition: "",
+                employeeCode: "008548",
+                name: "NGUYỄN QUỐC CHUNG",
+                dateOfBirth: "28/05/1972",
+                gender: "Nam",
+                team: "Tổ Kỹ thuật dẫn đường",
+                position: "Nhân viên bảo trì trang thiết bị khu bay",
+                partyPosition: "Đảng viên",
+                unionPosition: "Nhân viên bảo trì trang thiết bị khu bay",
                 title: "Kỹ thuật viên",
                 education: "Đại học",
+                birthplace: "Phường Ba Đình - Thành phố Hà Nội",
+                hometown: "Phường Cửa Lò - Tỉnh Nghệ An",
+                address: "Căn Hộ C3201 Chung Cư Intracom Reverside - Xã Vĩnh Thanh - Thành Phố Hà Nội",
+                residence: "Căn Hộ C3201 Chung Cư Intracom Reverside - Xã Vĩnh Thanh - Thành Phố Hà Nội",
+                idCard: "001072013960",
+                idCardDate: "07/10/2021",
+                phone: "0776336869",
                 specialty: "HLV Bảo dưỡng, sửa chữa trang thiết bị ILS/DME/Marker và NDB",
                 note: "",
                 avatar: null,
                 avatarColor: "#27ae60"
+            },
+            {
+                id: 4,
+                employeeCode: "008549",
+                name: "PHẠM MINH QUANG",
+                dateOfBirth: "05/04/1975",
+                gender: "Nam",
+                team: "Tổ Đài dẫn đường",
+                position: "Phó đội trưởng/Tổ trưởng tổ Đài dẫn đường",
+                partyPosition: "Chi ủy viên",
+                unionPosition: "Phó chủ tịch CĐCS/Chủ tích CĐBP",
+                title: "Kỹ sư",
+                education: "Đại học",
+                birthplace: "Phường Lào Cai - Tỉnh Lào Cai",
+                hometown: "Xã Trung Giã - Thành Phố Hà Nội",
+                address: "Khối 2 - Xã Sóc Sơn - Thành Phố Hà Nội",
+                residence: "Khối 2 - Xã Sóc Sơn - Thành Phố Hà Nội",
+                idCard: "010075000120",
+                idCardDate: "10/07/2021",
+                phone: "0769856555",
+                specialty: "HLV Bảo dưỡng, sửa chữa trang thiết bị ILS/DME/Marker và NDB",
+                note: "",
+                avatar: null,
+                avatarColor: "#e74c3c"
+            },
+            {
+                id: 5,
+                employeeCode: "008598",
+                name: "NGUYỄN THƯỢNG HIỀN",
+                dateOfBirth: "01/11/1982",
+                gender: "Nam",
+                team: "Tổ Thông tin và đường dây",
+                position: "Phó đội trưởng/Tổ trưởng tổ Thông tin và đường dây",
+                partyPosition: "Đảng viên",
+                unionPosition: "Đoàn viên công đoàn",
+                title: "Kỹ sư",
+                education: "Đại học",
+                birthplace: "Xã Đông Anh - Thành Phố Hà Nội",
+                hometown: "Xã Đông Anh - Thành Phố Hà Nội",
+                address: "Đông Trù - Xã Đông Anh - Thành Phố Hà Nội",
+                residence: "Số Nhà 8- Lô 4 - Đông Trù - Xã Đông Anh - Thành Phố Hà Nội",
+                idCard: "001082014736",
+                idCardDate: "19/02/2022",
+                phone: "0989649113",
+                specialty: "HLV Bảo dưỡng, sửa chữa trang thiết bị ILS/DME/Marker và NDB",
+                note: "",
+                avatar: null,
+                avatarColor: "#f39c12"
+            },
+            {
+                id: 6,
+                employeeCode: "008606",
+                name: "NGUYỄN THANH TÙNG",
+                dateOfBirth: "05/08/1981",
+                gender: "Nam",
+                team: "Tổ Đài dẫn đường",
+                position: "Nhân viên bảo trì trang thiết bị khu bay",
+                partyPosition: "",
+                unionPosition: "Đoàn viên công đoàn",
+                title: "Kỹ thuật viên",
+                education: "Đại học",
+                birthplace: "Phường Bồ Đề - Thành Phố Hà Nội",
+                hometown: "Xã Vạn Xuân - Tỉnh Hưng Yên",
+                address: "Số 1/117/23 Nguyễn Sơn - Phường Bồ Đề - Thành Phố Hà Nội",
+                residence: "Số 1/117/23 Nguyễn Sơn - Phường Bồ Đề - Thành Phố Hà Nội",
+                idCard: "001081025469",
+                idCardDate: "22/11/2021",
+                phone: "0912562662",
+                specialty: "HLV Bảo dưỡng, sửa chữa trang thiết bị ILS/DME/Marker và NDB",
+                note: "",
+                avatar: null,
+                avatarColor: "#9b59b6"
+            },
+            {
+                id: 7,
+                employeeCode: "008653",
+                name: "NGUYỄN VĂN HÙNG",
+                dateOfBirth: "20/02/1965",
+                gender: "Nam",
+                team: "Tổ Đài dẫn đường",
+                position: "Nhân viên vận hành trang thiết bị khu bay",
+                partyPosition: "",
+                unionPosition: "Đoàn viên công đoàn",
+                title: "Kỹ thuật viên",
+                education: "Đại học",
+                birthplace: "Phường Đông Ngạc - Thành Phố Hà Nội",
+                hometown: "Xã Mê Linh - Thành Phố Hà Nội",
+                address: "Số 15 Ngách 163 Tổ Dân Phố Đông Ngạc 4 - Phường Đông Ngạc - Thành Phố Hà Nội",
+                residence: "Số 15 Ngách 163 Tổ Dân Phố Đông Ngạc 4 - Phường Đông Ngạc - Thành Phố Hà Nội",
+                idCard: "001065036311",
+                idCardDate: "10/07/2021",
+                phone: "0948615168",
+                specialty: "HLV Bảo dưỡng, sửa chữa trang thiết bị ILS/DME/Marker và NDB",
+                note: "",
+                avatar: null,
+                avatarColor: "#1abc9c"
+            },
+            {
+                id: 8,
+                employeeCode: "008684",
+                name: "NGUYỄN HOÀNG VINH",
+                dateOfBirth: "28/11/1978",
+                gender: "Nam",
+                team: "Tổ Đài dẫn đường",
+                position: "Kỹ sư khai thác, bảo trì trang thiết bị khu bay",
+                partyPosition: "",
+                unionPosition: "Đoàn viên công đoàn",
+                title: "Kỹ sư",
+                education: "Đại học",
+                birthplace: "Phường Long Biên - Thành Phố Hà Nội",
+                hometown: "Phường Long Biên - Thành Phố Hà Nội",
+                address: "Tổ 19 - Phường Long Biên - Thành Phố Hà Nội",
+                residence: "Tổ 19 - Phường Long Biên - Thành Phố Hà Nội",
+                idCard: "001078017706",
+                idCardDate: "16/04/2021",
+                phone: "0912048656",
+                specialty: "HLV Bảo dưỡng, sửa chữa trang thiết bị ILS/DME/Marker và NDB",
+                note: "",
+                avatar: null,
+                avatarColor: "#34495e"
+            },
+            {
+                id: 9,
+                employeeCode: "008688",
+                name: "LÊ VĂN QUANG",
+                dateOfBirth: "26/07/1979",
+                gender: "Nam",
+                team: "Tổ Kỹ thuật dẫn đường",
+                position: "Kỹ sư khai thác, bảo trì trang thiết bị khu bay - Tổ phó tổ Kỹ thuật dẫn đường",
+                partyPosition: "Đảng viên",
+                unionPosition: "Đoàn viên công đoàn",
+                title: "Kỹ sư",
+                education: "Đại học",
+                birthplace: "Xã Vạn Lộc - Tỉnh Thanh Hóa",
+                hometown: "Xã Vạn Lộc - Tỉnh Thanh Hóa",
+                address: "Căn Hộ 2001 Tháp B Dự Án Tổ Hợp TM Dịch Vụ VP Và Nhà Ở Để Bán 75 Nguyễn Tam Trinh Tổ 21 - Phường Vĩnh Tuy - Thành Phố Hà Nội",
+                residence: "Căn Hộ ZA2110 Tòa ZEN Dự Án Feliz Homes - Phường Tương Mai - Thành Phố Hà Nội",
+                idCard: "038079000082",
+                idCardDate: "13/06/2014",
+                phone: "0912919412",
+                specialty: "HLV Bảo dưỡng, sửa chữa trang thiết bị ILS/DME/Marker và NDB",
+                note: "",
+                avatar: null,
+                avatarColor: "#e67e22"
+            },
+            {
+                id: 10,
+                employeeCode: "008799",
+                name: "NGUYỄN THỊ VÂN",
+                dateOfBirth: "18/03/1981",
+                gender: "Nữ",
+                team: "Tổ Đài dẫn đường",
+                position: "Nhân viên bảo trì trang thiết bị khu bay",
+                partyPosition: "",
+                unionPosition: "Đoàn viên công đoàn",
+                title: "Kỹ thuật viên",
+                education: "Đại học",
+                birthplace: "Phường Mường Thanh - Tỉnh Điện Biên",
+                hometown: "Xã Ô Diên - Thành Phố Hà Nội",
+                address: "Tổ Dân Phố Số 6 Phú Mỹ - Phường Từ Liêm - Thành Phố Hà Nội",
+                residence: "Tổ Dân Phố Số 6 Phú Mỹ - Phường Từ Liêm - Thành Phố Hà Nội",
+                idCard: "011181000388",
+                idCardDate: "10/04/2021",
+                phone: "0912602628",
+                specialty: "HLV Bảo dưỡng, sửa chữa trang thiết bị ILS/DME/Marker và NDB",
+                note: "",
+                avatar: null,
+                avatarColor: "#16a085"
+            },
+            {
+                id: 11,
+                employeeCode: "008817",
+                name: "BÙI HỒNG KỲ",
+                dateOfBirth: "07/03/1971",
+                gender: "Nam",
+                team: "Tổ Thông tin và đường dây",
+                position: "Nhân viên bảo trì trang thiết bị khu bay - Tổ phó tổ Thông tin và đường dây",
+                partyPosition: "Đảng viên",
+                unionPosition: "Đoàn viên công đoàn",
+                title: "Kỹ thuật viên",
+                education: "Đại học",
+                birthplace: "Xã Nam Tiên Hưng - Tỉnh Hưng Yên",
+                hometown: "Xã Nam Tiên Hưng - Tỉnh Hưng Yên",
+                address: "Thắng Lợi - Xã Nội Bài - Thành Phố Hà Nội",
+                residence: "Thắng Lợi - Xã Nội Bài - Thành Phố Hà Nội",
+                idCard: "034071002861",
+                idCardDate: "10/07/2021",
+                phone: "0916049279",
+                specialty: "HLV Bảo dưỡng, sửa chữa trang thiết bị ILS/DME/Marker và NDB",
+                note: "",
+                avatar: null,
+                avatarColor: "#8e44ad"
+            },
+            {
+                id: 12,
+                employeeCode: "011955",
+                name: "KHÚC TRƯỜNG SƠN",
+                dateOfBirth: "17/11/1989",
+                gender: "Nam",
+                team: "",
+                position: "Nhân viên vận hành trang thiết bị khu bay",
+                partyPosition: "Đảng viên",
+                unionPosition: "Đoàn viên công đoàn",
+                title: "Kỹ thuật viên",
+                education: "Đại học",
+                birthplace: "Thành Phố Hà Nội",
+                hometown: "Xã Chương Dương - Thành Phố Hà Nội",
+                address: "Phố chợ - Xã Đông Anh - Thành Phố Hà Nội",
+                residence: "Xóm Thượng - Xã Đông Anh - Thành Phố Hà Nội",
+                idCard: "001089051297",
+                idCardDate: "21/09/2021",
+                phone: "0978171189",
+                specialty: "HLV Bảo dưỡng, sửa chữa trang thiết bị ILS/DME/Marker và NDB",
+                note: "",
+                avatar: null,
+                avatarColor: "#d35400"
+            },
+            {
+                id: 13,
+                employeeCode: "014126",
+                name: "TRẦN QUỐC HOÀN",
+                dateOfBirth: "08/12/1991",
+                gender: "Nam",
+                team: "",
+                position: "Kỹ sư khai thác, bảo trì trang thiết bị khu bay - Tổ phó tổ Thông tin và đường dây",
+                partyPosition: "Đảng viên",
+                unionPosition: "Ủy viên BCH CĐBP/Tổ trưởng tổ công đoàn",
+                title: "Kỹ sư",
+                education: "Đại học",
+                birthplace: "Xã Nghĩa Hưng - Tỉnh Ninh Bình",
+                hometown: "Xã Nghĩa Hưng - Tỉnh Ninh Bình",
+                address: "Căn Hộ 1712 CT2B - Chung Cư 789 - BTTM - BQP - TDP Trung 3 - Phường Xuân Đỉnh - Thành Phố Hà Nội",
+                residence: "Căn Hộ 1712 CT2B - Chung Cư 789 - BTTM - BQP - TDP Trung 3 - Phường Xuân Đỉnh - Thành Phố Hà Nội",
+                idCard: "036091003582",
+                idCardDate: "04/08/2022",
+                phone: "0986889191",
+                specialty: "HLV Bảo dưỡng, sửa chữa trang thiết bị ILS/DME/Marker và NDB",
+                note: "",
+                avatar: null,
+                avatarColor: "#27ae60"
+            },
+            {
+                id: 14,
+                employeeCode: "015142",
+                name: "NGUYỄN VĂN LONG",
+                dateOfBirth: "28/08/1988",
+                gender: "Nam",
+                team: "",
+                position: "Kỹ sư khai thác, bảo trì trang thiết bị khu bay - Tổ phó tổ Kỹ thuật dẫn đường",
+                partyPosition: "Đảng viên",
+                unionPosition: "Đoàn viên công đoàn",
+                title: "Kỹ sư",
+                education: "Đại học",
+                birthplace: "Xã Nội Bài - Thành Phố Hà Nội",
+                hometown: "Xã Nội Bài - Thành Phố Hà Nội",
+                address: "Thạch Lỗi - Xã Nội Bài - Thành Phố Hà Nội",
+                residence: "Thạch Lỗi - Xã Nội Bài - Thành Phố Hà Nội",
+                idCard: "001088050206",
+                idCardDate: "10/05/2021",
+                phone: "0988676588",
+                specialty: "HLV Bảo dưỡng, sửa chữa trang thiết bị ILS/DME/Marker và NDB",
+                note: "",
+                avatar: null,
+                avatarColor: "#2980b9"
+            },
+            {
+                id: 15,
+                employeeCode: "015143",
+                name: "NGUYỄN NGỌC LINH",
+                dateOfBirth: "01/09/1992",
+                gender: "Nam",
+                team: "",
+                position: "Kỹ sư khai thác, bảo trì trang thiết bị khu bay",
+                partyPosition: "Đảng viên",
+                unionPosition: "Đoàn viên công đoàn",
+                title: "Kỹ sư",
+                education: "Đại học",
+                birthplace: "Phường Trường Vinh - Tỉnh Nghệ An",
+                hometown: "Xã Cát Ngạn - Tỉnh Nghệ An",
+                address: "Số Nhà 256 - Đường Lê Trọng Tấn -Tổ 38 - Phường An Khê - Thành Phố Đà Nẵng",
+                residence: "Số Nhà 256 - Đường Lê Trọng Tấn -Tổ 38 - Phường An Khê - Thành Phố Đà Nẵng",
+                idCard: "040092017997",
+                idCardDate: "01/04/2022",
+                phone: "0368822404",
+                specialty: "HLV Bảo dưỡng, sửa chữa trang thiết bị ILS/DME/Marker và NDB",
+                note: "",
+                avatar: null,
+                avatarColor: "#8e44ad"
+            },
+            {
+                id: 16,
+                employeeCode: "015147",
+                name: "LÊ TUẤN ANH",
+                dateOfBirth: "21/10/1992",
+                gender: "Nam",
+                team: "",
+                position: "Nhân viên vận hành trang thiết bị khu bay - Tổ phó tổ Đài dẫn đường",
+                partyPosition: "Đảng viên",
+                unionPosition: "Tổ trưởng tổ công đoàn",
+                title: "Kỹ thuật viên",
+                education: "Đại học",
+                birthplace: "Xã Nội Bài - Thành Phố Hà Nội",
+                hometown: "Xã Nội Bài - Thành Phố Hà Nội",
+                address: "Thôn Đoài - Xã Nội Bài - Thành Phố Hà Nội",
+                residence: "Thôn Đoài - Xã Nội Bài - Thành Phố Hà Nội",
+                idCard: "001092026939",
+                idCardDate: "10/07/2021",
+                phone: "0356139679",
+                specialty: "HLV Bảo dưỡng, sửa chữa trang thiết bị ILS/DME/Marker và NDB",
+                note: "",
+                avatar: null,
+                avatarColor: "#2c3e50"
+            },
+            {
+                id: 17,
+                employeeCode: "015282",
+                name: "HOÀNG GIA PHONG",
+                dateOfBirth: "22/01/1990",
+                gender: "Nam",
+                team: "",
+                position: "Nhân viên vận hành trang thiết bị khu bay",
+                partyPosition: "Đảng viên",
+                unionPosition: "Đoàn viên công đoàn",
+                title: "Kỹ thuật viên",
+                education: "Đại học",
+                birthplace: "Xã Hương Sơn - Thành Phố Hà Nội",
+                hometown: "Xã Hương Sơn - Thành Phố Hà Nội",
+                address: "435 Đội Cấn - Phường Ngọc Hà - Thành Phố Hà Nội",
+                residence: "435 Đội Cấn - Phường Ngọc Hà - Thành Phố Hà Nội",
+                idCard: "001090025211",
+                idCardDate: "01/06/2023",
+                phone: "0948381633",
+                specialty: "HLV Bảo dưỡng, sửa chữa trang thiết bị ILS/DME/Marker và NDB",
+                note: "",
+                avatar: null,
+                avatarColor: "#3498db"
+            },
+            {
+                id: 18,
+                employeeCode: "015744",
+                name: "ĐỖ TRUNG KIÊN",
+                dateOfBirth: "10/11/1988",
+                gender: "Nam",
+                team: "",
+                position: "Nhân viên vận hành trang thiết bị khu bay - Tổ phó tổ Đài dẫn đường",
+                partyPosition: "Đảng viên",
+                unionPosition: "Phó chủ tịch CĐBP/Tổ trưởng tổ công đoàn",
+                title: "Kỹ thuật viên",
+                education: "Đại học",
+                birthplace: "Xã Quang Minh - Thành Phố Hà Nội",
+                hometown: "Xã Quang Minh - Thành Phố Hà Nội",
+                address: "Thôn Giai Lạc 2 - Xã Quang Minh - Thành Phố Hà Nội",
+                residence: "Thôn Giai Lạc 2 - Xã Quang Minh - Thành Phố Hà Nội",
+                idCard: "001088018454",
+                idCardDate: "12/08/2021",
+                phone: "0974069808",
+                specialty: "HLV Bảo dưỡng, sửa chữa trang thiết bị ILS/DME/Marker và NDB",
+                note: "",
+                avatar: null,
+                avatarColor: "#e74c3c"
+            },
+            {
+                id: 19,
+                employeeCode: "016883",
+                name: "NGUYỄN MINH ĐỨC",
+                dateOfBirth: "25/10/1992",
+                gender: "Nam",
+                team: "",
+                position: "Nhân viên vận hành trang thiết bị khu bay",
+                partyPosition: "Đảng viên",
+                unionPosition: "Đoàn viên công đoàn",
+                title: "Kỹ thuật viên",
+                education: "Đại học",
+                birthplace: "Xã Hợp Thịnh - Tỉnh Bắc Ninh",
+                hometown: "Xã Hợp Thịnh - Tỉnh Bắc Ninh",
+                address: "Trung Tâm - Xã Hợp Thịnh - Tỉnh Bắc Ninh",
+                residence: "Trung Tâm - Xã Hợp Thịnh - Tỉnh Bắc Ninh",
+                idCard: "024092015643",
+                idCardDate: "17/12/2021",
+                phone: "0976279347",
+                specialty: "HLV Bảo dưỡng, sửa chữa trang thiết bị ILS/DME/Marker và NDB",
+                note: "",
+                avatar: null,
+                avatarColor: "#1abc9c"
+            },
+            {
+                id: 20,
+                employeeCode: "016885",
+                name: "NGUYỄN NAM KHÁNH",
+                dateOfBirth: "30/04/1989",
+                gender: "Nam",
+                team: "",
+                position: "Nhân viên vận hành trang thiết bị khu bay",
+                partyPosition: "",
+                unionPosition: "Đoàn viên công đoàn",
+                title: "Kỹ thuật viên",
+                education: "Đại học",
+                birthplace: "Xã Tiên Lục - Tỉnh Bắc Ninh",
+                hometown: "Xã Tiên Lục - Tỉnh Bắc Ninh",
+                address: "CT7F - Khu đô thị Mới Dương Nội - Phường Dương Nội - Thành Phố Hà Nội",
+                residence: "CT7F - Khu đô thị Mới Dương Nội - Phường Dương Nội - Thành Phố Hà Nội",
+                idCard: "024089022225",
+                idCardDate: "12/08/2021",
+                phone: "0973681795",
+                specialty: "HLV Bảo dưỡng, sửa chữa trang thiết bị ILS/DME/Marker và NDB",
+                note: "",
+                avatar: null,
+                avatarColor: "#9b59b6"
+            },
+            {
+                id: 21,
+                employeeCode: "016891",
+                name: "NGUYỄN MẠNH CƯỜNG",
+                dateOfBirth: "03/12/1993",
+                gender: "Nam",
+                team: "",
+                position: "Kỹ sư khai thác, bảo trì trang thiết bị khu bay",
+                partyPosition: "Đảng viên",
+                unionPosition: "Đoàn viên công đoàn",
+                title: "Kỹ sư",
+                education: "Đại học",
+                birthplace: "Xã Sóc Sơn - Thành Phố Hà Nội",
+                hometown: "Xã Sóc Sơn - Thành Phố Hà Nội",
+                address: "Lạc Nông - Xã Sóc Sơn - Thành Phố Hà Nội",
+                residence: "Lạc Nông - Xã Sóc Sơn - Thành Phố Hà Nội",
+                idCard: "001093035743",
+                idCardDate: "12/01/2022",
+                phone: "0356111107",
+                specialty: "HLV Bảo dưỡng, sửa chữa trang thiết bị ILS/DME/Marker và NDB",
+                note: "",
+                avatar: null,
+                avatarColor: "#34495e"
+            },
+            {
+                id: 22,
+                employeeCode: "016892",
+                name: "NGUYỄN MINH TUẤN",
+                dateOfBirth: "14/07/1991",
+                gender: "Nam",
+                team: "",
+                position: "Kỹ sư khai thác, bảo trì trang thiết bị khu bay",
+                partyPosition: "Đảng viên",
+                unionPosition: "Đoàn viên công đoàn",
+                title: "Kỹ sư",
+                education: "Đại học",
+                birthplace: "Phường Sơn Tây - Thành phố Hà Nội",
+                hometown: "Xã Nam Xang- Tỉnh Ninh Bình",
+                address: "Số 129 Thôn 400- Phường Tùng Thiện- Thành phố Hà Nội",
+                residence: "Số 129 Thôn 400- Phường Tùng Thiện- Thành phố Hà Nội",
+                idCard: "001091021001",
+                idCardDate: "10/07/2021",
+                phone: "0356092358",
+                specialty: "HLV Bảo dưỡng, sửa chữa trang thiết bị ILS/DME/Marker và NDB",
+                note: "",
+                avatar: null,
+                avatarColor: "#d35400"
+            },
+            {
+                id: 23,
+                employeeCode: "017390",
+                name: "LÊ HỒNG THÁI",
+                dateOfBirth: "23/12/1995",
+                gender: "Nam",
+                team: "",
+                position: "Kỹ sư khai thác, bảo trì trang thiết bị khu bay",
+                partyPosition: "Đảng viên",
+                unionPosition: "Đoàn viên công đoàn",
+                title: "Kỹ sư",
+                education: "Đại học",
+                birthplace: "Xã Sóc Sơn - Thành Phố Hà Nội",
+                hometown: "Xã Sóc Sơn - Thành Phố Hà Nội",
+                address: "Dược Hạ - Xã Sóc Sơn - Thành Phố Hà Nội",
+                residence: "Tập Thể 971 - Dược Hạ - Xã Sóc Sơn - Thành Phố Hà Nội",
+                idCard: "001095014037",
+                idCardDate: "10/07/2021",
+                phone: "0962403365",
+                specialty: "HLV Bảo dưỡng, sửa chữa trang thiết bị ILS/DME/Marker và NDB",
+                note: "",
+                avatar: null,
+                avatarColor: "#27ae60"
+            },
+            {
+                id: 24,
+                employeeCode: "017853",
+                name: "VƯƠNG VĂN NAM",
+                dateOfBirth: "10/08/1997",
+                gender: "Nam",
+                team: "",
+                position: "Kỹ sư khai thác, bảo trì trang thiết bị khu bay",
+                partyPosition: "",
+                unionPosition: "Đoàn viên công đoàn",
+                title: "Kỹ sư",
+                education: "Đại học",
+                birthplace: "Xã Đa Phúc - Thành Phố Hà Nội",
+                hometown: "Xã Đa Phúc - Thành Phố Hà Nội",
+                address: "Thôn Lai Cách - Xã Đa Phúc - Thành Phố Hà Nội",
+                residence: "Thôn Lai Cách - Xã Đa Phúc - Thành Phố Hà Nội",
+                idCard: "001097026753",
+                idCardDate: "10/04/2021",
+                phone: "0326135328",
+                specialty: "HLV Bảo dưỡng, sửa chữa trang thiết bị ILS/DME/Marker và NDB",
+                note: "",
+                avatar: null,
+                avatarColor: "#2980b9"
+            },
+            {
+                id: 25,
+                employeeCode: "17855",
+                name: "NGUYỄN HOÀNG DƯƠNG",
+                dateOfBirth: "21/07/1999",
+                gender: "Nam",
+                team: "",
+                position: "Nhân viên vận hành trang thiết bị khu bay",
+                partyPosition: "",
+                unionPosition: "Đoàn viên công đoàn",
+                title: "Kỹ thuật viên",
+                education: "Đại học",
+                birthplace: "Xã Nội Bài - Thành Phố Hà Nội",
+                hometown: "Xã Nội Bài - Thành Phố Hà Nội",
+                address: "Thôn Trung - Xã Nội Bài - Thành Phố Hà Nội",
+                residence: "Thôn Trung - Xã Nội Bài - Thành Phố Hà Nội",
+                idCard: "001099006361",
+                idCardDate: "21/06/2024",
+                phone: "0912716250",
+                specialty: "HLV Bảo dưỡng, sửa chữa trang thiết bị ILS/DME/Marker và NDB",
+                note: "",
+                avatar: null,
+                avatarColor: "#8e44ad"
             }
         ];
 
@@ -772,7 +1476,7 @@
 
         // Get avatar color
         function getAvatarColor(name) {
-            const colors = ['#1a2980', '#26d0ce', '#27ae60', '#e74c3c', '#f39c12'];
+            const colors = ['#1a2980', '#26d0ce', '#27ae60', '#e74c3c', '#f39c12', '#9b59b6', '#1abc9c', '#34495e', '#e67e22', '#16a085', '#8e44ad', '#d35400', '#2980b9', '#2c3e50', '#3498db'];
             const index = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
             return colors[index % colors.length];
         }
@@ -798,60 +1502,79 @@
             }, 3000);
         }
 
-        // Login
-        function login() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+        // Show admin login
+        function showAdminLogin() {
+            document.getElementById('loginPanel').style.display = 'flex';
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('adminPassword').focus();
+        }
+
+        // Hide admin login
+        function hideAdminLogin() {
+            document.getElementById('loginPanel').style.display = 'none';
+        }
+
+        // Toggle password visibility
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('adminPassword');
+            const showPasswordCheckbox = document.getElementById('showPassword');
             
-            if ((username === 'admin' && password === 'admin123') || 
-                (username === 'user' && password === 'user123')) {
-                
-                currentUser = {
-                    username: username,
-                    type: username === 'admin' ? 'admin' : 'user',
-                    displayName: username === 'admin' ? 'Quản trị viên' : 'Người dùng'
-                };
-                isAdmin = currentUser.type === 'admin';
-                
-                document.getElementById('loginPanel').style.display = 'none';
-                document.getElementById('mainContent').style.display = 'block';
-                document.getElementById('userDisplayName').textContent = currentUser.displayName;
-                
-                initializeStorage();
-                updateStats();
-                renderPersonnelTable();
-                setupUserPermissions();
-                
-                showNotification(`Đăng nhập thành công! Chào mừng ${currentUser.displayName}`, 'success');
+            if (showPasswordCheckbox.checked) {
+                passwordInput.type = 'text';
             } else {
-                showNotification('Tên đăng nhập hoặc mật khẩu không đúng!', 'error');
+                passwordInput.type = 'password';
             }
         }
 
-        // Logout
-        function logout() {
-            currentUser = null;
+        // Login as admin
+        function loginAsAdmin() {
+            const password = document.getElementById('adminPassword').value;
+            
+            if (password === 'Naoc@Cns') {
+                isAdmin = true;
+                document.getElementById('loginPanel').style.display = 'none';
+                document.getElementById('adminLoginBtn').style.display = 'none';
+                
+                // Create logout button
+                const logoutBtn = document.createElement('button');
+                logoutBtn.className = 'admin-logout-btn';
+                logoutBtn.id = 'adminLogoutBtn';
+                logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> ĐĂNG XUẤT ADMIN';
+                logoutBtn.onclick = logoutAdmin;
+                document.body.appendChild(logoutBtn);
+                
+                document.getElementById('userDisplayName').textContent = 'Admin';
+                setupUserPermissions();
+                renderPersonnelTable();
+                
+                showNotification('Đăng nhập quyền admin thành công!', 'success');
+            } else {
+                showNotification('Mật khẩu không đúng!', 'error');
+                document.getElementById('adminPassword').value = '';
+                document.getElementById('adminPassword').focus();
+            }
+        }
+
+        // Logout admin
+        function logoutAdmin() {
             isAdmin = false;
+            document.getElementById('adminLogoutBtn').remove();
+            document.getElementById('adminLoginBtn').style.display = 'flex';
+            document.getElementById('userDisplayName').textContent = 'Khách';
+            setupUserPermissions();
+            renderPersonnelTable();
             
-            document.getElementById('loginPanel').style.display = 'flex';
-            document.getElementById('mainContent').style.display = 'none';
-            document.getElementById('username').value = 'admin';
-            document.getElementById('password').value = 'admin123';
-            
-            showNotification('Đã đăng xuất thành công!', 'success');
+            showNotification('Đã đăng xuất quyền admin!', 'success');
         }
 
         // Setup permissions
         function setupUserPermissions() {
             const addBtn = document.getElementById('addBtn');
-            const actionColumn = document.getElementById('actionColumn');
             
             if (isAdmin) {
                 addBtn.style.display = 'flex';
-                if (actionColumn) actionColumn.style.display = '';
             } else {
                 addBtn.style.display = 'none';
-                if (actionColumn) actionColumn.style.display = 'none';
             }
         }
 
@@ -867,6 +1590,37 @@
             document.getElementById('total-engineer').textContent = engineer;
             document.getElementById('total-technician').textContent = technician;
             document.getElementById('total-count').textContent = total;
+        }
+
+        // Upload avatar
+        function uploadAvatar(personId) {
+            if (!isAdmin) {
+                showNotification('Chỉ quản trị viên mới có quyền upload ảnh!', 'error');
+                return;
+            }
+            
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const personIndex = personnelData.findIndex(p => p.id === personId);
+                        if (personIndex !== -1) {
+                            personnelData[personIndex].avatar = e.target.result;
+                            savePersonnelData();
+                            renderPersonnelTable();
+                            showNotification('Đã upload ảnh thành công!', 'success');
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+            
+            input.click();
         }
 
         // Render table
@@ -911,7 +1665,7 @@
             if (pageData.length === 0) {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td colspan="14" style="text-align: center; padding: 60px 20px; color: var(--gray);">
+                    <td colspan="23" style="text-align: center; padding: 60px 20px; color: var(--dark);">
                         <i class="fas fa-users-slash" style="font-size: 48px; margin-bottom: 20px; display: block;"></i>
                         <h3>Không tìm thấy nhân sự</h3>
                     </td>
@@ -931,38 +1685,78 @@
                         avatarHTML = `<div class="avatar" style="background: ${person.avatarColor}">${initials}</div>`;
                     }
                     
-                    // Determine what to show based on permissions
-                    const displayDateOfBirth = isAdmin ? person.dateOfBirth : '••/••/••••';
-                    const displaySpecialty = isAdmin ? person.specialty : '•••••••••••••••';
+                    // Add upload button for admin
+                    const uploadButton = isAdmin ? 
+                        `<div class="avatar-upload" onclick="event.stopPropagation(); uploadAvatar(${person.id})">
+                            <i class="fas fa-camera"></i>
+                        </div>` : '';
+                    
+                    // Xác định cần hiển thị thông tin gì
+                    const displayDateOfBirth = isAdmin ? person.dateOfBirth : '—';
+                    const displaySpecialty = isAdmin ? person.specialty : '—';
+                    const displayIdCard = isAdmin ? person.idCard : '—';
+                    const displayIdCardDate = isAdmin ? person.idCardDate : '—';
+                    const displayPhone = isAdmin ? person.phone : '—';
+                    const displayBirthplace = isAdmin ? person.birthplace : '—';
+                    const displayHometown = isAdmin ? person.hometown : '—';
+                    const displayAddress = isAdmin ? person.address : '—';
+                    const displayResidence = isAdmin ? person.residence : '—';
+                    const displayPartyPosition = isAdmin ? person.partyPosition : '—';
+                    const displayUnionPosition = isAdmin ? person.unionPosition : '—';
+                    
+                    // View button HTML
+                    const viewButtonHTML = `
+                        <span style="color: #3498db; cursor: pointer; font-size: 16px;" 
+                              onclick="event.stopPropagation(); viewPersonnel(${person.id})">
+                            👁️
+                        </span>
+                    `;
+                    
+                    // Action buttons for admin
+                    const actionButtonsHTML = isAdmin ? `
+                        <div class="action-buttons">
+                            <button class="action-btn edit-btn" onclick="event.stopPropagation(); editPersonnel(${person.id})">
+                                <i class="fas fa-edit"></i> Sửa
+                            </button>
+                            <button class="action-btn delete-btn" onclick="event.stopPropagation(); deletePersonnel(${person.id})">
+                                <i class="fas fa-trash"></i> Xóa
+                            </button>
+                        </div>
+                    ` : viewButtonHTML;
                     
                     row.innerHTML = `
                         <td>${actualIndex}</td>
                         <td><div class="employee-code">${person.employeeCode || '—'}</div></td>
-                        <td class="avatar-cell"><div class="avatar-container">${avatarHTML}</div></td>
+                        <td class="avatar-cell">
+                            <div class="avatar-container">
+                                ${avatarHTML}
+                                ${uploadButton}
+                            </div>
+                        </td>
                         <td class="col-name"><div class="employee-name">${person.name}</div></td>
                         <td>${displayDateOfBirth}</td>
-                        <td class="col-team">${person.team}</td>
-                        <td class="col-position" style="text-align: center;">${person.position}</td>
-                        <td class="col-party" style="text-align: center;">${person.partyPosition || ''}</td>
-                        <td class="col-union" style="text-align: center;">${person.unionPosition || ''}</td>
-                        <td class="col-title" style="text-align: center;">${person.title}</td>
-                        <td style="text-align: center;">${person.education}</td>
+                        <td>${person.gender || '—'}</td>
+                        <td class="col-team">${person.team || '—'}</td>
+                        <td class="col-position" style="text-align: center;">${person.position || '—'}</td>
+                        <td class="col-party" style="text-align: center;">${displayPartyPosition}</td>
+                        <td class="col-union" style="text-align: center;">${displayUnionPosition}</td>
+                        <td class="col-title" style="text-align: center;">${person.title || '—'}</td>
+                        <td style="text-align: center;">${person.education || '—'}</td>
+                        <td class="col-birthplace">${displayBirthplace}</td>
+                        <td class="col-hometown">${displayHometown}</td>
+                        <td class="col-address">${displayAddress}</td>
+                        <td class="col-residence">${displayResidence}</td>
+                        <td>${displayIdCard}</td>
+                        <td>${displayIdCardDate}</td>
+                        <td>${displayPhone}</td>
                         <td class="col-specialty">${displaySpecialty}</td>
                         <td class="col-note">${person.note || ''}</td>
                         <td class="col-action">
-                            ${isAdmin ? `
-                            <div class="action-buttons">
-                                <button class="action-btn edit-btn" onclick="event.stopPropagation(); editPersonnel(${person.id})">
-                                    <i class="fas fa-edit"></i> Sửa
-                                </button>
-                                <button class="action-btn delete-btn" onclick="event.stopPropagation(); deletePersonnel(${person.id})">
-                                    <i class="fas fa-trash"></i> Xóa
-                                </button>
-                            </div>
-                            ` : '<span style="color: #999; font-size: 11px;">Chỉ xem</span>'}
+                            ${actionButtonsHTML}
                         </td>
                     `;
                     
+                    // Click on row to view details
                     row.onclick = () => viewPersonnel(person.id);
                     tableBody.appendChild(row);
                 });
@@ -1033,14 +1827,30 @@
                 <i class="fas fa-user-circle"></i> THÔNG TIN CHI TIẾT: ${person.name}
             `;
             
-            // Determine what to show
-            const displayDateOfBirth = isAdmin ? person.dateOfBirth : '••/••/••••';
-            const displaySpecialty = isAdmin ? person.specialty : '•••••••••••••••';
-            const displayNote = isAdmin ? person.note : '';
+            // Xác định cần hiển thị thông tin gì trong modal
+            const displayDateOfBirth = isAdmin ? person.dateOfBirth : '—';
+            const displaySpecialty = isAdmin ? person.specialty : '—';
+            const displayNote = isAdmin ? person.note : '—';
+            const displayIdCard = isAdmin ? person.idCard : '—';
+            const displayIdCardDate = isAdmin ? person.idCardDate : '—';
+            const displayPhone = isAdmin ? person.phone : '—';
+            const displayBirthplace = isAdmin ? person.birthplace : '—';
+            const displayHometown = isAdmin ? person.hometown : '—';
+            const displayAddress = isAdmin ? person.address : '—';
+            const displayResidence = isAdmin ? person.residence : '—';
+            const displayPartyPosition = isAdmin ? person.partyPosition : '—';
+            const displayUnionPosition = isAdmin ? person.unionPosition : '—';
             
             document.getElementById('modal-content-body').innerHTML = `
                 <div style="display: flex; align-items: center; gap: 25px; margin-bottom: 30px; padding-bottom: 25px; border-bottom: 2px solid var(--border);">
-                    <div>${avatarHTML}</div>
+                    <div>
+                        ${avatarHTML}
+                        ${isAdmin ? `
+                        <button class="upload-avatar-btn" onclick="uploadAvatar(${person.id})">
+                            <i class="fas fa-camera"></i> Đổi ảnh
+                        </button>
+                        ` : ''}
+                    </div>
                     <div style="flex: 1;">
                         <h3 style="margin: 0 0 10px 0; color: var(--primary); font-size: 20px;">${person.name}</h3>
                         <p style="margin: 8px 0; color: var(--dark); font-size: 14px;">
@@ -1052,6 +1862,9 @@
                         <p style="margin: 8px 0; color: var(--dark); font-size: 14px;">
                             <i class="fas fa-building"></i> Đội/tổ: <strong>${person.team}</strong>
                         </p>
+                        <p style="margin: 8px 0; color: var(--dark); font-size: 14px;">
+                            <i class="fas fa-phone"></i> Điện thoại: <strong>${displayPhone}</strong>
+                        </p>
                     </div>
                 </div>
                 
@@ -1062,12 +1875,24 @@
                         </h4>
                         <div style="font-size: 14px;">
                             <p style="margin: 12px 0; display: flex; justify-content: space-between;">
-                                <span style="color: var(--gray);">Ngày sinh:</span>
+                                <span style="color: var(--dark);">Ngày sinh:</span>
                                 <strong>${displayDateOfBirth}</strong>
                             </p>
                             <p style="margin: 12px 0; display: flex; justify-content: space-between;">
-                                <span style="color: var(--gray);">Trình độ:</span>
+                                <span style="color: var(--dark);">Giới tính:</span>
+                                <strong>${person.gender || '—'}</strong>
+                            </p>
+                            <p style="margin: 12px 0; display: flex; justify-content: space-between;">
+                                <span style="color: var(--dark);">Trình độ:</span>
                                 <strong>${person.education || '—'}</strong>
+                            </p>
+                            <p style="margin: 12px 0; display: flex; justify-content: space-between;">
+                                <span style="color: var(--dark);">Nơi sinh:</span>
+                                <strong>${displayBirthplace}</strong>
+                            </p>
+                            <p style="margin: 12px 0; display: flex; justify-content: space-between;">
+                                <span style="color: var(--dark);">Quê quán:</span>
+                                <strong>${displayHometown}</strong>
                             </p>
                         </div>
                     </div>
@@ -1078,21 +1903,45 @@
                         </h4>
                         <div style="font-size: 14px;">
                             <p style="margin: 12px 0; display: flex; justify-content: space-between;">
-                                <span style="color: var(--gray);">Chức vụ:</span>
+                                <span style="color: var(--dark);">Chức vụ:</span>
                                 <strong>${person.position || '—'}</strong>
                             </p>
-                            ${person.partyPosition ? `
+                            ${displayPartyPosition !== '—' ? `
                             <p style="margin: 12px 0; display: flex; justify-content: space-between;">
-                                <span style="color: var(--gray);">Chức vụ Đảng:</span>
-                                <strong style="color: #c0392b;">${person.partyPosition}</strong>
+                                <span style="color: var(--dark);">Chức vụ Đảng:</span>
+                                <strong style="color: #c0392b;">${displayPartyPosition}</strong>
                             </p>
                             ` : ''}
-                            ${person.unionPosition ? `
+                            ${displayUnionPosition !== '—' ? `
                             <p style="margin: 12px 0; display: flex; justify-content: space-between;">
-                                <span style="color: var(--gray);">Chức vụ Công đoàn:</span>
-                                <strong style="color: var(--success);">${person.unionPosition}</strong>
+                                <span style="color: var(--dark);">Chức vụ Công đoàn:</span>
+                                <strong style="color: var(--success);">${displayUnionPosition}</strong>
                             </p>
                             ` : ''}
+                        </div>
+                    </div>
+                    
+                    <div style="background: var(--light); padding: 20px; border-radius: 10px; border: 1px solid var(--border);">
+                        <h4 style="margin: 0 0 15px 0; color: var(--primary); font-size: 15px;">
+                            <i class="fas fa-home"></i> Thông tin liên hệ
+                        </h4>
+                        <div style="font-size: 14px;">
+                            <p style="margin: 12px 0; display: flex; justify-content: space-between;">
+                                <span style="color: var(--dark);">Địa chỉ thường trú:</span>
+                                <strong>${displayAddress}</strong>
+                            </p>
+                            <p style="margin: 12px 0; display: flex; justify-content: space-between;">
+                                <span style="color: var(--dark);">Địa chỉ tạm trú:</span>
+                                <strong>${displayResidence}</strong>
+                            </p>
+                            <p style="margin: 12px 0; display: flex; justify-content: space-between;">
+                                <span style="color: var(--dark);">Số CCCD:</span>
+                                <strong>${displayIdCard}</strong>
+                            </p>
+                            <p style="margin: 12px 0; display: flex; justify-content: space-between;">
+                                <span style="color: var(--dark);">Ngày cấp CCCD:</span>
+                                <strong>${displayIdCardDate}</strong>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -1106,7 +1955,7 @@
                     </div>
                 </div>
                 
-                ${displayNote ? `
+                ${displayNote !== '—' && displayNote ? `
                 <div style="background: var(--light); padding: 20px; border-radius: 10px; border: 1px solid var(--border); margin-top: 20px;">
                     <h4 style="margin: 0 0 15px 0; color: var(--primary); font-size: 15px;">
                         <i class="fas fa-sticky-note"></i> Ghi chú
@@ -1138,6 +1987,7 @@
         function closeModal() {
             document.getElementById('detailModal').style.display = 'none';
             currentPersonnelId = null;
+            currentAvatarFile = null;
         }
 
         // Edit personnel
@@ -1151,13 +2001,30 @@
             if (!person) return;
             
             currentPersonnelId = id;
+            currentAvatarFile = null;
             
             document.getElementById('modal-title').innerHTML = `
                 <i class="fas fa-edit"></i> CHỈNH SỬA THÔNG TIN: ${person.name}
             `;
             
+            let avatarPreview = '';
+            if (person.avatar) {
+                avatarPreview = `<img src="${person.avatar}" alt="${person.name}" class="avatar-preview" id="avatarPreview">`;
+            } else {
+                const initials = getInitials(person.name);
+                avatarPreview = `<div class="avatar-preview" id="avatarPreview" style="background: ${person.avatarColor}; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 24px;">${initials}</div>`;
+            }
+            
             document.getElementById('modal-content-body').innerHTML = `
                 <form id="editPersonnelForm" style="margin: 20px 0;">
+                    <div style="text-align: center; margin-bottom: 25px;">
+                        ${avatarPreview}
+                        <button type="button" class="upload-avatar-btn" onclick="document.getElementById('avatarInput').click()">
+                            <i class="fas fa-camera"></i> Chọn ảnh đại diện
+                        </button>
+                        <input type="file" id="avatarInput" accept="image/*" style="display: none;" onchange="handleAvatarUpload(event)">
+                    </div>
+                    
                     <div class="form-row">
                         <div class="form-group">
                             <label><i class="fas fa-user"></i> Họ và tên *</label>
@@ -1175,6 +2042,17 @@
                             <input type="text" id="edit-dateOfBirth" value="${person.dateOfBirth || ''}" placeholder="dd/mm/yyyy">
                         </div>
                         <div class="form-group">
+                            <label><i class="fas fa-venus-mars"></i> Giới tính *</label>
+                            <select id="edit-gender" required>
+                                <option value="">Chọn giới tính</option>
+                                <option value="Nam" ${person.gender === 'Nam' ? 'selected' : ''}>Nam</option>
+                                <option value="Nữ" ${person.gender === 'Nữ' ? 'selected' : ''}>Nữ</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
                             <label><i class="fas fa-users"></i> Đội/tổ *</label>
                             <select id="edit-team" required>
                                 <option value="">Chọn đội/tổ</option>
@@ -1184,59 +2062,98 @@
                                 <option value="Tổ Thông tin và đường dây" ${person.team === 'Tổ Thông tin và đường dây' ? 'selected' : ''}>Tổ Thông tin và đường dây</option>
                             </select>
                         </div>
-                    </div>
-                    
-                    <div class="form-row">
                         <div class="form-group">
-                            <label><i class="fas fa-briefcase"></i> Chức vụ</label>
+                            <label><i class="fas fa-briefcase"></i> Chức vụ (Chính quyền)</label>
                             <select id="edit-position">
                                 <option value="">Chọn chức vụ</option>
                                 <option value="Đội trưởng" ${person.position === 'Đội trưởng' ? 'selected' : ''}>Đội trưởng</option>
-                                <option value="Phó đội trưởng/Tổ trưởng" ${person.position === 'Phó đội trưởng/Tổ trưởng' ? 'selected' : ''}>Phó đội trưởng/Tổ trưởng</option>
+                                <option value="Phó đội trưởng" ${person.position === 'Phó đội trưởng' ? 'selected' : ''}>Phó đội trưởng</option>
+                                <option value="Tổ trưởng" ${person.position === 'Tổ trưởng' ? 'selected' : ''}>Tổ trưởng</option>
                                 <option value="Phó tổ trưởng" ${person.position === 'Phó tổ trưởng' ? 'selected' : ''}>Phó tổ trưởng</option>
+                                <option value="Kỹ sư" ${person.position === 'Kỹ sư' ? 'selected' : ''}>Kỹ sư</option>
+                                <option value="Kỹ thuật viên" ${person.position === 'Kỹ thuật viên' ? 'selected' : ''}>Kỹ thuật viên</option>
                                 <option value="Nhân viên" ${person.position === 'Nhân viên' ? 'selected' : ''}>Nhân viên</option>
                             </select>
                         </div>
+                    </div>
+                    
+                    <div class="form-row">
                         <div class="form-group">
                             <label><i class="fas fa-graduation-cap"></i> Chức danh</label>
                             <select id="edit-title">
                                 <option value="">Chọn chức danh</option>
                                 <option value="Kỹ sư" ${person.title === 'Kỹ sư' ? 'selected' : ''}>Kỹ sư</option>
                                 <option value="Kỹ thuật viên" ${person.title === 'Kỹ thuật viên' ? 'selected' : ''}>Kỹ thuật viên</option>
-                                <option value="Chuyên viên" ${person.title === 'Chuyên viên' ? 'selected' : ''}>Chuyên viên</option>
                             </select>
                         </div>
-                    </div>
-                    
-                    <div class="form-row">
                         <div class="form-group">
                             <label><i class="fas fa-graduation-cap"></i> Trình độ</label>
                             <select id="edit-education">
                                 <option value="">Chọn trình độ</option>
                                 <option value="Đại học" ${person.education === 'Đại học' ? 'selected' : ''}>Đại học</option>
-                                <option value="Cao đẳng" ${person.education === 'Cao đẳng' ? 'selected' : ''}>Cao đẳng</option>
-                                <option value="Trung cấp" ${person.education === 'Trung cấp' ? 'selected' : ''}>Trung cấp</option>
                             </select>
                         </div>
                     </div>
                     
                     <div class="form-row">
                         <div class="form-group">
-                            <label><i class="fas fa-flag"></i> Chức vụ Đảng</label>
+                            <label><i class="fas fa-map-marker-alt"></i> Nơi sinh</label>
+                            <input type="text" id="edit-birthplace" value="${person.birthplace || ''}" placeholder="Nhập nơi sinh">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-home"></i> Quê quán</label>
+                            <input type="text" id="edit-hometown" value="${person.hometown || ''}" placeholder="Nhập quê quán">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-house-user"></i> Địa chỉ thường trú</label>
+                            <input type="text" id="edit-address" value="${person.address || ''}" placeholder="Nhập địa chỉ thường trú">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-building"></i> Địa chỉ tạm trú</label>
+                            <input type="text" id="edit-residence" value="${person.residence || ''}" placeholder="Nhập địa chỉ tạm trú">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-id-card"></i> Số CCCD</label>
+                            <input type="text" id="edit-idCard" value="${person.idCard || ''}" placeholder="Nhập số CCCD">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-calendar-alt"></i> Ngày cấp CCCD</label>
+                            <input type="text" id="edit-idCardDate" value="${person.idCardDate || ''}" placeholder="dd/mm/yyyy">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-phone"></i> Số điện thoại</label>
+                            <input type="text" id="edit-phone" value="${person.phone || ''}" placeholder="Nhập số điện thoại">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-flag" style="color: #c0392b;"></i> Chức vụ Đảng</label>
                             <select id="edit-partyPosition">
                                 <option value="" ${!person.partyPosition ? 'selected' : ''}>Không có</option>
-                                <option value="Đảng viên" ${person.partyPosition === 'Đảng viên' ? 'selected' : ''}>Đảng viên</option>
                                 <option value="Bí thư chi bộ" ${person.partyPosition === 'Bí thư chi bộ' ? 'selected' : ''}>Bí thư chi bộ</option>
+                                <option value="Phó bí thư chi bộ" ${person.partyPosition === 'Phó bí thư chi bộ' ? 'selected' : ''}>Phó bí thư chi bộ</option>
                                 <option value="Chi ủy viên" ${person.partyPosition === 'Chi ủy viên' ? 'selected' : ''}>Chi ủy viên</option>
+                                <option value="Đảng viên" ${person.partyPosition === 'Đảng viên' ? 'selected' : ''}>Đảng viên</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label><i class="fas fa-handshake"></i> Chức vụ Công đoàn</label>
+                            <label><i class="fas fa-handshake" style="color: #27ae60;"></i> Chức vụ Công đoàn</label>
                             <select id="edit-unionPosition">
                                 <option value="" ${!person.unionPosition ? 'selected' : ''}>Không có</option>
                                 <option value="Đoàn viên công đoàn" ${person.unionPosition === 'Đoàn viên công đoàn' ? 'selected' : ''}>Đoàn viên công đoàn</option>
-                                <option value="Tổ trưởng công đoàn" ${person.unionPosition === 'Tổ trưởng công đoàn' ? 'selected' : ''}>Tổ trưởng công đoàn</option>
-                                <option value="Phó chủ tịch Công đoàn" ${person.unionPosition === 'Phó chủ tịch Công đoàn' ? 'selected' : ''}>Phó chủ tịch Công đoàn</option>
+                                <option value="Tổ trưởng tổ công đoàn" ${person.unionPosition === 'Tổ trưởng tổ công đoàn' ? 'selected' : ''}>Tổ trưởng tổ công đoàn</option>
+                                <option value="Ủy viên BCH CĐBP" ${person.unionPosition === 'Ủy viên BCH CĐBP' ? 'selected' : ''}>Ủy viên BCH CĐBP</option>
+                                <option value="Phó chủ tịch CĐCS/Chủ tích CĐBP" ${person.unionPosition === 'Phó chủ tịch CĐCS/Chủ tích CĐBP' ? 'selected' : ''}>Phó chủ tịch CĐCS/Chủ tích CĐBP</option>
                             </select>
                         </div>
                     </div>
@@ -1266,7 +2183,7 @@
             
             document.getElementById('detailModal').style.display = 'flex';
             
-            // Handle form submission - FIXED VERSION
+            // Handle form submission
             const form = document.getElementById('editPersonnelForm');
             form.onsubmit = (e) => {
                 e.preventDefault();
@@ -1274,7 +2191,21 @@
             };
         }
 
-        // SAVE PERSONNEL CHANGES - ĐÃ SỬA
+        // Handle avatar upload in edit form
+        function handleAvatarUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const avatarPreview = document.getElementById('avatarPreview');
+                    avatarPreview.innerHTML = `<img src="${e.target.result}" alt="Preview" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+                    currentAvatarFile = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // SAVE PERSONNEL CHANGES
         function savePersonnelChanges() {
             if (!isAdmin) return;
             
@@ -1286,20 +2217,35 @@
             }
             
             // Update the person's data
-            personnelData[index] = {
+            const updatedPerson = {
                 ...personnelData[index],
                 name: document.getElementById('edit-name').value,
                 employeeCode: document.getElementById('edit-employeeCode').value,
                 dateOfBirth: document.getElementById('edit-dateOfBirth').value,
+                gender: document.getElementById('edit-gender').value,
                 team: document.getElementById('edit-team').value,
                 position: document.getElementById('edit-position').value,
                 title: document.getElementById('edit-title').value,
                 education: document.getElementById('edit-education').value,
+                birthplace: document.getElementById('edit-birthplace').value,
+                hometown: document.getElementById('edit-hometown').value,
+                address: document.getElementById('edit-address').value,
+                residence: document.getElementById('edit-residence').value,
+                idCard: document.getElementById('edit-idCard').value,
+                idCardDate: document.getElementById('edit-idCardDate').value,
+                phone: document.getElementById('edit-phone').value,
                 partyPosition: document.getElementById('edit-partyPosition').value,
                 unionPosition: document.getElementById('edit-unionPosition').value,
                 specialty: document.getElementById('edit-specialty').value,
                 note: document.getElementById('edit-note').value
             };
+            
+            // Update avatar if new one was uploaded
+            if (currentAvatarFile) {
+                updatedPerson.avatar = currentAvatarFile;
+            }
+            
+            personnelData[index] = updatedPerson;
             
             // Save to localStorage
             savePersonnelData();
@@ -1319,12 +2265,24 @@
             }
             
             currentPersonnelId = null;
+            currentAvatarFile = null;
+            
             document.getElementById('modal-title').innerHTML = `
                 <i class="fas fa-user-plus"></i> THÊM NHÂN SỰ MỚI
             `;
             
             document.getElementById('modal-content-body').innerHTML = `
                 <form id="addPersonnelForm" style="margin: 20px 0;">
+                    <div style="text-align: center; margin-bottom: 25px;">
+                        <div class="avatar-preview" id="avatarPreview" style="background: var(--border); display: flex; align-items: center; justify-content: center; color: #999; font-size: 18px;">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <button type="button" class="upload-avatar-btn" onclick="document.getElementById('avatarInputAdd').click()">
+                            <i class="fas fa-camera"></i> Chọn ảnh đại diện
+                        </button>
+                        <input type="file" id="avatarInputAdd" accept="image/*" style="display: none;" onchange="handleAvatarUploadAdd(event)">
+                    </div>
+                    
                     <div class="form-row">
                         <div class="form-group">
                             <label><i class="fas fa-user"></i> Họ và tên *</label>
@@ -1342,6 +2300,17 @@
                             <input type="text" id="add-dateOfBirth" placeholder="dd/mm/yyyy">
                         </div>
                         <div class="form-group">
+                            <label><i class="fas fa-venus-mars"></i> Giới tính *</label>
+                            <select id="add-gender" required>
+                                <option value="">Chọn giới tính</option>
+                                <option value="Nam">Nam</option>
+                                <option value="Nữ">Nữ</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
                             <label><i class="fas fa-users"></i> Đội/tổ *</label>
                             <select id="add-team" required>
                                 <option value="">Chọn đội/tổ</option>
@@ -1351,59 +2320,98 @@
                                 <option value="Tổ Thông tin và đường dây">Tổ Thông tin và đường dây</option>
                             </select>
                         </div>
-                    </div>
-                    
-                    <div class="form-row">
                         <div class="form-group">
-                            <label><i class="fas fa-briefcase"></i> Chức vụ</label>
+                            <label><i class="fas fa-briefcase"></i> Chức vụ (Chính quyền)</label>
                             <select id="add-position">
                                 <option value="">Chọn chức vụ</option>
                                 <option value="Đội trưởng">Đội trưởng</option>
-                                <option value="Phó đội trưởng/Tổ trưởng">Phó đội trưởng/Tổ trưởng</option>
+                                <option value="Phó đội trưởng">Phó đội trưởng</option>
+                                <option value="Tổ trưởng">Tổ trưởng</option>
                                 <option value="Phó tổ trưởng">Phó tổ trưởng</option>
+                                <option value="Kỹ sư">Kỹ sư</option>
+                                <option value="Kỹ thuật viên">Kỹ thuật viên</option>
                                 <option value="Nhân viên">Nhân viên</option>
                             </select>
                         </div>
+                    </div>
+                    
+                    <div class="form-row">
                         <div class="form-group">
                             <label><i class="fas fa-graduation-cap"></i> Chức danh</label>
                             <select id="add-title">
                                 <option value="">Chọn chức danh</option>
                                 <option value="Kỹ sư">Kỹ sư</option>
                                 <option value="Kỹ thuật viên">Kỹ thuật viên</option>
-                                <option value="Chuyên viên">Chuyên viên</option>
                             </select>
                         </div>
-                    </div>
-                    
-                    <div class="form-row">
                         <div class="form-group">
                             <label><i class="fas fa-graduation-cap"></i> Trình độ</label>
                             <select id="add-education">
                                 <option value="">Chọn trình độ</option>
                                 <option value="Đại học">Đại học</option>
-                                <option value="Cao đẳng">Cao đẳng</option>
-                                <option value="Trung cấp">Trung cấp</option>
                             </select>
                         </div>
                     </div>
                     
                     <div class="form-row">
                         <div class="form-group">
-                            <label><i class="fas fa-flag"></i> Chức vụ Đảng</label>
+                            <label><i class="fas fa-map-marker-alt"></i> Nơi sinh</label>
+                            <input type="text" id="add-birthplace" placeholder="Nhập nơi sinh">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-home"></i> Quê quán</label>
+                            <input type="text" id="add-hometown" placeholder="Nhập quê quán">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-house-user"></i> Địa chỉ thường trú</label>
+                            <input type="text" id="add-address" placeholder="Nhập địa chỉ thường trú">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-building"></i> Địa chỉ tạm trú</label>
+                            <input type="text" id="add-residence" placeholder="Nhập địa chỉ tạm trú">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-id-card"></i> Số CCCD</label>
+                            <input type="text" id="add-idCard" placeholder="Nhập số CCCD">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-calendar-alt"></i> Ngày cấp CCCD</label>
+                            <input type="text" id="add-idCardDate" placeholder="dd/mm/yyyy">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-phone"></i> Số điện thoại</label>
+                            <input type="text" id="add-phone" placeholder="Nhập số điện thoại">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-flag" style="color: #c0392b;"></i> Chức vụ Đảng</label>
                             <select id="add-partyPosition">
                                 <option value="">Không có</option>
-                                <option value="Đảng viên">Đảng viên</option>
                                 <option value="Bí thư chi bộ">Bí thư chi bộ</option>
+                                <option value="Phó bí thư chi bộ">Phó bí thư chi bộ</option>
                                 <option value="Chi ủy viên">Chi ủy viên</option>
+                                <option value="Đảng viên">Đảng viên</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label><i class="fas fa-handshake"></i> Chức vụ Công đoàn</label>
+                            <label><i class="fas fa-handshake" style="color: #27ae60;"></i> Chức vụ Công đoàn</label>
                             <select id="add-unionPosition">
                                 <option value="">Không có</option>
                                 <option value="Đoàn viên công đoàn">Đoàn viên công đoàn</option>
-                                <option value="Tổ trưởng công đoàn">Tổ trưởng công đoàn</option>
-                                <option value="Phó chủ tịch Công đoàn">Phó chủ tịch Công đoàn</option>
+                                <option value="Tổ trưởng tổ công đoàn">Tổ trưởng tổ công đoàn</option>
+                                <option value="Ủy viên BCH CĐBP">Ủy viên BCH CĐBP</option>
+                                <option value="Phó chủ tịch CĐCS/Chủ tích CĐBP">Phó chủ tịch CĐCS/Chủ tích CĐBP</option>
                             </select>
                         </div>
                     </div>
@@ -1440,27 +2448,50 @@
             };
         }
 
+        // Handle avatar upload in add form
+        function handleAvatarUploadAdd(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const avatarPreview = document.getElementById('avatarPreview');
+                    avatarPreview.innerHTML = `<img src="${e.target.result}" alt="Preview" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+                    currentAvatarFile = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
         // Add new personnel
         function addNewPersonnel() {
             if (!isAdmin) return;
             
             const newId = personnelData.length > 0 ? Math.max(...personnelData.map(p => p.id)) + 1 : 1;
+            const name = document.getElementById('add-name').value;
             
             const newPerson = {
                 id: newId,
-                name: document.getElementById('add-name').value,
+                name: name,
                 employeeCode: document.getElementById('add-employeeCode').value,
                 dateOfBirth: document.getElementById('add-dateOfBirth').value,
+                gender: document.getElementById('add-gender').value,
                 team: document.getElementById('add-team').value,
                 position: document.getElementById('add-position').value,
                 title: document.getElementById('add-title').value,
                 education: document.getElementById('add-education').value,
+                birthplace: document.getElementById('add-birthplace').value,
+                hometown: document.getElementById('add-hometown').value,
+                address: document.getElementById('add-address').value,
+                residence: document.getElementById('add-residence').value,
+                idCard: document.getElementById('add-idCard').value,
+                idCardDate: document.getElementById('add-idCardDate').value,
+                phone: document.getElementById('add-phone').value,
                 partyPosition: document.getElementById('add-partyPosition').value,
                 unionPosition: document.getElementById('add-unionPosition').value,
                 specialty: document.getElementById('add-specialty').value,
                 note: document.getElementById('add-note').value,
-                avatar: null,
-                avatarColor: getAvatarColor(document.getElementById('add-name').value)
+                avatar: currentAvatarFile,
+                avatarColor: getAvatarColor(name)
             };
             
             personnelData.push(newPerson);
@@ -1519,19 +2550,28 @@
 
         // Export
         function exportToExcel() {
-            let csvContent = "Mã NV,Họ và tên,Chức danh,Đội/tổ,Chức vụ,Trình độ,Chức vụ Đảng,Chức vụ Công đoàn,Ngày sinh,Chuyên môn đào tạo,Ghi chú\n";
+            let csvContent = "STT,Mã NV,Họ và tên,Ngày sinh,Giới tính,Đội/tổ,Chức vụ,Chức vụ Đảng,Chức vụ Công đoàn,Chức danh,Trình độ,Nơi sinh,Quê quán,Địa chỉ thường trú,Địa chỉ tạm trú,Số CCCD,Ngày cấp CCCD,Số điện thoại,Chuyên môn đào tạo,Ghi chú\n";
             
-            personnelData.forEach(person => {
+            personnelData.forEach((person, index) => {
                 const row = [
+                    index + 1,
                     person.employeeCode || '',
                     person.name,
-                    person.title,
-                    person.team,
-                    person.position,
-                    person.education,
+                    person.dateOfBirth || '',
+                    person.gender || '',
+                    person.team || '',
+                    person.position || '',
                     person.partyPosition || '',
                     person.unionPosition || '',
-                    person.dateOfBirth || '',
+                    person.title || '',
+                    person.education || '',
+                    person.birthplace || '',
+                    person.hometown || '',
+                    person.address || '',
+                    person.residence || '',
+                    person.idCard || '',
+                    person.idCardDate || '',
+                    person.phone || '',
                     person.specialty || '',
                     person.note || ''
                 ].map(field => `"${field}"`).join(',');
@@ -1556,6 +2596,10 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
+            initializeStorage();
+            updateStats();
+            renderPersonnelTable();
+            
             // Event listeners for filters
             ['filter-team', 'filter-position', 'filter-title', 'filter-education'].forEach(id => {
                 document.getElementById(id).addEventListener('change', () => {
@@ -1575,8 +2619,17 @@
                     closeModal();
                 }
             });
+            
+            // Enter key for admin login
+            const adminPasswordInput = document.getElementById('adminPassword');
+            if (adminPasswordInput) {
+                adminPasswordInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        loginAsAdmin();
+                    }
+                });
+            }
         });
     </script>
 </body>
 </html>
-
