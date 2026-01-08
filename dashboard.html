@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHƯƠNG TRÌNH QUẢN LÝ KỸ THUẬT</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Additional styles for dashboard */
+        .dashboard-header {
+            background: linear-gradient(to right, #2c3e50, #34495e);
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            background: #26d0ce;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            padding: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #1a2980;
+        }
+        
+        .stat-card.green { border-left-color: #27ae60; }
+        .stat-card.blue { border-left-color: #3498db; }
+        .stat-card.orange { border-left-color: #e67e22; }
+        .stat-card.red { border-left-color: #e74c3c; }
+        
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 10px 0;
+        }
+        
+        .quick-actions {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            margin: 0 30px 30px;
+            border-radius: 10px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        
+        .action-btn {
+            padding: 12px 25px;
+            background: #1a2980;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+        
+        .action-btn:hover {
+            background: #15226d;
+            transform: translateY(-2px);
+        }
+        
+        .alerts-section {
+            padding: 20px 30px;
+        }
+        
+        .alert-card {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .alert-card.warning { background: #fff3cd; border-color: #ffeaa7; }
+        .alert-card.danger { background: #f8d7da; border-color: #f5c6cb; }
+        .alert-card.info { background: #d1ecf1; border-color: #bee5eb; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- DASHBOARD HEADER -->
+        <div class="dashboard-header">
+            <div class="logo">
+                <img src="https://img.icons8.com/color/96/airplane-front-view.png" alt="Logo" style="width: 40px; height: 40px;">
+                <div class="logo-text">
+                    <h1 style="font-size: 20px; margin: 0;">CHƯƠNG TRÌNH QUẢN LÝ KỸ THUẬT</h1>
+                </div>
+            </div>
+            
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                    <button class="action-btn" onclick="location.href='index.html'">
+                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                </button>
+            </div>
+        </div>
+
+        <!-- STATISTICS -->
+        <div class="dashboard-stats">
+            <div class="stat-card green">
+                <i class="fas fa-check-circle fa-2x" style="color: #27ae60;"></i>
+                <div class="stat-number">112</div>
+                <p>Thiết bị hoạt động</p>
+            </div>
+            
+            <div class="stat-card blue">
+                <i class="fas fa-users fa-2x" style="color: #3498db;"></i>
+                <div class="stat-number">26</div>
+                <p>Nhân viên</p>
+            </div>
+            
+            <div class="stat-card orange">
+                <i class="fas fa-car fa-2x" style="color: #e67e22;"></i>
+                <div class="stat-number">3</div>
+                <p>Phương tiện</p>
+            </div>
+            
+            <div class="stat-card red">
+                <i class="fas fa-exclamation-triangle fa-2x" style="color: #e74c3c;"></i>
+                <div class="stat-number">2</div>
+                <p>Cảnh báo</p>
+            </div>
+        </div>
+
+        <!-- QUICK ACTIONS -->
+        <div class="quick-actions">
+            <h3><i class="fas fa-bolt"></i> THAO TÁC NHANH</h3>
+            <div class="action-buttons">
+                <button class="action-btn" onclick="location.href='personnel.html'">
+                    <i class="fas fa-user-plus"></i> Thêm nhân viên
+                </button>
+                <button class="action-btn" onclick="location.href='reports.html'">
+                    <i class="fas fa-file-export"></i> Xuất báo cáo
+                </button>
+                <button class="action-btn">
+                    <i class="fas fa-tools"></i> Ghi nhận bảo trì
+                </button>
+                <button class="action-btn">
+                    <i class="fas fa-bell"></i> Cài đặt cảnh báo
+                </button>
+                <button class="action-btn" onclick="location.href='index.html'">
+                    <i class="fas fa-home"></i> Về trang chủ
+                </button>
+            </div>
+        </div>
+
+        <!-- ALERTS -->
+        <div class="alerts-section">
+            <h3><i class="fas fa-exclamation-circle"></i> CẢNH BÁO HỆ THỐNG</h3>
+            <div class="alert-card warning">
+                <i class="fas fa-calendar-times" style="color: #f39c12;"></i>
+                <div>
+                    <strong>Thiết bị NDB SA50 sắp hết hạn kiểm định</strong>
+                    <p>Hạn kiểm định: 15/01/2025 | Còn 27 ngày</p>
+                </div>
+            </div>
+            
+            <div class="alert-card warning">
+                <i class="fas fa-wrench" style="color: #f39c12;"></i>
+                <div>
+                    <strong>Xe Toyota 29C-934.52 cần bảo dưỡng</strong>
+                    <p>Đã chạy 85,000 km | Lịch bảo dưỡng: 10/05/2025</p>
+                </div>
+            </div>
+            
+            <div class="alert-card info">
+                <i class="fas fa-info-circle" style="color: #3498db;"></i>
+                <div>
+                    <strong>Hệ thống backup hoàn thành</strong>
+                    <p>Backup dữ liệu lúc 07:45 ngày 19/12/2024</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN MENU (từ trang chủ) -->
+        <div class="system-menu" style="padding-top: 0;">
+            <h3 style="text-align: center; margin-bottom: 20px; color: #1a2980;">
+                <i class="fas fa-th-large"></i> DANH MỤC HỆ THỐNG
+            </h3>
+            <!-- Copy menu từ index.html -->
+            <div class="menu-row">
+                <a href="ils.html" class="menu-card">
+                    <div class="menu-icon">
+                        <i class="fas fa-satellite-dish"></i>
+                    </div>
+                    <h3>HỆ THỐNG ILS</h3>
+                    <p>10 thiết bị</p>
+                </a>
+                
+                <a href="ndb.html" class="menu-card">
+                    <div class="menu-icon">
+                        <i class="fas fa-broadcast-tower"></i>
+                    </div>
+                    <h3>HỆ THỐNG NDB</h3>
+                    <p>2 thiết bị</p>
+                </a>
+                
+                <a href="communication.html" class="menu-card">
+                    <div class="menu-icon">
+                        <i class="fas fa-walkie-talkie"></i>
+                    </div>
+                    <h3>THÔNG TIN LIÊN LẠC</h3>
+                    <p>20 thiết bị</p>
+                </a>
+            </div>
+            
+            <div class="menu-row">
+                <a href="power.html" class="menu-card">
+                    <div class="menu-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>HỆ THỐNG CẤP NGUỒN</h3>
+                    <p>8 thiết bị</p>
+                </a>
+                
+                <a href="pccc.html" class="menu-card">
+                    <div class="menu-icon">
+                        <i class="fas fa-fire-extinguisher"></i>
+                    </div>
+                    <h3>HỆ THỐNG PCCC</h3>
+                    <p>48 thiết bị</p>
+                </a>
+                
+                <a href="cable.html" class="menu-card">
+                    <div class="menu-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h3>HỆ THỐNG CÁP TÍN HIỆU</h3>
+                    <p>5 tuyến</p>
+                </a>
+            </div>
+            
+            <div class="menu-row">
+                <a href="vehicles.html" class="menu-card">
+                    <div class="menu-icon">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <h3>QUẢN LÝ PHƯƠNG TIỆN</h3>
+                    <p>3 phương tiện</p>
+                </a>
+                
+                <a href="personnel.html" class="menu-card">
+                    <div class="menu-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>QUẢN LÝ NHÂN SỰ</h3>
+                    <p>26 nhân viên</p>
+                </a>
+                
+                <a href="reports.html" class="menu-card">
+                    <div class="menu-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3>BÁO CÁO TỔNG HỢP</h3>
+                    <p>Xem & xuất báo cáo</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="footer-info">
+                <div class="contact-info">
+                    <h4><i class="fas fa-headset"></i> HỖ TRỢ KỸ THUẬT</h4>
+                    <p><i class="fas fa-phone"></i> Hotline: <strong>(+84) 919 926 586</strong></p>
+                    <p><i class="fas fa-envelope"></i> Email: <strong>naoc.cns@gmail.com</strong></p>
+                </div>
+                <div class="system-info">
+                    <p><i class="fas fa-code"></i> Phiên bản: <strong>1.0.0</strong></p>
+                    <p><i class="fas fa-calendar-check"></i> Cập nhật: <strong>19/12/2025</strong></p>
+                    <p><i class="fas fa-database"></i> Tổng thiết bị: <strong>112</strong></p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2025 Bản quyền thuộc Đội thiết bị thông tin dẫn đường - Trung tâm Khai thác khu bay Nội Bài.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Simple dashboard script
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update visit count
+            let visitCount = localStorage.getItem('visitCount') || 1847;
+            visitCount = parseInt(visitCount);
+            console.log('Lượt truy cập hệ thống:', visitCount);
+            
+            // Welcome message
+            console.log('Chào mừng bạn đã đăng nhập hệ thống!');
+            
+            // Simulate loading
+            setTimeout(() => {
+                console.log('Hệ thống đã sẵn sàng');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

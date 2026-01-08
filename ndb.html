@@ -1,0 +1,2288 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ thống NDB - Hệ thống QLKT Nội Bài</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Page specific styles */
+        .page-header {
+            background: linear-gradient(to right, #8B4513, #D2691E);
+            color: white;
+            padding: 25px 40px;
+            border-radius: 0 0 15px 15px;
+            margin-bottom: 30px;
+        }
+        
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .page-title h1 {
+            font-size: 28px;
+            margin: 0;
+        }
+        
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Admin Mode Toggle */
+        .admin-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .admin-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .role-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .admin-badge {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .user-badge {
+            background: #3498db;
+            color: white;
+        }
+        
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 30px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #8B4513;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+        
+        /* Login Modal */
+        .login-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .login-content {
+            background: white;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .login-header h3 {
+            color: #8B4513;
+            margin-bottom: 10px;
+        }
+        
+        .login-header i {
+            font-size: 40px;
+            color: #8B4513;
+            margin-bottom: 15px;
+        }
+        
+        .password-input {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .password-input input {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .password-input input:focus {
+            border-color: #8B4513;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        
+        .password-hint {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+            text-align: center;
+        }
+        
+        /* NDB Introduction */
+        .ndb-intro {
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+            border-radius: 10px;
+            margin: 0 30px 30px;
+        }
+        
+        .intro-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            align-items: center;
+        }
+        
+        .intro-text h3 {
+            color: #8B4513;
+            margin-bottom: 15px;
+        }
+        
+        .ndb-specs {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .spec-item {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        /* Equipment Container */
+        .equipment-container {
+            padding: 0 30px 30px;
+        }
+        
+        .section-title {
+            color: #8B4513;
+            margin-bottom: 20px;
+            padding-left: 10px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Restricted Message */
+        .restricted-message {
+            background: #fff3cd;
+            border-left: 4px solid #f39c12;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+        }
+        
+        .restricted-message a {
+            color: #8B4513;
+            font-weight: bold;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        
+        /* NDB List - UPDATED: Horizontal layout like image */
+        .ndb-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin: 0 auto;
+        }
+        
+        .ndb-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #e0e0e0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-header {
+            background: #8B4513;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .ndb-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .status-active {
+            background: #d5f4e6;
+            color: #27ae60;
+        }
+        
+        .status-maintenance {
+            background: #fff3cd;
+            color: #f39c12;
+        }
+        
+        .status-inactive {
+            background: #f2d7d5;
+            color: #c0392b;
+        }
+        
+        .card-content {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Specification layout like image - UPDATED: More compact */
+        .spec-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex: 1;
+        }
+        
+        .spec-column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .spec-item-card {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .spec-label {
+            font-weight: bold;
+            color: #8B4513;
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+        
+        .spec-value {
+            color: #2c3e50;
+            font-size: 14px;
+        }
+        
+        .spec-highlight {
+            font-weight: bold;
+            color: #8B4513;
+            font-size: 15px;
+        }
+        
+        /* Coordinates section */
+        .coordinates-section {
+            text-align: center;
+            margin: 15px 0;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 4px solid #8B4513;
+        }
+        
+        .coordinates {
+            font-family: monospace;
+            font-size: 14px;
+            color: #2c3e50;
+            margin-top: 3px;
+        }
+        
+        /* Installation info */
+        .installation-info {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 12px 0;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .install-date, .inspection-date {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        /* Action buttons - UPDATED: More compact like image */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .action-btn {
+            padding: 10px 4px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            transition: all 0.3s;
+            text-align: center;
+            min-height: 60px;
+            font-weight: bold;
+        }
+        
+        .action-btn i {
+            font-size: 16px;
+            margin-bottom: 3px;
+        }
+        
+        /* Button colors */
+        .view-btn {
+            background: #8B4513;
+            color: white;
+        }
+        
+        .monitor-btn {
+            background: #3498db;
+            color: white;
+        }
+        
+        .test-btn {
+            background: #9b59b6;
+            color: white;
+        }
+        
+        .edit-btn {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        /* Restricted action */
+        .restricted-action {
+            opacity: 0.6;
+            cursor: not-allowed !important;
+            background: #95a5a6 !important;
+        }
+        
+        /* Add NDB Button */
+        .add-ndb-btn {
+            background: linear-gradient(to right, #27ae60, #2ecc71);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 30px 20px;
+            transition: all 0.3s;
+        }
+        
+        .add-ndb-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+        }
+        
+        /* Statistics */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 0 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-top: 4px solid #8B4513;
+        }
+        
+        .stat-card h3 {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #8B4513;
+            margin: 10px 0;
+        }
+        
+        /* Signal Monitor Modal */
+        .signal-monitor-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .monitor-content {
+            background: white;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        .signal-monitor-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #8B4513;
+        }
+        
+        .signal-monitor-header h3 {
+            color: #8B4513;
+            margin-bottom: 10px;
+        }
+        
+        /* Signal Display */
+        .signal-display {
+            background: #1a1a2e;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .signal-frequency {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #00ff88;
+        }
+        
+        .signal-wave {
+            height: 100px;
+            position: relative;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .signal-wave-canvas {
+            width: 100%;
+            height: 100%;
+            background: #0f3460;
+        }
+        
+        .signal-strength {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+        
+        .strength-label {
+            font-size: 14px;
+            color: #ccc;
+        }
+        
+        .strength-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #00ff88;
+        }
+        
+        .strength-unit {
+            font-size: 14px;
+            color: #ccc;
+            margin-left: 5px;
+        }
+        
+        /* Signal Meter */
+        .signal-meter-container {
+            margin: 25px 0;
+        }
+        
+        .meter-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .signal-meter {
+            height: 25px;
+            background: #f0f0f0;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 10px;
+        }
+        
+        .signal-level {
+            height: 100%;
+            width: 85%;
+            background: linear-gradient(to right, #e74c3c, #f39c12, #2ecc71);
+            transition: width 0.5s ease;
+            position: relative;
+        }
+        
+        .signal-indicator {
+            position: absolute;
+            top: -25px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        /* Signal Parameters */
+        .signal-parameters {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .parameter-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .parameter-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #8B4513;
+            margin: 5px 0;
+        }
+        
+        .parameter-label {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        /* Monitor Controls */
+        .monitor-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 900px;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 30px;
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #8B4513;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #8B4513;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #7f8c8d;
+            color: white;
+        }
+        
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .intro-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .ndb-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .signal-parameters {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .spec-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .admin-controls {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .signal-parameters {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (min-width: 1200px) {
+            .ndb-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* Error message */
+        .error-message {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        /* Login attempts warning */
+        .login-attempts {
+            font-size: 11px;
+            color: #e74c3c;
+            margin-top: 10px;
+            text-align: center;
+            display: none;
+        }
+        
+        /* Animation for signal wave */
+        @keyframes waveAnimation {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100px); }
+        }
+        
+        .signal-wave-line {
+            position: absolute;
+            bottom: 50%;
+            width: 100%;
+            height: 2px;
+            background: #00ff88;
+            animation: waveAnimation 2s linear infinite;
+        }
+        
+        .signal-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #ff3366;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.7; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- PAGE HEADER -->
+        <div class="page-header">
+            <div class="page-title">
+                <button class="back-btn" onclick="location.href='dashboard.html'">
+                    <i class="fas fa-arrow-left"></i> Quay lại
+                </button>
+                <h1><i class="fas fa-broadcast-tower"></i> HỆ THỐNG NDB</h1>
+            </div>
+            <p>Non-Directional Beacon - Đài dẫn đường vô hướng</p>
+        </div>
+
+        <!-- ADMIN CONTROLS -->
+        <div class="admin-controls">
+            <div class="admin-toggle">
+                <span id="userRole" class="role-badge user-badge">
+                    <i class="fas fa-user"></i> CHẾ ĐỘ XEM
+                </span>
+                <label class="switch">
+                    <input type="checkbox" id="adminToggle">
+                    <span class="slider"></span>
+                </label>
+                <span id="adminBadge" class="role-badge admin-badge" style="display: none;">
+                    <i class="fas fa-user-shield"></i> CHẾ ĐỘ ADMIN
+                </span>
+            </div>
+            
+            <div id="adminActions" style="display: none;">
+                <button class="action-btn btn-success" onclick="showAddNDBForm()">
+                    <i class="fas fa-plus"></i> THÊM ĐÀI NDB MỚI
+                </button>
+                <button class="action-btn btn-danger" onclick="logoutAdmin()" style="margin-left: 10px;">
+                    <i class="fas fa-sign-out-alt"></i> ĐĂNG XUẤT
+                </button>
+            </div>
+        </div>
+
+        <!-- STATISTICS -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <h3><i class="fas fa-tower-broadcast"></i> TỔNG SỐ ĐÀI NDB</h3>
+                <div class="stat-number" id="totalNDBs">2</div>
+                <p>Đài SA50 & SA500</p>
+            </div>
+            
+            <div class="stat-card">
+                <h3><i class="fas fa-check-circle"></i> ĐANG HOẠT ĐỘNG</h3>
+                <div class="stat-number" id="activeNDBs">2</div>
+                <p>100% hoạt động</p>
+            </div>
+            
+            <div class="stat-card">
+                <h3><i class="fas fa-history"></i> TUỔI THỌ TRUNG BÌNH</h3>
+                <div class="stat-number">29</div>
+                <p>Năm (từ 1995)</p>
+            </div>
+            
+            <div class="stat-card">
+                <h3><i class="fas fa-shield-alt"></i> ĐỘ ỔN ĐỊNH</h3>
+                <div class="stat-number">99.8%</div>
+                <p>Thời gian hoạt động</p>
+            </div>
+        </div>
+
+        <!-- NDB INTRODUCTION -->
+        <div class="ndb-intro">
+            <div class="intro-content">
+                <div class="intro-text">
+                    <h3><i class="fas fa-info-circle"></i> GIỚI THIỆU HỆ THỐNG NDB</h3>
+                    <p>NDB (Non-Directional Beacon) là hệ thống dẫn đường vô hướng, phát tín hiệu radio tần số thấp giúp máy bay xác định phương hướng. Hệ thống NDB tại Nội Bài gồm 2 đài chính cung cấp tín hiệu dẫn đường cho các tuyến bay đến và đi.</p>
+                    <p>Các đài NDB hoạt động ở dải tần số 190-1750 kHz, công suất từ 25W đến 200W, phạm vi phủ sóng từ 25 đến 100 NM.</p>
+                </div>
+                
+                <div class="ndb-specs">
+                    <h4><i class="fas fa-list-alt"></i> THÔNG SỐ CHUNG</h4>
+                    <div class="spec-item">
+                        <strong>Tần số hoạt động:</strong> 190-1750 kHz
+                    </div>
+                    <div class="spec-item">
+                        <strong>Công suất:</strong> 50W (SA50)/ 500W (SA500)
+                    </div>
+                    <div class="spec-item">
+                        <strong>Phạm vi phủ sóng:</strong> 25-50 NM
+                    </div>
+                    <div class="spec-item">
+                        <strong>Độ chính xác:</strong> ±5°
+                    </div>
+                    <div class="spec-item">
+                        <strong>Antenna:</strong> Kiểu chữ Г(SA50)/ T (SA500)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADD NDB BUTTON (Admin only) -->
+        <button id="addNDBButton" class="add-ndb-btn" style="display: none;" onclick="showAddNDBForm()">
+            <i class="fas fa-plus-circle"></i> THÊM ĐÀI NDB MỚI
+        </button>
+
+        <!-- NDB EQUIPMENT -->
+        <div class="equipment-container">
+            <h3 class="section-title">
+                <i class="fas fa-satellite"></i> DANH SÁCH THIẾT BỊ NDB
+            </h3>
+            
+            <!-- Restricted Message for Non-Admin -->
+            <div id="restrictedMessage" class="restricted-message">
+                <i class="fas fa-lock"></i>
+                <div>
+                    <strong>Chế độ xem hạn chế:</strong> Bạn đang ở chế độ người dùng. 
+                    <a href="#" onclick="showAdminLogin()">Đăng nhập Admin</a> để quản lý thiết bị.
+                </div>
+            </div>
+            
+            <div class="ndb-list" id="ndb-grid">
+                <!-- NDB cards will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- LOGIN MODAL -->
+        <div class="login-modal" id="loginModal">
+            <div class="login-content">
+                <div class="login-header">
+                    <i class="fas fa-user-shield"></i>
+                    <h3>ĐĂNG NHẬP ADMIN</h3>
+                    <p>Vui lòng nhập mật khẩu để truy cập chế độ quản trị</p>
+                </div>
+                
+                <form id="adminLoginForm">
+                    <div class="password-input">
+                        <input type="password" id="adminPassword" placeholder="Nhập mật khẩu admin" required>
+                        <button type="button" class="toggle-password" id="togglePassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="password-hint">
+                        🔒 Liên hệ quản trị viên để được cấp mật khẩu
+                    </div>
+                    <div class="login-attempts" id="loginAttempts">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Còn <span id="attemptsLeft">3</span> lần thử
+                    </div>
+                    <div class="error-message" id="passwordError">
+                        <i class="fas fa-exclamation-circle"></i> Mật khẩu không chính xác!
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeLoginModal()">HỦY</button>
+                        <button type="submit" class="btn btn-primary">ĐĂNG NHẬP</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- SIGNAL MONITOR MODAL -->
+        <div class="signal-monitor-modal" id="signalMonitorModal">
+            <div class="monitor-content">
+                <div class="signal-monitor-header">
+                    <i class="fas fa-wave-square"></i>
+                    <h3 id="monitorTitle">GIÁM SÁT TÍN HIỆU NDB</h3>
+                    <p id="monitorSubtitle">Đang giám sát tín hiệu</p>
+                </div>
+                
+                <div class="signal-display">
+                    <div class="signal-frequency" id="signalFrequency">
+                        230.000 kHz
+                    </div>
+                    
+                    <div class="signal-wave" id="signalWave">
+                        <canvas class="signal-wave-canvas" id="waveCanvas"></canvas>
+                        <div class="signal-wave-line"></div>
+                        <div class="signal-dot" style="top: 30%; left: 30%;"></div>
+                        <div class="signal-dot" style="top: 70%; left: 60%;"></div>
+                    </div>
+                    
+                    <div class="signal-strength">
+                        <div class="strength-label">CƯỜNG ĐỘ TÍN HIỆU:</div>
+                        <div>
+                            <span class="strength-value" id="strengthValue">85</span>
+                            <span class="strength-unit">%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="signal-meter-container">
+                    <div class="meter-labels">
+                        <span>YẾU</span>
+                        <span>TRUNG BÌNH</span>
+                        <span>MẠNH</span>
+                    </div>
+                    <div class="signal-meter">
+                        <div class="signal-level" id="signalLevel" style="width: 85%;">
+                            <div class="signal-indicator" id="signalIndicator" style="left: 85%;">85%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="signal-parameters">
+                    <div class="parameter-box">
+                        <div class="parameter-label">CÔNG SUẤT PHÁT</div>
+                        <div class="parameter-value" id="powerValue">50W</div>
+                    </div>
+                    <div class="parameter-box">
+                        <div class="parameter-label">NHIỄU</div>
+                        <div class="parameter-value" id="noiseValue">-92 dB</div>
+                    </div>
+                    <div class="parameter-box">
+                        <div class="parameter-label">TỶ SỐ S/N</div>
+                        <div class="parameter-value" id="snrValue">42 dB</div>
+                    </div>
+                </div>
+                
+                <div class="monitor-controls">
+                    <div>
+                        <button class="btn btn-secondary" onclick="pauseMonitoring()" id="pauseBtn">
+                            <i class="fas fa-pause"></i> TẠM DỪNG
+                        </button>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary" onclick="closeSignalMonitor()">
+                            <i class="fas fa-times"></i> ĐÓNG GIÁM SÁT
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DETAIL MODAL -->
+        <div class="modal" id="detailModal">
+            <div class="modal-content">
+                <span class="close-modal" onclick="closeModal()">&times;</span>
+                <h2 id="modal-title">CHI TIẾT ĐÀI NDB</h2>
+                <div id="modal-body">
+                    <!-- Content will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- EDIT MODAL -->
+        <div class="modal" id="editModal">
+            <div class="modal-content">
+                <span class="close-modal" onclick="closeEditModal()">&times;</span>
+                <h2 id="edit-modal-title">CHỈNH SỬA ĐÀI NDB</h2>
+                <form id="ndbEditForm">
+                    <div id="edit-form-content">
+                        <!-- Form will be populated by JavaScript -->
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeEditModal()">HỦY</button>
+                        <button type="submit" class="btn btn-primary">LƯU THAY ĐỔI</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- ADD NDB MODAL -->
+        <div class="modal" id="addModal">
+            <div class="modal-content">
+                <span class="close-modal" onclick="closeAddModal()">&times;</span>
+                <h2><i class="fas fa-plus-circle"></i> THÊM ĐÀI NDB MỚI</h2>
+                <form id="ndbAddForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Tên đài NDB *</label>
+                            <input type="text" class="form-control" id="newName" required placeholder="VD: NDB SA50">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Mã đài *</label>
+                            <input type="text" class="form-control" id="newCode" required placeholder="VD: SA50">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Model *</label>
+                            <input type="text" class="form-control" id="newModel" required placeholder="VD: Southern American">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Số Serial *</label>
+                            <input type="text" class="form-control" id="newSerial" required placeholder="VD: 6900A0016">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Tần số *</label>
+                            <input type="text" class="form-control" id="newFrequency" required placeholder="VD: 230 kHz">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Công suất *</label>
+                            <input type="text" class="form-control" id="newPower" required placeholder="VD: 50W">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Antenna</label>
+                            <input type="text" class="form-control" id="newAntenna" placeholder="VD: Chữ T, cao 13m">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phạm vi phủ sóng</label>
+                            <input type="text" class="form-control" id="newRange" placeholder="VD: 25 NM">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Trạng thái *</label>
+                            <select class="form-control" id="newStatus" required>
+                                <option value="active">Đang hoạt động</option>
+                                <option value="maintenance">Đang bảo trì</option>
+                                <option value="inactive">Ngừng hoạt động</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Năm lắp đặt</label>
+                            <input type="text" class="form-control" id="newInstallationDate" placeholder="VD: 1995">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Tọa độ</label>
+                            <input type="text" class="form-control" id="newCoordinates" placeholder="VD: 21°13'40.55\"B - 105°46'58.98\"Đ">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Vị trí lắp đặt</label>
+                            <input type="text" class="form-control" id="newLocation" placeholder="VD: Khu vực NDB 1">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Người phụ trách</label>
+                            <input type="text" class="form-control" id="newPersonInCharge" placeholder="VD: Lê Tuấn Anh">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Hạn kiểm định tiếp theo</label>
+                            <input type="text" class="form-control" id="newNextInspection" placeholder="VD: 15/01/2025">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Ghi chú</label>
+                        <textarea class="form-control" id="newNotes" rows="3" placeholder="Thông tin bổ sung..."></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeAddModal()">HỦY</button>
+                        <button type="submit" class="btn btn-success">THÊM ĐÀI NDB</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="footer-info">
+                <div class="contact-info">
+                    <h4><i class="fas fa-headset"></i> HỖ TRỢ KỸ THUẬT NDB</h4>
+                    <p><i class="fas fa-phone"></i> Hotline: <strong>091992xx6586</strong></p>
+                    <p><i class="fas fa-envelope"></i> Email: <strong>naoc.cns@gmail.com</strong></p>
+                </div>
+                <div class="system-info">
+                    <p><i class="fas fa-print"></i> <a href="#" onclick="printNDBReport()" style="color: white; text-decoration: underline;">In báo cáo NDB</a></p>
+                    <p><i class="fas fa-file-signature"></i> <a href="#" onclick="viewLicenses()" style="color: white; text-decoration: underline;">Giấy phép tần số</a></p>
+                    <p><i class="fas fa-database"></i> Cập nhật: <strong>19/12/2025</strong></p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2025 Đội thiết bị thông tin dẫn đường - Trung tâm Khai thác khu bay Nội Bài</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // NDB Equipment Data - UPDATED: SA500 power changed from 50W to 500W
+        let ndbEquipment = [
+            {
+                id: 1,
+                name: "NDB SA50",
+                code: "SA50",
+                model: "Southern American",
+                serial: "6900A0016",
+                frequency: "230 kHz",
+                power: "50W", // SA50: 50W
+                antenna: "Chữ Г, cao 13m",
+                range: "25 NM",
+                status: "active",
+                installationDate: "1995",
+                nextInspection: "15/01/2025",
+                coordinates: "21°13'40.55\"B - 105°46'58.98\"Đ",
+                location: "Khu vực NDB 1",
+                personInCharge: "Nguyễn Tuấn Anh",
+                licenseNumber: "2607/GP-CHK",
+                frequencyLicense: "304321/GP",
+                notes: "Thiết bị có cấu hình chính và dự phòng"
+            },
+            {
+                id: 2,
+                name: "NDB SA500",
+                code: "SA500",
+                model: "Southern American",
+                serial: "9000A0013",
+                frequency: "320 kHz",
+                power: "500W", // UPDATED: SA500: 500W (was 50W)
+                antenna: "Chữ T, cao 30m",
+                range: "50 NM",
+                status: "active",
+                installationDate: "1995",
+                nextInspection: "20/02/2025",
+                coordinates: "21°14'19.71\"B - 105°44'45.55\"Đ",
+                location: "Khu vực NDB 2",
+                personInCharge: "Phạm Minh Quang",
+                licenseNumber: "1782/GP-CHK",
+                frequencyLicense: "304315/GP",
+                notes: "Antenna cao nhất hệ thống"
+            }
+        ];
+
+        // Admin mode state
+        let isAdminMode = false;
+        let nextId = 3; // For new NDBs
+        const ADMIN_PASSWORD = "Naoc@Cns"; // Mật khẩu admin
+        let loginAttempts = 3; // Giới hạn số lần đăng nhập sai
+        
+        // Signal monitoring variables
+        let signalInterval = null;
+        let isMonitoring = false;
+        let currentMonitoringNDB = null;
+        let signalStrength = 85;
+        let noiseLevel = -92;
+        let snrValue = 42;
+
+        // Show admin login modal
+        function showAdminLogin() {
+            document.getElementById('loginModal').style.display = 'flex';
+            document.getElementById('adminPassword').focus();
+            resetLoginAttempts();
+        }
+
+        // Close login modal
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('passwordError').style.display = 'none';
+            document.getElementById('loginAttempts').style.display = 'none';
+            resetLoginAttempts();
+        }
+
+        // Reset login attempts
+        function resetLoginAttempts() {
+            loginAttempts = 3;
+            document.getElementById('attemptsLeft').textContent = loginAttempts;
+        }
+
+        // Toggle password visibility
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('adminPassword');
+            const toggleBtn = document.getElementById('togglePassword');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleBtn.innerHTML = '<i class="fas fa-eye-slash"></i>';
+            } else {
+                passwordInput.type = 'password';
+                toggleBtn.innerHTML = '<i class="fas fa-eye"></i>';
+            }
+        }
+
+        // Admin login
+        function adminLogin(event) {
+            event.preventDefault();
+            
+            if (loginAttempts <= 0) {
+                alert('⛔ TÀI KHOẢN TẠM THỜI BỊ KHÓA\nVui lòng liên hệ quản trị viên để mở khóa.');
+                return;
+            }
+            
+            const passwordInput = document.getElementById('adminPassword');
+            const passwordError = document.getElementById('passwordError');
+            const loginAttemptsDisplay = document.getElementById('loginAttempts');
+            const enteredPassword = passwordInput.value;
+            
+            if (enteredPassword === ADMIN_PASSWORD) {
+                // Login successful
+                isAdminMode = true;
+                closeLoginModal();
+                updateAdminUI();
+                alert('✅ ĐĂNG NHẬP THÀNH CÔNG!\nBạn đã vào chế độ Admin.');
+                resetLoginAttempts();
+            } else {
+                // Login failed
+                loginAttempts--;
+                document.getElementById('attemptsLeft').textContent = loginAttempts;
+                
+                passwordError.style.display = 'block';
+                loginAttemptsDisplay.style.display = 'block';
+                passwordInput.style.borderColor = '#e74c3c';
+                passwordInput.style.boxShadow = '0 0 0 3px rgba(231, 76, 60, 0.1)';
+                
+                // Shake animation for error
+                passwordInput.style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    passwordInput.style.animation = '';
+                }, 500);
+                
+                if (loginAttempts > 0) {
+                    passwordError.innerHTML = `<i class="fas fa-exclamation-circle"></i> Mật khẩu không chính xác! Còn ${loginAttempts} lần thử`;
+                } else {
+                    passwordError.innerHTML = '<i class="fas fa-ban"></i> Đã vượt quá số lần thử. Tài khoản bị khóa tạm thời.';
+                    passwordInput.disabled = true;
+                    setTimeout(() => {
+                        closeLoginModal();
+                        setTimeout(() => {
+                            passwordInput.disabled = false;
+                            resetLoginAttempts();
+                        }, 30000); // Mở khóa sau 30 giây
+                    }, 2000);
+                }
+                
+                // Clear password field after 1 second
+                setTimeout(() => {
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                }, 1000);
+            }
+        }
+
+        // Logout admin
+        function logoutAdmin() {
+            if (confirm('Bạn có chắc chắn muốn đăng xuất khỏi chế độ Admin?')) {
+                isAdminMode = false;
+                updateAdminUI();
+                alert('🔒 ĐÃ ĐĂNG XUẤT\nChế độ Admin đã được tắt.');
+            }
+        }
+
+        // Toggle admin mode via switch
+        function toggleAdminMode() {
+            if (!isAdminMode) {
+                // If not logged in, show login modal
+                showAdminLogin();
+                // Reset switch to off position
+                document.getElementById('adminToggle').checked = false;
+            } else {
+                // If already logged in, confirm logout
+                logoutAdmin();
+                // Reset switch to off position
+                document.getElementById('adminToggle').checked = false;
+            }
+        }
+
+        // Update UI based on admin mode
+        function updateAdminUI() {
+            const adminToggle = document.getElementById('adminToggle');
+            const adminBadge = document.getElementById('adminBadge');
+            const userRole = document.getElementById('userRole');
+            const adminActions = document.getElementById('adminActions');
+            const addNDBButton = document.getElementById('addNDBButton');
+            const restrictedMessage = document.getElementById('restrictedMessage');
+            
+            if (isAdminMode) {
+                adminToggle.checked = true;
+                adminBadge.style.display = 'flex';
+                userRole.style.display = 'none';
+                adminActions.style.display = 'block';
+                addNDBButton.style.display = 'block';
+                restrictedMessage.style.display = 'none';
+            } else {
+                adminToggle.checked = false;
+                adminBadge.style.display = 'none';
+                userRole.style.display = 'flex';
+                adminActions.style.display = 'none';
+                addNDBButton.style.display = 'none';
+                restrictedMessage.style.display = 'flex';
+            }
+            
+            // Re-render NDB cards with appropriate permissions
+            renderNDBEquipment();
+            updateStatistics();
+        }
+
+        // Initialize NDB display
+        function renderNDBEquipment() {
+            const ndbGrid = document.getElementById('ndb-grid');
+            ndbGrid.innerHTML = '';
+            
+            ndbEquipment.forEach(ndb => {
+                const card = createNDBCard(ndb);
+                ndbGrid.appendChild(card);
+            });
+            
+            updateStatistics();
+        }
+
+        // Create NDB card based on permissions - UPDATED: More compact layout
+        function createNDBCard(ndb) {
+            const statusClass = ndb.status === 'active' ? 'status-active' : 
+                              ndb.status === 'maintenance' ? 'status-maintenance' : 'status-inactive';
+            const statusText = ndb.status === 'active' ? 'HOẠT ĐỘNG' : 
+                             ndb.status === 'maintenance' ? 'BẢO TRÌ' : 'NGỪNG HOẠT ĐỘNG';
+            
+            const card = document.createElement('div');
+            card.className = 'ndb-card';
+            
+            let actionsHTML = '';
+            
+            if (isAdminMode) {
+                // ADMIN MODE - Full access
+                actionsHTML = `
+                    <div class="action-buttons">
+                        <button class="action-btn view-btn" onclick="viewNDBDetails(${ndb.id})">
+                            <i class="fas fa-eye"></i> CHI TIẾT
+                        </button>
+                        <button class="action-btn monitor-btn" onclick="startSignalMonitoring(${ndb.id})">
+                            <i class="fas fa-wave-square"></i> GIÁM SÁT
+                        </button>
+                        <button class="action-btn edit-btn" onclick="editNDB(${ndb.id})">
+                            <i class="fas fa-edit"></i> CHỈNH SỬA
+                        </button>
+                        <button class="action-btn delete-btn" onclick="deleteNDB(${ndb.id})">
+                            <i class="fas fa-trash"></i> XÓA
+                        </button>
+                    </div>
+                `;
+            } else {
+                // USER MODE - Limited access
+                actionsHTML = `
+                    <div class="action-buttons">
+                        <button class="action-btn view-btn restricted-action" onclick="showRestrictedAlert()">
+                            <i class="fas fa-eye"></i> CHI TIẾT
+                        </button>
+                        <button class="action-btn monitor-btn" onclick="startSignalMonitoring(${ndb.id})">
+                            <i class="fas fa-wave-square"></i> GIÁM SÁT
+                        </button>
+                        <button class="action-btn test-btn" onclick="testSignal(${ndb.id})">
+                            <i class="fas fa-broadcast-tower"></i> KIỂM TRA
+                        </button>
+                        <button class="action-btn edit-btn restricted-action" onclick="showRestrictedAlert()">
+                            <i class="fas fa-edit"></i> CHỈNH SỬA
+                        </button>
+                    </div>
+                `;
+            }
+            
+            card.innerHTML = `
+                <div class="card-header">
+                    <div class="ndb-title">${ndb.name} (${ndb.code})</div>
+                    <span class="status-badge ${statusClass}">${statusText}</span>
+                </div>
+                
+                <div class="card-content">
+                    <div class="spec-grid">
+                        <div class="spec-column">
+                            <div class="spec-item-card">
+                                <div class="spec-label">Model:</div>
+                                <div class="spec-value">${ndb.model}</div>
+                            </div>
+                            <div class="spec-item-card">
+                                <div class="spec-label">Serial:</div>
+                                <div class="spec-value">${ndb.serial}</div>
+                            </div>
+                            <div class="spec-item-card">
+                                <div class="spec-label">Tần số:</div>
+                                <div class="spec-value spec-highlight">${ndb.frequency}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="spec-column">
+                            <div class="spec-item-card">
+                                <div class="spec-label">Công suất:</div>
+                                <div class="spec-value">${ndb.power}</div>
+                            </div>
+                            <div class="spec-item-card">
+                                <div class="spec-label">Antenna:</div>
+                                <div class="spec-value">${ndb.antenna}</div>
+                            </div>
+                            <div class="spec-item-card">
+                                <div class="spec-label">Phạm vi:</div>
+                                <div class="spec-value">${ndb.range}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="coordinates-section">
+                        <div class="coordinates-label">Tọa độ:</div>
+                        <div class="coordinates">
+                            <i class="fas fa-map-marker-alt"></i> ${ndb.coordinates}
+                        </div>
+                    </div>
+                    
+                    <div class="installation-info">
+                        <div class="install-date">
+                            <i class="fas fa-calendar-alt"></i> Lắp đặt: ${ndb.installationDate}
+                        </div>
+                        <div class="inspection-date">
+                            <i class="fas fa-calendar-check"></i> Kiểm định: ${ndb.nextInspection}
+                        </div>
+                    </div>
+                    
+                    ${actionsHTML}
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // Start signal monitoring
+        function startSignalMonitoring(id) {
+            const ndb = ndbEquipment.find(e => e.id === id);
+            if (!ndb) return;
+            
+            currentMonitoringNDB = ndb;
+            
+            // Update modal info
+            document.getElementById('monitorTitle').textContent = `GIÁM SÁT TÍN HIỆU: ${ndb.name}`;
+            document.getElementById('monitorSubtitle').textContent = `Đang giám sát ${ndb.name} - ${ndb.frequency}`;
+            document.getElementById('signalFrequency').textContent = `${ndb.frequency}`;
+            document.getElementById('powerValue').textContent = ndb.power; // This will show 500W for SA500
+            
+            // Reset monitoring state
+            signalStrength = 85;
+            noiseLevel = -92;
+            snrValue = 42;
+            
+            // Show modal
+            document.getElementById('signalMonitorModal').style.display = 'flex';
+            
+            // Start monitoring
+            startMonitoring();
+        }
+
+        // Start monitoring process
+        function startMonitoring() {
+            if (signalInterval) {
+                clearInterval(signalInterval);
+            }
+            
+            isMonitoring = true;
+            document.getElementById('pauseBtn').innerHTML = '<i class="fas fa-pause"></i> TẠM DỪNG';
+            
+            // Initialize wave visualization
+            initWaveVisualization();
+            
+            // Start updating signal values
+            signalInterval = setInterval(updateSignalValues, 500);
+        }
+
+        // Initialize wave visualization
+        function initWaveVisualization() {
+            const canvas = document.getElementById('waveCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            // Draw initial wave
+            drawWave(ctx, canvas.width, canvas.height);
+        }
+
+        // Draw wave on canvas
+        function drawWave(ctx, width, height) {
+            ctx.clearRect(0, 0, width, height);
+            
+            // Draw background grid
+            ctx.strokeStyle = 'rgba(0, 255, 136, 0.1)';
+            ctx.lineWidth = 1;
+            
+            // Draw horizontal lines
+            for (let i = 0; i < height; i += 20) {
+                ctx.beginPath();
+                ctx.moveTo(0, i);
+                ctx.lineTo(width, i);
+                ctx.stroke();
+            }
+            
+            // Draw vertical lines
+            for (let i = 0; i < width; i += 20) {
+                ctx.beginPath();
+                ctx.moveTo(i, 0);
+                ctx.lineTo(i, height);
+                ctx.stroke();
+            }
+            
+            // Draw sine wave
+            ctx.strokeStyle = '#00ff88';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            
+            const amplitude = height / 4;
+            const frequency = 0.05;
+            const time = Date.now() / 1000;
+            
+            for (let x = 0; x < width; x++) {
+                const y = height / 2 + amplitude * Math.sin(x * frequency + time);
+                if (x === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+            
+            ctx.stroke();
+            
+            // Draw dots on wave
+            ctx.fillStyle = '#ff3366';
+            for (let i = 0; i < 5; i++) {
+                const x = (i + 1) * width / 6;
+                const y = height / 2 + amplitude * Math.sin(x * frequency + time);
+                ctx.beginPath();
+                ctx.arc(x, y, 4, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // Update signal values
+        function updateSignalValues() {
+            if (!isMonitoring) return;
+            
+            // Simulate signal fluctuations
+            signalStrength += (Math.random() - 0.5) * 4;
+            signalStrength = Math.max(60, Math.min(100, signalStrength));
+            
+            noiseLevel += (Math.random() - 0.5) * 2;
+            noiseLevel = Math.max(-100, Math.min(-80, noiseLevel));
+            
+            snrValue = Math.round(50 + (signalStrength - 85) / 2 + (noiseLevel + 92));
+            snrValue = Math.max(30, Math.min(60, snrValue));
+            
+            // Update display
+            document.getElementById('strengthValue').textContent = Math.round(signalStrength);
+            document.getElementById('noiseValue').textContent = Math.round(noiseLevel) + ' dB';
+            document.getElementById('snrValue').textContent = snrValue + ' dB';
+            
+            // Update meter
+            const levelElement = document.getElementById('signalLevel');
+            const indicatorElement = document.getElementById('signalIndicator');
+            
+            levelElement.style.width = signalStrength + '%';
+            indicatorElement.style.left = signalStrength + '%';
+            indicatorElement.textContent = Math.round(signalStrength) + '%';
+            
+            // Update wave visualization
+            const canvas = document.getElementById('waveCanvas');
+            const ctx = canvas.getContext('2d');
+            drawWave(ctx, canvas.width, canvas.height);
+            
+            // Change meter color based on strength
+            if (signalStrength < 70) {
+                levelElement.style.background = '#e74c3c';
+                indicatorElement.style.color = '#e74c3c';
+            } else if (signalStrength < 85) {
+                levelElement.style.background = '#f39c12';
+                indicatorElement.style.color = '#f39c12';
+            } else {
+                levelElement.style.background = 'linear-gradient(to right, #f39c12, #2ecc71)';
+                indicatorElement.style.color = '#2ecc71';
+            }
+        }
+
+        // Pause/resume monitoring
+        function pauseMonitoring() {
+            if (isMonitoring) {
+                // Pause
+                isMonitoring = false;
+                document.getElementById('pauseBtn').innerHTML = '<i class="fas fa-play"></i> TIẾP TỤC';
+                if (signalInterval) {
+                    clearInterval(signalInterval);
+                    signalInterval = null;
+                }
+            } else {
+                // Resume
+                startMonitoring();
+            }
+        }
+
+        // Close signal monitor
+        function closeSignalMonitor() {
+            document.getElementById('signalMonitorModal').style.display = 'none';
+            if (signalInterval) {
+                clearInterval(signalInterval);
+                signalInterval = null;
+            }
+            isMonitoring = false;
+            currentMonitoringNDB = null;
+        }
+
+        // Test signal (Available for all users)
+        function testSignal(id) {
+            const ndb = ndbEquipment.find(e => e.id === id);
+            if (!ndb) return;
+            
+            alert(`📡 Đang kiểm tra tín hiệu ${ndb.name}...\n\n📶 Tần số: ${ndb.frequency}\n⚡ Công suất: ${ndb.power}\n📊 Trạng thái: ${ndb.status}\n\n✅ Kết quả: Tín hiệu ổn định`);
+        }
+
+        // Show restricted alert for non-admin users
+        function showRestrictedAlert() {
+            alert('🔒 CHỨC NĂNG CHỈ DÀNH CHO QUẢN TRỊ VIÊN\n\nVui lòng đăng nhập với mật khẩu Admin để:\n• Xem chi tiết thiết bị\n• Chỉnh sửa thông tin\n• Thêm/xóa thiết bị\n\nNhấn vào "Đăng nhập Admin" trong thông báo trên trang.');
+        }
+
+        // Update statistics
+        function updateStatistics() {
+            const totalNDBs = ndbEquipment.length;
+            const activeNDBs = ndbEquipment.filter(ndb => ndb.status === 'active').length;
+            
+            document.getElementById('totalNDBs').textContent = totalNDBs;
+            document.getElementById('activeNDBs').textContent = activeNDBs;
+        }
+
+        // View NDB details (Admin only)
+        function viewNDBDetails(id) {
+            if (!isAdminMode) {
+                showRestrictedAlert();
+                return;
+            }
+            
+            const ndb = ndbEquipment.find(e => e.id === id);
+            if (!ndb) return;
+            
+            document.getElementById('modal-title').textContent = `CHI TIẾT: ${ndb.name} (${ndb.code})`;
+            
+            const detailsHTML = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin: 20px 0;">
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
+                        <h4><i class="fas fa-info-circle"></i> THÔNG TIN KỸ THUẬT</h4>
+                        <div style="margin-top: 15px;">
+                            <div style="display: flex; margin-bottom: 12px;">
+                                <div style="font-weight: bold; min-width: 180px; color: #8B4513;">Tên đài:</div>
+                                <div><strong>${ndb.name} (${ndb.code})</strong></div>
+                            </div>
+                            <div style="display: flex; margin-bottom: 12px;">
+                                <div style="font-weight: bold; min-width: 180px; color: #8B4513;">Hãng sản xuất:</div>
+                                <div>${ndb.model}</div>
+                            </div>
+                            <div style="display: flex; margin-bottom: 12px;">
+                                <div style="font-weight: bold; min-width: 180px; color: #8B4513;">Số serial:</div>
+                                <div>${ndb.serial}</div>
+                            </div>
+                            <div style="display: flex; margin-bottom: 12px;">
+                                <div style="font-weight: bold; min-width: 180px; color: #8B4513;">Tần số phát:</div>
+                                <div><strong style="color: #2c3e50;">${ndb.frequency}</strong></div>
+                            </div>
+                            <div style="display: flex; margin-bottom: 12px;">
+                                <div style="font-weight: bold; min-width: 180px; color: #8B4513;">Công suất:</div>
+                                <div>${ndb.power}</div>
+                            </div>
+                            <div style="display: flex; margin-bottom: 12px;">
+                                <div style="font-weight: bold; min-width: 180px; color: #8B4513;">Loại antenna:</div>
+                                <div>${ndb.antenna}</div>
+                            </div>
+                            <div style="display: flex; margin-bottom: 12px;">
+                                <div style="font-weight: bold; min-width: 180px; color: #8B4513;">Phạm vi phủ sóng:</div>
+                                <div>${ndb.range}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
+                        <h4><i class="fas fa-map-marked-alt"></i> THÔNG TIN VỊ TRÍ</h4>
+                        <div style="margin-top: 15px;">
+                            <div style="display: flex; margin-bottom: 12px;">
+                                <div style="font-weight: bold; min-width: 180px; color: #8B4513;">Tọa độ:</div>
+                                <div style="font-family: monospace;">${ndb.coordinates}</div>
+                            </div>
+                            <div style="display: flex; margin-bottom: 12px;">
+                                <div style="font-weight: bold; min-width: 180px; color: #8B4513;">Vị trí lắp đặt:</div>
+                                <div>${ndb.location}</div>
+                            </div>
+                            <div style="display: flex; margin-bottom: 12px;">
+                                <div style="font-weight: bold; min-width: 180px; color: #8B4513;">Năm lắp đặt:</div>
+                                <div>${ndb.installationDate}</div>
+                            </div>
+                            <div style="display: flex; margin-bottom: 12px;">
+                                <div style="font-weight: bold; min-width: 180px; color: #8B4513;">Người phụ trách:</div>
+                                <div>${ndb.personInCharge}</div>
+                            </div>
+                            <div style="display: flex; margin-bottom: 12px;">
+                                <div style="font-weight: bold; min-width: 180px; color: #8B4513;">Hạn kiểm định:</div>
+                                <div>${ndb.nextInspection}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: #e8f4fc; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h4><i class="fas fa-file-contract"></i> GIẤY PHÉP & GIẤY TỜ</h4>
+                    <div style="margin-top: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div>
+                            <div style="font-weight: bold; color: #8B4513;">Giấy phép khai thác:</div>
+                            <div>${ndb.licenseNumber}</div>
+                        </div>
+                        <div>
+                            <div style="font-weight: bold; color: #8B4513;">Giấy phép tần số:</div>
+                            <div>${ndb.frequencyLicense}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: #fff3cd; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h4><i class="fas fa-sticky-note"></i> GHI CHÚ</h4>
+                    <p>${ndb.notes}</p>
+                </div>
+                
+                <div style="margin-top: 20px; text-align: center;">
+                    <button style="background: #8B4513; color: white; border: none; padding: 12px 30px; border-radius: 6px; cursor: pointer; margin-right: 10px;" onclick="printNDBDetails(${ndb.id})">
+                        <i class="fas fa-print"></i> IN CHI TIẾT
+                    </button>
+                    <button style="background: #f39c12; color: white; border: none; padding: 12px 30px; border-radius: 6px; cursor: pointer; margin-right: 10px;" onclick="editNDB(${ndb.id})">
+                        <i class="fas fa-edit"></i> CHỈNH SỬA
+                    </button>
+                    <button style="background: #27ae60; color: white; border: none; padding: 12px 30px; border-radius: 6px; cursor: pointer;" onclick="closeModal()">
+                        <i class="fas fa-check"></i> ĐÓNG
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('modal-body').innerHTML = detailsHTML;
+            document.getElementById('detailModal').style.display = 'flex';
+        }
+
+        // Edit NDB (Admin only)
+        function editNDB(id) {
+            if (!isAdminMode) {
+                showRestrictedAlert();
+                return;
+            }
+            
+            const ndb = ndbEquipment.find(e => e.id === id);
+            if (!ndb) return;
+            
+            document.getElementById('edit-modal-title').textContent = `CHỈNH SỬA: ${ndb.name} (${ndb.code})`;
+            
+            const formHTML = `
+                <input type="hidden" id="editId" value="${ndb.id}">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Tên đài NDB *</label>
+                        <input type="text" class="form-control" id="editName" value="${ndb.name}" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Mã đài *</label>
+                        <input type="text" class="form-control" id="editCode" value="${ndb.code}" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Model *</label>
+                        <input type="text" class="form-control" id="editModel" value="${ndb.model}" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Số Serial *</label>
+                        <input type="text" class="form-control" id="editSerial" value="${ndb.serial}" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Tần số *</label>
+                        <input type="text" class="form-control" id="editFrequency" value="${ndb.frequency}" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Công suất *</label>
+                        <input type="text" class="form-control" id="editPower" value="${ndb.power}" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Antenna</label>
+                        <input type="text" class="form-control" id="editAntenna" value="${ndb.antenna}">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Phạm vi phủ sóng</label>
+                        <input type="text" class="form-control" id="editRange" value="${ndb.range}">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Trạng thái *</label>
+                        <select class="form-control" id="editStatus" required>
+                            <option value="active" ${ndb.status === 'active' ? 'selected' : ''}>Đang hoạt động</option>
+                            <option value="maintenance" ${ndb.status === 'maintenance' ? 'selected' : ''}>Đang bảo trì</option>
+                            <option value="inactive" ${ndb.status === 'inactive' ? 'selected' : ''}>Ngừng hoạt động</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Năm lắp đặt</label>
+                        <input type="text" class="form-control" id="editInstallationDate" value="${ndb.installationDate}">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Tọa độ</label>
+                        <input type="text" class="form-control" id="editCoordinates" value="${ndb.coordinates}">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Vị trí lắp đặt</label>
+                        <input type="text" class="form-control" id="editLocation" value="${ndb.location}">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Người phụ trách</label>
+                        <input type="text" class="form-control" id="editPersonInCharge" value="${ndb.personInCharge}">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Hạn kiểm định tiếp theo</label>
+                        <input type="text" class="form-control" id="editNextInspection" value="${ndb.nextInspection}">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Giấy phép khai thác</label>
+                        <input type="text" class="form-control" id="editLicenseNumber" value="${ndb.licenseNumber}">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Giấy phép tần số</label>
+                        <input type="text" class="form-control" id="editFrequencyLicense" value="${ndb.frequencyLicense}">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Ghi chú</label>
+                    <textarea class="form-control" id="editNotes" rows="3">${ndb.notes}</textarea>
+                </div>
+            `;
+            
+            document.getElementById('edit-form-content').innerHTML = formHTML;
+            document.getElementById('editModal').style.display = 'flex';
+        }
+
+        // Save NDB changes (Admin only)
+        function saveNDBChanges(event) {
+            event.preventDefault();
+            
+            if (!isAdminMode) {
+                showRestrictedAlert();
+                return;
+            }
+            
+            const id = parseInt(document.getElementById('editId').value);
+            const ndbIndex = ndbEquipment.findIndex(e => e.id === id);
+            
+            if (ndbIndex === -1) return;
+            
+            // Update NDB data
+            ndbEquipment[ndbIndex] = {
+                ...ndbEquipment[ndbIndex],
+                name: document.getElementById('editName').value,
+                code: document.getElementById('editCode').value,
+                model: document.getElementById('editModel').value,
+                serial: document.getElementById('editSerial').value,
+                frequency: document.getElementById('editFrequency').value,
+                power: document.getElementById('editPower').value,
+                antenna: document.getElementById('editAntenna').value,
+                range: document.getElementById('editRange').value,
+                status: document.getElementById('editStatus').value,
+                installationDate: document.getElementById('editInstallationDate').value,
+                coordinates: document.getElementById('editCoordinates').value,
+                location: document.getElementById('editLocation').value,
+                personInCharge: document.getElementById('editPersonInCharge').value,
+                nextInspection: document.getElementById('editNextInspection').value,
+                licenseNumber: document.getElementById('editLicenseNumber').value,
+                frequencyLicense: document.getElementById('editFrequencyLicense').value,
+                notes: document.getElementById('editNotes').value
+            };
+            
+            // Re-render and close modal
+            renderNDBEquipment();
+            closeEditModal();
+            alert('✅ Đã cập nhật thông tin đài NDB thành công!');
+        }
+
+        // Add new NDB (Admin only)
+        function showAddNDBForm() {
+            if (!isAdminMode) {
+                showRestrictedAlert();
+                return;
+            }
+            
+            document.getElementById('addModal').style.display = 'flex';
+        }
+
+        function addNewNDB(event) {
+            event.preventDefault();
+            
+            if (!isAdminMode) {
+                showRestrictedAlert();
+                return;
+            }
+            
+            const newNDB = {
+                id: nextId++,
+                name: document.getElementById('newName').value,
+                code: document.getElementById('newCode').value,
+                model: document.getElementById('newModel').value,
+                serial: document.getElementById('newSerial').value,
+                frequency: document.getElementById('newFrequency').value,
+                power: document.getElementById('newPower').value,
+                antenna: document.getElementById('newAntenna').value,
+                range: document.getElementById('newRange').value,
+                status: document.getElementById('newStatus').value,
+                installationDate: document.getElementById('newInstallationDate').value,
+                coordinates: document.getElementById('newCoordinates').value,
+                location: document.getElementById('newLocation').value,
+                personInCharge: document.getElementById('newPersonInCharge').value,
+                nextInspection: document.getElementById('newNextInspection').value,
+                licenseNumber: "Đang cập nhật",
+                frequencyLicense: "Đang cập nhật",
+                notes: document.getElementById('newNotes').value
+            };
+            
+            ndbEquipment.push(newNDB);
+            
+            // Reset form
+            document.getElementById('ndbAddForm').reset();
+            
+            // Re-render and close modal
+            renderNDBEquipment();
+            closeAddModal();
+            alert(`✅ Đã thêm đài NDB mới: ${newNDB.name} (${newNDB.code})`);
+        }
+
+        // Delete NDB (Admin only)
+        function deleteNDB(id) {
+            if (!isAdminMode) {
+                showRestrictedAlert();
+                return;
+            }
+            
+            if (confirm('⚠️ Bạn có chắc chắn muốn xóa đài NDB này không?\nHành động này không thể hoàn tác.')) {
+                ndbEquipment = ndbEquipment.filter(ndb => ndb.id !== id);
+                renderNDBEquipment();
+                alert('✅ Đã xóa đài NDB thành công!');
+            }
+        }
+
+        // Close modals
+        function closeModal() {
+            document.getElementById('detailModal').style.display = 'none';
+        }
+        
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+        
+        function closeAddModal() {
+            document.getElementById('addModal').style.display = 'none';
+        }
+
+        // Print NDB report
+        function printNDBReport() {
+            alert('🖨️ In báo cáo hệ thống NDB...\n(Trong phiên bản thực tế sẽ tạo file PDF)');
+        }
+
+        // View licenses
+        function viewLicenses() {
+            document.getElementById('modal-title').textContent = 'GIẤY PHÉP TẦN SỐ NDB';
+            
+            const licensesHTML = `
+                <div style="margin: 20px 0;">
+                    <h4><i class="fas fa-file-alt"></i> DANH SÁCH GIẤY PHÉP</h4>
+                    
+                    <div style="margin-top: 20px;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background: #f8f9fa;">
+                                    <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Đài NDB</th>
+                                    <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Giấy phép khai thác</th>
+                                    <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Giấy phép tần số</th>
+                                    <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Hạn hiệu lực</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${ndbEquipment.map(ndb => `
+                                    <tr>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee;">${ndb.name}</td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee;">${ndb.licenseNumber}</td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee;">${ndb.frequencyLicense}</td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee;">31/12/2025</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div style="margin-top: 30px; text-align: center;">
+                        <button style="background: #8B4513; color: white; border: none; padding: 12px 30px; border-radius: 6px; cursor: pointer;" onclick="closeModal()">
+                            <i class="fas fa-check"></i> ĐÓNG
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('modal-body').innerHTML = licensesHTML;
+            document.getElementById('detailModal').style.display = 'flex';
+        }
+
+        // Print NDB details
+        function printNDBDetails(id) {
+            alert(`🖨️ In chi tiết đài NDB ID: ${id}\n(Chức năng đang phát triển)`);
+        }
+
+        // Add shake animation for password error
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                20%, 40%, 60%, 80% { transform: translateX(5px); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up event listeners
+            document.getElementById('adminToggle').addEventListener('change', toggleAdminMode);
+            document.getElementById('togglePassword').addEventListener('click', togglePasswordVisibility);
+            document.getElementById('adminLoginForm').addEventListener('submit', adminLogin);
+            document.getElementById('ndbEditForm').addEventListener('submit', saveNDBChanges);
+            document.getElementById('ndbAddForm').addEventListener('submit', addNewNDB);
+            
+            // Initial render
+            renderNDBEquipment();
+            
+            // Set up restricted view for non-admin by default
+            document.getElementById('adminBadge').style.display = 'none';
+            document.getElementById('restrictedMessage').style.display = 'flex';
+            
+            // Close modals when clicking outside
+            document.getElementById('loginModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeLoginModal();
+                }
+            });
+            
+            document.getElementById('signalMonitorModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeSignalMonitor();
+                }
+            });
+            
+            document.getElementById('detailModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+            
+            document.getElementById('editModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeEditModal();
+                }
+            });
+            
+            document.getElementById('addModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeAddModal();
+                }
+            });
+            
+            // Handle Enter key in password field
+            document.getElementById('adminPassword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    document.getElementById('adminLoginForm').requestSubmit();
+                }
+            });
+            
+            // Reset password field styles on focus
+            document.getElementById('adminPassword').addEventListener('focus', function() {
+                this.style.borderColor = '#ddd';
+                this.style.boxShadow = 'none';
+                document.getElementById('passwordError').style.display = 'none';
+                document.getElementById('loginAttempts').style.display = 'none';
+            });
+            
+            // Handle window resize for wave canvas
+            window.addEventListener('resize', function() {
+                if (isMonitoring && currentMonitoringNDB) {
+                    const canvas = document.getElementById('waveCanvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = canvas.offsetWidth;
+                    canvas.height = canvas.offsetHeight;
+                    drawWave(ctx, canvas.width, canvas.height);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
