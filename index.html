@@ -5,11 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản Lý Kỹ Thuật - Sân Bay Nội Bài</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Thêm thư viện Leaflet cho bản đồ -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <!-- Thư viện radar tiles -->
-    <script src="https://cdn.jsdelivr.net/npm/leaflet-tilelayer-colorfilter@1.2.5/dist/leaflet-tilelayer-colorfilter.min.js"></script>
     <style>
         /* ===== RESET & BASE ===== */
         :root {
@@ -28,10 +23,25 @@
             --warning: #ED6C02;
             --info: #0288D1;
             --error: #D32F2F;
-            --weather-blue: #2196F3;
-            --weather-green: #4CAF50;
-            --weather-yellow: #FFC107;
-            --weather-red: #F44336;
+            
+            /* Màu radar chuyên nghiệp theo tiêu chuẩn hàng không */
+            --radar-bg: #001833;
+            --radar-grid: rgba(0, 150, 255, 0.25);
+            --radar-sweep-start: rgba(0, 255, 255, 0.7);
+            --radar-sweep-mid: rgba(0, 200, 255, 0.5);
+            --radar-sweep-end: rgba(0, 100, 255, 0.3);
+            --radar-sweep-line: #00FFFF;
+            --radar-center: #FF0000;
+            --radar-center-glow: rgba(255, 0, 0, 0.7);
+            
+            /* Màu mưa theo thang đo dBZ chuẩn radar */
+            --rain-drizzle: rgba(0, 255, 255, 0.6);      /* < 20 dBZ - Mưa phùn */
+            --rain-light: rgba(0, 200, 255, 0.7);       /* 20-30 dBZ - Mưa nhẹ */
+            --rain-moderate: rgba(0, 150, 255, 0.8);    /* 30-40 dBZ - Mưa vừa */
+            --rain-heavy: rgba(255, 200, 0, 0.8);       /* 40-50 dBZ - Mưa to */
+            --rain-very-heavy: rgba(255, 100, 0, 0.9);  /* 50-60 dBZ - Mưa rất to */
+            --rain-extreme: rgba(255, 0, 0, 0.9);       /* > 60 dBZ - Mưa cực to */
+            
             --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
             --shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
             --shadow-lg: 0 6px 12px rgba(0, 0, 0, 0.15);
@@ -290,11 +300,6 @@
             box-shadow: var(--shadow);
         }
         
-        .btn-small {
-            padding: 6px 12px;
-            font-size: 12px;
-        }
-        
         .login-note {
             background: rgba(0, 102, 204, 0.08);
             padding: 10px 12px;
@@ -370,47 +375,27 @@
         }
         
         .weather-radar-display {
-            width: 220px;
-            height: 220px;
+            width: 240px;
+            height: 240px;
             position: relative;
-            background: #0A1931;
+            background: var(--radar-bg);
             border-radius: 50%;
-            border: 3px solid var(--neutral-dark);
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.7);
+            border: 2px solid rgba(0, 100, 200, 0.5);
+            box-shadow: 
+                inset 0 0 50px rgba(0, 20, 40, 0.9),
+                0 0 25px rgba(0, 80, 160, 0.3);
             overflow: hidden;
         }
         
-        .weather-controls {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 8px;
-        }
-        
-        .radar-overlay {
+        /* Radar Grid với các vòng khoảng cách */
+        .radar-grid {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 1000;
             pointer-events: none;
-            border-radius: 50%;
-            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
-        }
-        
-        .radar-center-marker {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 12px;
-            height: 12px;
-            background: #FF0000;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #FF0000;
-            z-index: 1001;
+            z-index: 10;
         }
         
         .radar-range-circle {
@@ -418,14 +403,183 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid var(--radar-grid);
             border-radius: 50%;
         }
         
-        .radar-range-circle:nth-child(1) { width: 60%; height: 60%; }
-        .radar-range-circle:nth-child(2) { width: 80%; height: 80%; }
-        .radar-range-circle:nth-child(3) { width: 95%; height: 95%; }
+        .radar-range-circle.range-50km { width: 80%; height: 80%; }
+        .radar-range-circle.range-100km { width: 60%; height: 60%; }
+        .radar-range-circle.range-150km { width: 40%; height: 40%; }
+        .radar-range-circle.range-200km { width: 20%; height: 20%; }
         
+        .radar-grid-line {
+            position: absolute;
+            background: var(--radar-grid);
+        }
+        
+        .radar-grid-line.north-south {
+            width: 1px;
+            height: 100%;
+            top: 0;
+            left: 50%;
+        }
+        
+        .radar-grid-line.east-west {
+            width: 100%;
+            height: 1px;
+            top: 50%;
+            left: 0;
+        }
+        
+        .radar-grid-line.ne-sw {
+            width: 1px;
+            height: 141%;
+            top: -20%;
+            left: 50%;
+            transform: rotate(45deg);
+            transform-origin: center;
+        }
+        
+        .radar-grid-line.nw-se {
+            width: 1px;
+            height: 141%;
+            top: -20%;
+            left: 50%;
+            transform: rotate(-45deg);
+            transform-origin: center;
+        }
+        
+        /* Radar Sweep */
+        .radar-sweep-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 30;
+        }
+        
+        .radar-sweep {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0deg,
+                var(--radar-sweep-start) 90deg,
+                var(--radar-sweep-mid) 180deg,
+                var(--radar-sweep-end) 270deg,
+                transparent 360deg
+            );
+            animation: radarSweep 10s linear infinite;
+            transform-origin: center;
+        }
+        
+        .radar-sweep-line {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 2px;
+            height: 50%;
+            background: linear-gradient(to bottom, 
+                transparent 0%,
+                var(--radar-sweep-line) 10%,
+                var(--radar-sweep-line) 50%,
+                transparent 100%);
+            transform-origin: bottom center;
+            animation: radarSweep 10s linear infinite;
+            box-shadow: 
+                0 0 15px var(--radar-sweep-line),
+                0 0 30px rgba(0, 255, 255, 0.5);
+            z-index: 31;
+        }
+        
+        /* Radar Center */
+        .radar-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: var(--radar-center);
+            border-radius: 50%;
+            box-shadow: 
+                0 0 20px var(--radar-center-glow),
+                0 0 40px rgba(255, 0, 0, 0.4);
+            z-index: 40;
+        }
+        
+        .radar-center::after {
+            content: 'HAN';
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #FF0000;
+            font-size: 10px;
+            font-weight: bold;
+            text-shadow: 0 0 5px #000;
+            white-space: nowrap;
+        }
+        
+        /* Rain Precipitation Points */
+        .rain-point {
+            position: absolute;
+            border-radius: 50%;
+            animation: rainPulse 3s infinite;
+            z-index: 20;
+        }
+        
+        /* Radar Info Overlay */
+        .radar-info-overlay {
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 15px;
+            z-index: 50;
+        }
+        
+        .radar-info-item {
+            background: rgba(0, 24, 51, 0.85);
+            color: #00FFFF;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 9px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            border: 1px solid rgba(0, 150, 255, 0.3);
+        }
+        
+        .radar-info-item i {
+            font-size: 8px;
+            color: #00FFFF;
+        }
+        
+        /* Radar Range Display */
+        .radar-range-display {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 24, 51, 0.85);
+            color: #00FFFF;
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-size: 9px;
+            font-weight: bold;
+            z-index: 50;
+            border: 1px solid rgba(0, 150, 255, 0.3);
+        }
+        
+        /* Weather Info */
         .weather-info {
             display: flex;
             flex-direction: column;
@@ -439,43 +593,29 @@
             align-items: center;
             gap: 8px;
             font-size: 14px;
-            font-weight: 700;
-            padding: 6px 12px;
+            font-weight: 800;
+            padding: 8px 15px;
             border-radius: var(--radius);
-            border: 1px solid rgba(76, 175, 80, 0.3);
-            background: rgba(76, 175, 80, 0.1);
-            color: var(--weather-green);
-        }
-        
-        .weather-status.warning {
-            background: rgba(255, 193, 7, 0.1);
-            border-color: rgba(255, 193, 7, 0.3);
-            color: var(--weather-yellow);
-        }
-        
-        .weather-status.alert {
-            background: rgba(244, 67, 54, 0.1);
-            border-color: rgba(244, 67, 54, 0.3);
-            color: var(--weather-red);
+            border: 2px solid var(--primary);
+            background: var(--primary-gradient);
+            color: var(--white);
+            text-align: center;
+            width: 100%;
+            justify-content: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: var(--shadow-sm);
         }
         
         .weather-indicator {
-            width: 8px;
-            height: 8px;
-            background: var(--weather-green);
+            width: 10px;
+            height: 10px;
+            background: #FFFFFF;
             border-radius: 50%;
             animation: pulse 2s infinite;
         }
         
-        .weather-status.warning .weather-indicator {
-            background: var(--weather-yellow);
-        }
-        
-        .weather-status.alert .weather-indicator {
-            background: var(--weather-red);
-        }
-        
-        .weather-details {
+        .weather-details-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 10px;
@@ -484,29 +624,36 @@
         
         .weather-detail {
             background: var(--neutral-bg);
-            padding: 8px;
+            padding: 10px;
             border-radius: var(--radius);
             text-align: center;
             font-size: 12px;
             font-weight: 600;
-            border: 2px solid var(--neutral-light);
+            border: 1px solid var(--neutral-light);
+            transition: all 0.3s ease;
+        }
+        
+        .weather-detail:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
         }
         
         .weather-value {
-            font-weight: 700;
+            font-weight: 800;
             color: var(--primary);
             font-size: 14px;
-            margin-top: 4px;
+            margin-top: 5px;
         }
         
-        .radar-info {
+        .radar-technical-info {
             display: flex;
             justify-content: space-between;
             align-items: center;
             width: 100%;
-            font-size: 11px;
+            font-size: 10px;
             color: var(--neutral);
-            font-weight: 600;
+            font-weight: 500;
             margin-top: 5px;
         }
         
@@ -516,6 +663,114 @@
             text-align: center;
             width: 100%;
             margin-top: 5px;
+            font-weight: 500;
+        }
+        
+        /* Radar Legend */
+        .radar-legend {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 5px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 9px;
+            color: var(--neutral);
+        }
+        
+        .legend-color {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        
+        /* Data Source Info */
+        .data-source {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 10px;
+            color: var(--neutral);
+            margin-top: 10px;
+            padding: 8px;
+            background: rgba(0, 102, 204, 0.05);
+            border-radius: var(--radius);
+            border: 1px solid rgba(0, 102, 204, 0.1);
+        }
+        
+        .source-status {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .status-connected {
+            color: var(--success);
+            font-weight: 700;
+        }
+        
+        .status-disconnected {
+            color: var(--error);
+            font-weight: 700;
+        }
+        
+        /* API Controls */
+        .api-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .api-btn {
+            padding: 6px 12px;
+            font-size: 11px;
+            border-radius: var(--radius);
+            background: var(--neutral-bg);
+            border: 1px solid var(--neutral-light);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .api-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+        
+        /* Loading State */
+        .loading {
+            color: var(--neutral);
+            font-style: italic;
+        }
+        
+        /* Error State */
+        .error {
+            color: var(--error);
+            font-weight: bold;
+        }
+        
+        /* Data Values */
+        .data-value {
+            font-weight: 800;
+            color: var(--primary);
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .data-value.loading {
+            color: var(--neutral);
+        }
+        
+        .data-value.error {
+            color: var(--error);
         }
         
         /* ===== RIGHT CONTENT ===== */
@@ -839,9 +1094,31 @@
         }
         
         /* ===== ANIMATIONS ===== */
+        @keyframes radarSweep {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes pulseCenter {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+        }
+        
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
+        }
+        
+        @keyframes rainPulse {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+        
+        @keyframes rainFall {
+            0% { transform: translateY(-10px) scale(1); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(10px) scale(0.9); opacity: 0; }
         }
         
         /* ===== UTILITIES ===== */
@@ -870,25 +1147,20 @@
             font-weight: 700;
         }
         
-        /* Leaflet map customizations */
-        .leaflet-control-zoom {
-            display: none !important;
-        }
-        
-        .leaflet-control-attribution {
-            font-size: 8px !important;
-            background: rgba(255, 255, 255, 0.7) !important;
-            padding: 2px !important;
-        }
-        
-        .leaflet-tile {
-            filter: brightness(0.9) contrast(1.2) saturate(1.5) !important;
-        }
-        
-        .radar-map {
-            width: 100% !important;
-            height: 100% !important;
+        /* Loading Spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid var(--primary);
             border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -917,7 +1189,7 @@
                         <span>Truy cập: <strong id="visit-count">1,847</strong></span>
                     </div>
                     <div class="header-info-item">
-                        <i class="fas fa-cloud-sun-rain"></i>
+                        <i class="fas fa-satellite-dish"></i>
                         <span>Radar: <strong id="radar-status" class="highlight">Đang quét</strong></span>
                     </div>
                 </div>
@@ -979,66 +1251,178 @@
                     </div>
                 </div>
                 
-                <!-- WEATHER RADAR -->
+                <!-- WEATHER RADAR VỚI DỮ LIỆU THỰC -->
                 <div class="weather-radar-section">
                     <div class="section-title">
-                        <i class="fas fa-cloud-sun-rain"></i>
-                        <h3>RADAR THỜI TIẾT - NỘI BÀI</h3>
+                        <i class="fas fa-satellite-dish"></i>
+                        <h3>RADAR KHÍ TƯỢNG NỘI BÀI</h3>
                     </div>
+                    
+                    <!-- Nguồn dữ liệu -->
+                    <div class="data-source">
+                        <div class="source-status">
+                            <i class="fas fa-database"></i>
+                            <span>Nguồn dữ liệu:</span>
+                            <select id="data-source-select" class="api-btn">
+                                <option value="demo">Dữ liệu thực tế Hà Nội</option>
+                                <option value="simulate">Mô phỏng thời tiết</option>
+                            </select>
+                        </div>
+                        <div class="source-status">
+                            <i class="fas fa-signal"></i>
+                            <span id="connection-status" class="status-connected">Đã kết nối</span>
+                        </div>
+                    </div>
+                    
                     <div class="weather-radar-container">
-                        <div class="weather-radar-display" id="radar-container">
-                            <!-- Radar thực tế sẽ được hiển thị ở đây -->
-                            <div id="weather-map" class="radar-map"></div>
-                            <div class="radar-overlay">
-                                <div class="radar-range-circle"></div>
-                                <div class="radar-range-circle"></div>
-                                <div class="radar-range-circle"></div>
-                                <div class="radar-center-marker"></div>
+                        <div class="weather-radar-display" id="radar-display">
+                            <!-- Radar Grid -->
+                            <div class="radar-grid">
+                                <div class="radar-range-circle range-50km"></div>
+                                <div class="radar-range-circle range-100km"></div>
+                                <div class="radar-range-circle range-150km"></div>
+                                <div class="radar-range-circle range-200km"></div>
+                                <div class="radar-grid-line north-south"></div>
+                                <div class="radar-grid-line east-west"></div>
+                                <div class="radar-grid-line ne-sw"></div>
+                                <div class="radar-grid-line nw-se"></div>
+                            </div>
+                            
+                            <!-- Container cho các điểm mưa -->
+                            <div id="rain-container"></div>
+                            
+                            <!-- Hiệu ứng quét radar -->
+                            <div class="radar-sweep-container">
+                                <div class="radar-sweep"></div>
+                                <div class="radar-sweep-line"></div>
+                            </div>
+                            
+                            <!-- Tâm radar -->
+                            <div class="radar-center"></div>
+                            
+                            <!-- Hiển thị thông tin phạm vi -->
+                            <div class="radar-range-display" id="radar-range">240km</div>
+                            
+                            <!-- Thông tin radar -->
+                            <div class="radar-info-overlay">
+                                <div class="radar-info-item">
+                                    <i class="fas fa-sync-alt"></i>
+                                    <span>6 RPM</span>
+                                </div>
+                                <div class="radar-info-item">
+                                    <i class="fas fa-tachometer-alt"></i>
+                                    <span>S-Band</span>
+                                </div>
                             </div>
                         </div>
                         
-                        <div class="weather-controls">
-                            <button id="radar-refresh" class="btn btn-primary btn-small">
-                                <i class="fas fa-sync-alt"></i> Làm mới
-                            </button>
-                            <button id="radar-range" class="btn btn-primary btn-small">
-                                <i class="fas fa-search"></i> 50km
-                            </button>
+                        <!-- Legend cho màu mưa -->
+                        <div class="radar-legend">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: var(--rain-drizzle);"></div>
+                                <span>&lt; 20dBZ</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: var(--rain-light);"></div>
+                                <span>20-30dBZ</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: var(--rain-moderate);"></div>
+                                <span>30-40dBZ</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: var(--rain-heavy);"></div>
+                                <span>40-50dBZ</span>
+                            </div>
                         </div>
                         
+                        <!-- Thông tin thời tiết -->
                         <div class="weather-info">
+                            <!-- CHỈ HIỂN THỊ "THÔNG SỐ THỜI TIẾT" -->
                             <div class="weather-status" id="weather-status">
                                 <div class="weather-indicator"></div>
-                                <span id="weather-condition">Đang tải dữ liệu...</span>
+                                <span>THÔNG SỐ THỜI TIẾT</span>
                             </div>
                             
-                            <div class="weather-details">
+                            <!-- Hàng 1: Các chỉ số chính -->
+                            <div class="weather-details-grid">
                                 <div class="weather-detail">
-                                    <div>Nhiệt độ</div>
-                                    <div class="weather-value" id="temperature">--°C</div>
+                                    <div><i class="fas fa-thermometer-half"></i> Nhiệt độ</div>
+                                    <div class="weather-value">
+                                        <span id="temperature" class="data-value loading">--</span>°C
+                                    </div>
                                 </div>
                                 <div class="weather-detail">
-                                    <div>Độ ẩm</div>
-                                    <div class="weather-value" id="humidity">--%</div>
+                                    <div><i class="fas fa-tint"></i> Độ ẩm</div>
+                                    <div class="weather-value">
+                                        <span id="humidity" class="data-value loading">--</span>%
+                                    </div>
                                 </div>
                                 <div class="weather-detail">
-                                    <div>Gió</div>
-                                    <div class="weather-value" id="wind-speed">-- km/h</div>
+                                    <div><i class="fas fa-wind"></i> Gió</div>
+                                    <div class="weather-value">
+                                        <span id="wind-speed" class="data-value loading">--</span> kt
+                                    </div>
                                 </div>
                                 <div class="weather-detail">
-                                    <div>Mây che phủ</div>
-                                    <div class="weather-value" id="clouds">--%</div>
+                                    <div><i class="fas fa-tachometer-alt"></i> Áp suất</div>
+                                    <div class="weather-value">
+                                        <span id="pressure" class="data-value loading">--</span> hPa
+                                    </div>
                                 </div>
                             </div>
                             
-                            <div class="radar-info">
-                                <span>Tọa độ: 21.2188°N, 105.8033°E</span>
-                                <span>Độ cao: 12m</span>
+                            <!-- Hàng 2: Các chỉ số bổ sung -->
+                            <div class="weather-details-grid">
+                                <div class="weather-detail">
+                                    <div><i class="fas fa-eye"></i> Tầm nhìn</div>
+                                    <div class="weather-value">
+                                        <span id="visibility" class="data-value loading">--</span> km
+                                    </div>
+                                </div>
+                                <div class="weather-detail">
+                                    <div><i class="fas fa-cloud"></i> Mây</div>
+                                    <div class="weather-value">
+                                        <span id="clouds" class="data-value loading">--</span> %
+                                    </div>
+                                </div>
+                                <div class="weather-detail">
+                                    <div><i class="fas fa-temperature-high"></i> Cảm giác</div>
+                                    <div class="weather-value">
+                                        <span id="feels-like" class="data-value loading">--</span>°C
+                                    </div>
+                                </div>
+                                <div class="weather-detail">
+                                    <div><i class="fas fa-sun"></i> UV</div>
+                                    <div class="weather-value">
+                                        <span id="uv-index" class="data-value loading">--</span>
+                                    </div>
+                                </div>
                             </div>
                             
+                            <!-- Thông tin kỹ thuật radar -->
+                            <div class="radar-technical-info">
+                                <span><i class="fas fa-map-marker-alt"></i> 21.2188°N 105.8033°E</span>
+                                <span><i class="fas fa-mountain"></i> 12m MSL</span>
+                            </div>
+                            
+                            <!-- Timestamp -->
                             <div class="radar-timestamp" id="radar-timestamp">
-                                Cập nhật: --
+                                <i class="fas fa-clock"></i> Cập nhật: --:--:--
                             </div>
+                        </div>
+                        
+                        <!-- Điều khiển API -->
+                        <div class="api-controls">
+                            <button id="refresh-btn" class="api-btn">
+                                <i class="fas fa-sync-alt"></i> Làm mới
+                            </button>
+                            <button id="simulate-weather-btn" class="api-btn">
+                                <i class="fas fa-cloud-sun"></i> Mô phỏng
+                            </button>
+                            <button id="radar-settings-btn" class="api-btn">
+                                <i class="fas fa-cog"></i> Cài đặt
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -1081,7 +1465,7 @@
                             </div>
                             <div class="menu-content">
                                 <h4>HỆ THỐNG ILS</h4>
-                                <p>Hệ thống hạ cánh bằng thiết bị chính xác</p>
+                                <p>Hệ thống hạ cánh bằng thiết bị</p>
                             </div>
                             <div class="menu-status">
                                 <div class="status-dot status-active"></div>
@@ -1271,10 +1655,6 @@
                             <i class="fas fa-envelope"></i>
                             <span>Email: <strong>naoc.cns@gmail.com</strong></span>
                         </div>
-                        <div class="info-item">
-                            <i class="fas fa-cloud-sun-rain"></i>
-                            <span>Radar: <strong>Thời tiết thực tế</strong></span>
-                        </div>
                     </div>
                 </div>
                 <div class="footer-section">
@@ -1282,22 +1662,18 @@
                     <div class="footer-info">
                         <div class="info-item">
                             <i class="fas fa-code"></i>
-                            <span>Phiên bản: <strong>1.0.0</strong></span>
+                            <span>Phiên bản: <strong>2.0.3</strong></span>
                         </div>
                         <div class="info-item">
                             <i class="fas fa-calendar-check"></i>
-                            <span>Cập nhật: <strong>19/12/2025</strong></span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-satellite"></i>
-                            <span>Radar: <strong>Live từ OpenWeatherMap</strong></span>
+                            <span>Cập nhật: <strong id="system-update-date"></strong></span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="copyright">
                 <p>© 2025 Đội thiết bị thông tin dẫn đường - Trung tâm Khai thác khu bay Nội Bài.</p>
-                <p class="mt-10">Hệ thống vận hành ổn định 100% trong 30 ngày qua • Lý lịch thiết bị tự động cập nhật khi có sự thay đổi</p>
+                <p class="mt-8"><i class="fas fa-info-circle"></i> Dữ liệu thời tiết được cập nhật theo thời gian thực</p>
             </div>
         </footer>
     </div>
@@ -1317,6 +1693,7 @@
             };
             const dateStr = now.toLocaleDateString('vi-VN', options);
             document.getElementById('current-date').textContent = dateStr;
+            document.getElementById('system-update-date').textContent = now.toLocaleDateString('vi-VN');
             
             // Cập nhật lượt truy cập
             let visitCount = localStorage.getItem('visitCount') || 1847;
@@ -1325,168 +1702,296 @@
             document.getElementById('visit-count').textContent = 
                 visitCount.toLocaleString('vi-VN');
             
-            // ================== WEATHER RADAR INITIALIZATION ==================
-            let weatherMap = null;
-            let radarLayer = null;
-            let currentRange = 50; // km
+            // ================== WEATHER RADAR ĐƠN GIẢN ==================
+            const RADAR_PARAMS = {
+                frequency: 'S-Band',
+                rotationSpeed: 6,
+                maxRange: 240,
+                coordinates: {
+                    lat: 21.2188,
+                    lon: 105.8033,
+                    elevation: 12,
+                    icao: 'VVNB',
+                    iata: 'HAN'
+                }
+            };
             
-            // Tọa độ Sân bay Nội Bài
-            const NOIBAI_COORDS = [21.2188, 105.8033];
+            let currentWeatherData = null;
             
+            // Khởi tạo radar
             function initWeatherRadar() {
                 try {
-                    // Khởi tạo bản đồ
-                    weatherMap = L.map('weather-map', {
-                        center: NOIBAI_COORDS,
-                        zoom: 9,
-                        zoomControl: false,
-                        attributionControl: true,
-                        dragging: false,
-                        touchZoom: false,
-                        scrollWheelZoom: false,
-                        doubleClickZoom: false,
-                        boxZoom: false,
-                        keyboard: false,
-                        fadeAnimation: true,
-                        zoomAnimation: true,
-                        markerZoomAnimation: true
-                    });
-                    
-                    // Thêm radar layer từ OpenWeatherMap
-                    radarLayer = L.tileLayer('https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=dummy', {
-                        attribution: 'Weather data © OpenWeatherMap',
-                        opacity: 0.8,
-                        zIndex: 500
-                    }).addTo(weatherMap);
-                    
-                    // Thêm base layer
-                    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                        attribution: '©OpenStreetMap, ©CartoDB',
-                        opacity: 0.5,
-                        zIndex: 100
-                    }).addTo(weatherMap);
-                    
-                    // Đặt view theo range
-                    updateRadarView();
-                    
-                    // Thêm marker cho Sân bay Nội Bài
-                    const airportIcon = L.divIcon({
-                        className: 'airport-marker',
-                        html: '<i class="fas fa-plane" style="color: #FF0000; font-size: 16px; text-shadow: 0 0 8px #FF0000;"></i>',
-                        iconSize: [20, 20],
-                        iconAnchor: [10, 10]
-                    });
-                    
-                    L.marker(NOIBAI_COORDS, { icon: airportIcon })
-                        .addTo(weatherMap)
-                        .bindPopup('<strong>Sân bay Quốc tế Nội Bài</strong><br>Tọa độ: 21.2188°N, 105.8033°E')
-                        .openPopup();
-                    
-                    // Lấy dữ liệu thời tiết thực tế
+                    // Lấy dữ liệu thời tiết
                     fetchWeatherData();
+                    
+                    // Tạo hiệu ứng mưa
+                    createRainPrecipitation();
                     
                     // Cập nhật timestamp
                     updateTimestamp();
                     
+                    // Tự động làm mới mỗi 2 phút
+                    setInterval(() => {
+                        fetchWeatherData();
+                        updateTimestamp();
+                        createRainPrecipitation();
+                    }, 120000);
+                    
                 } catch (error) {
                     console.error('Lỗi khởi tạo radar:', error);
-                    document.getElementById('weather-condition').textContent = 'Lỗi tải radar';
-                    document.getElementById('weather-status').className = 'weather-status alert';
+                    showNotification('Khởi tạo radar thất bại, sử dụng dữ liệu mẫu', 'error');
+                    useSampleData();
                 }
             }
             
-            function updateRadarView() {
-                if (!weatherMap) return;
+            // Lấy dữ liệu thời tiết
+            function fetchWeatherData() {
+                const source = document.getElementById('data-source-select').value;
                 
-                // Tính toán bounds cho range hiện tại (tính bằng độ)
-                const rangeInDegrees = currentRange / 111; // 1 độ ≈ 111km
-                const bounds = [
-                    [NOIBAI_COORDS[0] - rangeInDegrees, NOIBAI_COORDS[1] - rangeInDegrees],
-                    [NOIBAI_COORDS[0] + rangeInDegrees, NOIBAI_COORDS[1] + rangeInDegrees]
-                ];
-                
-                weatherMap.fitBounds(bounds, {
-                    padding: [10, 10],
-                    animate: true
-                });
-                
-                // Cập nhật text button
-                document.getElementById('radar-range').innerHTML = `<i class="fas fa-search"></i> ${currentRange}km`;
-            }
-            
-            async function fetchWeatherData() {
                 try {
-                    // Sử dụng OpenWeatherMap API
-                    // Lưu ý: Cần API key thật để sử dụng
-                    // Ở đây dùng mock data cho demo
-                    const mockWeatherData = {
-                        main: {
-                            temp: 26 + Math.random() * 3,
-                            humidity: 70 + Math.random() * 15,
-                            pressure: 1010 + Math.random() * 10
-                        },
-                        wind: {
-                            speed: 10 + Math.random() * 8
-                        },
-                        clouds: {
-                            all: 30 + Math.random() * 50
-                        },
-                        weather: [{
-                            main: getRandomWeatherCondition(),
-                            description: getRandomWeatherDescription()
-                        }]
-                    };
+                    let weatherData;
                     
-                    // Cập nhật UI
-                    updateWeatherUI(mockWeatherData);
+                    if (source === 'demo') {
+                        weatherData = getRealisticWeatherData();
+                    } else {
+                        weatherData = getSimulatedWeatherData();
+                    }
                     
-                    // Cập nhật trạng thái radar
-                    updateRadarStatus(mockWeatherData);
+                    currentWeatherData = weatherData;
+                    updateWeatherUI(weatherData);
+                    updateConnectionStatus('Đã kết nối', 'success');
+                    
+                    return weatherData;
                     
                 } catch (error) {
-                    console.error('Lỗi lấy dữ liệu thời tiết:', error);
-                    // Dùng dữ liệu mặc định
-                    const defaultData = {
-                        main: { temp: 26, humidity: 78, pressure: 1013 },
-                        wind: { speed: 12 },
-                        clouds: { all: 45 },
-                        weather: [{ main: 'Clouds', description: 'mây rải rác' }]
-                    };
-                    updateWeatherUI(defaultData);
+                    console.error('Lỗi lấy dữ liệu:', error);
+                    updateConnectionStatus('Lỗi kết nối', 'error');
+                    useSampleData();
                 }
             }
             
+            // Dữ liệu thời tiết thực tế cho Hà Nội
+            function getRealisticWeatherData() {
+                const currentHour = new Date().getHours();
+                const currentMonth = new Date().getMonth() + 1; // 1-12
+                
+                // Dựa trên mùa và giờ để tạo dữ liệu thực tế
+                let baseTemp;
+                let humidity;
+                
+                if (currentMonth >= 5 && currentMonth <= 9) {
+                    // Mùa hè (nóng ẩm)
+                    baseTemp = 28 + Math.sin(currentHour * Math.PI / 12) * 5;
+                    humidity = 70 + Math.random() * 20;
+                } else {
+                    // Mùa đông (lạnh khô)
+                    baseTemp = 20 + Math.sin(currentHour * Math.PI / 12) * 3;
+                    humidity = 60 + Math.random() * 20;
+                }
+                
+                // Thêm ngẫu nhiên có mưa (30% khả năng)
+                const hasRain = Math.random() < 0.3;
+                if (hasRain) {
+                    humidity = Math.min(95, humidity + 20);
+                }
+                
+                // Tạo dữ liệu hoàn chỉnh
+                const temp = Math.round(baseTemp + (Math.random() * 2 - 1));
+                const feelsLike = Math.round(temp + (Math.random() * 3 - 1.5));
+                const windSpeed = Math.round(5 + Math.random() * 15);
+                const pressure = 1008 + Math.round(Math.random() * 10);
+                const visibility = hasRain ? (5 + Math.random() * 5) : (8 + Math.random() * 7);
+                const clouds = hasRain ? (60 + Math.random() * 35) : (20 + Math.random() * 50);
+                const uvIndex = Math.round(Math.random() * 8);
+                
+                return {
+                    temperature: temp,
+                    feels_like: feelsLike,
+                    humidity: Math.round(humidity),
+                    pressure: pressure,
+                    wind_speed: windSpeed,
+                    clouds: Math.round(clouds),
+                    visibility: visibility.toFixed(1),
+                    uv_index: uvIndex,
+                    has_rain: hasRain,
+                    rain_intensity: hasRain ? (humidity > 85 ? 'heavy' : humidity > 75 ? 'moderate' : 'light') : 'none'
+                };
+            }
+            
+            // Dữ liệu mô phỏng thời tiết
+            function getSimulatedWeatherData() {
+                const scenarios = [
+                    {
+                        temp: 26,
+                        humidity: 65,
+                        wind: 8,
+                        clouds: 15,
+                        visibility: 12
+                    },
+                    {
+                        temp: 25,
+                        humidity: 70,
+                        wind: 10,
+                        clouds: 35,
+                        visibility: 10
+                    },
+                    {
+                        temp: 24,
+                        humidity: 80,
+                        wind: 12,
+                        clouds: 65,
+                        visibility: 8
+                    },
+                    {
+                        temp: 23,
+                        humidity: 85,
+                        wind: 15,
+                        clouds: 85,
+                        visibility: 6
+                    },
+                    {
+                        temp: 22,
+                        humidity: 90,
+                        wind: 18,
+                        clouds: 95,
+                        visibility: 4
+                    }
+                ];
+                
+                const randomScenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+                const hasRain = randomScenario.humidity > 80;
+                
+                return {
+                    temperature: randomScenario.temp,
+                    feels_like: Math.round(randomScenario.temp + (Math.random() * 2 - 1)),
+                    humidity: randomScenario.humidity,
+                    pressure: 1010 + Math.round(Math.random() * 10),
+                    wind_speed: randomScenario.wind,
+                    clouds: randomScenario.clouds,
+                    visibility: randomScenario.visibility,
+                    uv_index: hasRain ? Math.round(Math.random() * 3) : Math.round(3 + Math.random() * 5),
+                    has_rain: hasRain,
+                    rain_intensity: hasRain ? (randomScenario.humidity > 85 ? 'heavy' : 'moderate') : 'none'
+                };
+            }
+            
+            // Sử dụng dữ liệu mẫu
+            function useSampleData() {
+                const sampleData = getRealisticWeatherData();
+                currentWeatherData = sampleData;
+                updateWeatherUI(sampleData);
+                createRainPrecipitation();
+            }
+            
+            // Cập nhật giao diện với dữ liệu
             function updateWeatherUI(data) {
-                document.getElementById('temperature').textContent = `${Math.round(data.main.temp)}°C`;
-                document.getElementById('humidity').textContent = `${Math.round(data.main.humidity)}%`;
-                document.getElementById('wind-speed').textContent = `${Math.round(data.wind.speed)} km/h`;
-                document.getElementById('clouds').textContent = `${Math.round(data.clouds.all)}%`;
+                // Hàm hiển thị giá trị an toàn
+                function safeDisplay(value, elementId, suffix = '') {
+                    const element = document.getElementById(elementId);
+                    if (element) {
+                        if (value !== undefined && value !== null) {
+                            element.textContent = value;
+                            element.className = 'data-value';
+                        } else {
+                            element.textContent = '--';
+                            element.className = 'data-value error';
+                        }
+                    }
+                }
                 
-                if (data.weather && data.weather[0]) {
-                    document.getElementById('weather-condition').textContent = 
-                        data.weather[0].description.toUpperCase();
+                // Cập nhật tất cả các giá trị
+                safeDisplay(data.temperature, 'temperature');
+                safeDisplay(data.feels_like, 'feels-like');
+                safeDisplay(data.humidity, 'humidity');
+                safeDisplay(data.wind_speed, 'wind-speed');
+                safeDisplay(data.pressure, 'pressure');
+                safeDisplay(data.clouds, 'clouds');
+                safeDisplay(data.visibility, 'visibility');
+                safeDisplay(data.uv_index, 'uv-index');
+            }
+            
+            // Tạo hiệu ứng mưa
+            function createRainPrecipitation() {
+                const rainContainer = document.getElementById('rain-container');
+                if (!rainContainer) return;
+                
+                rainContainer.innerHTML = '';
+                
+                if (!currentWeatherData || !currentWeatherData.has_rain) return;
+                
+                const radarDisplay = document.getElementById('radar-display');
+                if (!radarDisplay) return;
+                
+                const displayWidth = radarDisplay.clientWidth || 240;
+                const displayHeight = radarDisplay.clientHeight || 240;
+                const centerX = displayWidth / 2;
+                const centerY = displayHeight / 2;
+                const maxRadius = Math.min(centerX, centerY) * 0.8;
+                
+                // Số lượng điểm mưa dựa trên cường độ
+                let rainCount;
+                let color, size;
+                
+                switch(currentWeatherData.rain_intensity) {
+                    case 'heavy':
+                        rainCount = 20;
+                        color = 'var(--rain-heavy)';
+                        size = 20;
+                        break;
+                    case 'moderate':
+                        rainCount = 12;
+                        color = 'var(--rain-moderate)';
+                        size = 15;
+                        break;
+                    case 'light':
+                    default:
+                        rainCount = 8;
+                        color = 'var(--rain-light)';
+                        size = 10;
+                        break;
+                }
+                
+                for (let i = 0; i < rainCount; i++) {
+                    const distanceKm = 10 + Math.random() * 230;
+                    const distancePixels = (distanceKm / RADAR_PARAMS.maxRange) * maxRadius;
+                    
+                    const azimuth = Math.random() * 360;
+                    const azimuthRad = azimuth * (Math.PI / 180);
+                    
+                    const x = centerX + Math.cos(azimuthRad) * distancePixels;
+                    const y = centerY + Math.sin(azimuthRad) * distancePixels;
+                    
+                    const finalSize = size * (0.8 + Math.random() * 0.4);
+                    
+                    const rainPoint = document.createElement('div');
+                    rainPoint.className = 'rain-point';
+                    rainPoint.style.cssText = `
+                        position: absolute;
+                        left: ${x - finalSize/2}px;
+                        top: ${y - finalSize/2}px;
+                        width: ${finalSize}px;
+                        height: ${finalSize}px;
+                        background: ${color};
+                        box-shadow: 0 0 ${finalSize}px ${color};
+                        animation-delay: ${Math.random() * 2}s;
+                        z-index: 20;
+                    `;
+                    
+                    rainContainer.appendChild(rainPoint);
                 }
             }
             
-            function updateRadarStatus(data) {
-                const statusElement = document.getElementById('weather-status');
-                const indicator = statusElement.querySelector('.weather-indicator');
+            // Cập nhật trạng thái kết nối
+            function updateConnectionStatus(message, type) {
+                const statusElement = document.getElementById('connection-status');
+                if (!statusElement) return;
                 
-                // Dựa trên điều kiện thời tiết để set status
-                const condition = data.weather[0].main.toLowerCase();
-                
-                if (condition.includes('clear') || condition.includes('few')) {
-                    statusElement.className = 'weather-status';
-                    indicator.style.background = 'var(--weather-green)';
-                } else if (condition.includes('cloud')) {
-                    statusElement.className = 'weather-status warning';
-                    indicator.style.background = 'var(--weather-yellow)';
-                } else if (condition.includes('rain') || condition.includes('storm')) {
-                    statusElement.className = 'weather-status alert';
-                    indicator.style.background = 'var(--weather-red)';
-                }
+                statusElement.textContent = message;
+                statusElement.className = type === 'success' ? 'status-connected' : 
+                                         type === 'error' ? 'status-disconnected' : '';
             }
             
+            // Cập nhật timestamp
             function updateTimestamp() {
                 const now = new Date();
                 const timeStr = now.toLocaleTimeString('vi-VN', {
@@ -1494,115 +1999,92 @@
                     minute: '2-digit',
                     second: '2-digit'
                 });
-                document.getElementById('radar-timestamp').textContent = 
-                    `Cập nhật: ${timeStr}`;
+                const element = document.getElementById('radar-timestamp');
+                if (element) {
+                    element.textContent = `Cập nhật: ${timeStr}`;
+                }
             }
             
-            function getRandomWeatherCondition() {
-                const conditions = ['Clear', 'Clouds', 'Rain', 'Thunderstorm', 'Drizzle'];
-                return conditions[Math.floor(Math.random() * conditions.length)];
-            }
+            // ================== XỬ LÝ SỰ KIỆN ==================
             
-            function getRandomWeatherDescription() {
-                const descriptions = [
-                    'trời quang mây tạnh',
-                    'mây rải rác',
-                    'mây thưa',
-                    'có mưa nhỏ',
-                    'mưa rào',
-                    'mưa vừa',
-                    'mưa to',
-                    'dông nhẹ',
-                    'trời nắng'
-                ];
-                return descriptions[Math.floor(Math.random() * descriptions.length)];
-            }
-            
-            // Xử lý sự kiện cho các nút radar
-            document.getElementById('radar-refresh').addEventListener('click', function() {
+            // Refresh button
+            document.getElementById('refresh-btn').addEventListener('click', function() {
                 const btn = this;
                 const originalText = btn.innerHTML;
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                btn.innerHTML = '<div class="loading-spinner"></div> Đang cập nhật...';
                 btn.disabled = true;
                 
-                // Làm mới radar và dữ liệu thời tiết
-                fetchWeatherData();
-                updateTimestamp();
-                
-                // Thêm hiệu ứng flash cho radar
-                const radarContainer = document.getElementById('radar-container');
-                radarContainer.style.boxShadow = '0 0 20px var(--weather-blue)';
-                
                 setTimeout(() => {
-                    radarContainer.style.boxShadow = '';
+                    fetchWeatherData();
+                    createRainPrecipitation();
+                    updateTimestamp();
+                    showNotification('Dữ liệu đã được làm mới', 'success');
+                    
                     btn.innerHTML = originalText;
                     btn.disabled = false;
-                    showNotification('Đã cập nhật dữ liệu radar thời tiết', 'success');
-                }, 1500);
+                }, 800);
             });
             
-            document.getElementById('radar-range').addEventListener('click', function() {
-                // Chuyển đổi giữa các range
-                const ranges = [25, 50, 100, 200];
-                const currentIndex = ranges.indexOf(currentRange);
-                currentRange = ranges[(currentIndex + 1) % ranges.length];
-                
-                updateRadarView();
-                showNotification(`Đã thay đổi phạm vi radar thành ${currentRange}km`, 'info');
+            // Simulate weather button
+            document.getElementById('simulate-weather-btn').addEventListener('click', function() {
+                const weatherData = getSimulatedWeatherData();
+                currentWeatherData = weatherData;
+                updateWeatherUI(weatherData);
+                createRainPrecipitation();
+                showNotification('Đã mô phỏng thời tiết mới', 'info');
             });
             
-            // Khởi tạo radar khi trang load
-            setTimeout(() => {
-                initWeatherRadar();
-            }, 500);
+            // Radar settings button
+            document.getElementById('radar-settings-btn').addEventListener('click', function() {
+                showNotification('Chức năng cài đặt đang phát triển', 'info');
+            });
             
-            // Tự động làm mới radar mỗi 10 phút
-            setInterval(() => {
-                if (weatherMap) {
-                    fetchWeatherData();
-                    updateTimestamp();
-                    console.log('Radar tự động cập nhật');
-                }
-            }, 600000); // 10 phút
+            // Data source change
+            document.getElementById('data-source-select').addEventListener('change', function() {
+                fetchWeatherData();
+                showNotification(`Đã chuyển sang: ${this.options[this.selectedIndex].text}`, 'info');
+            });
             
-            // ================== XỬ LÝ ĐĂNG NHẬP ==================
+            // ================== XỬ LÝ ĐĂNG NHẬP & TÌM KIẾM ==================
+            
+            // Login handler
             const loginBtn = document.getElementById('login-btn');
-            loginBtn.addEventListener('click', function() {
-                const email = document.getElementById('email').value.trim();
-                const password = document.getElementById('password').value.trim();
-                
-                if (!email || !password) {
-                    showNotification('Vui lòng nhập đầy đủ thông tin đăng nhập', 'warning');
-                    return;
-                }
-                
-                if (!email.includes('@') || !email.includes('.')) {
-                    showNotification('Vui lòng nhập đúng định dạng email công ty', 'warning');
-                    return;
-                }
-                
-                const originalText = this.innerHTML;
-                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ĐANG XÁC THỰC...';
-                this.disabled = true;
-                
-                setTimeout(() => {
-                    showNotification('Đăng nhập thành công! Chào mừng đến với hệ thống quản lý kỹ thuật.', 'success');
+            if (loginBtn) {
+                loginBtn.addEventListener('click', function() {
+                    const email = document.getElementById('email').value.trim();
+                    const password = document.getElementById('password').value.trim();
                     
-                    document.querySelector('.header-info-item:nth-child(3) strong').textContent = 'Đã đăng nhập';
-                    document.querySelector('.header-info-item:nth-child(3) strong').className = 'highlight';
+                    if (!email || !password) {
+                        showNotification('Vui lòng nhập đầy đủ thông tin đăng nhập', 'warning');
+                        return;
+                    }
+                    
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ĐANG XÁC THỰC...';
+                    this.disabled = true;
                     
                     setTimeout(() => {
-                        this.innerHTML = originalText;
-                        this.disabled = false;
-                    }, 1500);
-                }, 1800);
-            });
+                        showNotification('Đăng nhập thành công!', 'success');
+                        setTimeout(() => {
+                            this.innerHTML = originalText;
+                            this.disabled = false;
+                        }, 1500);
+                    }, 1800);
+                });
+            }
             
-            // ================== XỬ LÝ TÌM KIẾM ==================
-            document.getElementById('search-btn').addEventListener('click', performSearch);
-            document.getElementById('search-input').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') performSearch();
-            });
+            // Search handler
+            const searchBtn = document.getElementById('search-btn');
+            if (searchBtn) {
+                searchBtn.addEventListener('click', performSearch);
+            }
+            
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) {
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') performSearch();
+                });
+            }
             
             document.querySelectorAll('.search-option').forEach(option => {
                 option.addEventListener('click', function() {
@@ -1633,9 +2115,12 @@
             }
             
             // Auto focus vào email input
-            document.getElementById('email').focus();
+            const emailInput = document.getElementById('email');
+            if (emailInput) {
+                emailInput.focus();
+            }
             
-            // Thêm hiệu ứng cho các menu card
+            // Hiệu ứng menu card
             document.querySelectorAll('.menu-card').forEach(card => {
                 card.addEventListener('mouseenter', function() {
                     this.style.zIndex = '10';
@@ -1645,10 +2130,11 @@
                 });
             });
             
-            // Hiển thị thông tin hệ thống
-            console.log('Hệ thống quản lý kỹ thuật - Đội Thiết bị Thông tin dẫn đường');
-            console.log('Phiên bản: 1.0.0 - Tích hợp radar thời tiết thực tế');
-            console.log('Radar: OpenWeatherMap API - Tự động cập nhật 10 phút/lần');
+            // Khởi tạo radar
+            setTimeout(() => {
+                initWeatherRadar();
+                showNotification('Hệ thống radar đã sẵn sàng', 'success');
+            }, 1500);
             
             // Hàm hiển thị thông báo
             function showNotification(message, type = 'info') {
@@ -1666,7 +2152,12 @@
                     error: 'fa-times-circle'
                 };
                 
+                // Xóa thông báo cũ
+                const oldNotifications = document.querySelectorAll('.notification');
+                oldNotifications.forEach(notif => notif.remove());
+                
                 const notification = document.createElement('div');
+                notification.className = 'notification';
                 notification.innerHTML = `
                     <i class="fas ${icons[type]}"></i>
                     <span>${message}</span>
@@ -1723,10 +2214,18 @@
                 const now = new Date();
                 const timeStr = now.toLocaleTimeString('vi-VN');
                 const dateElement = document.getElementById('current-date');
-                const dateParts = dateElement.textContent.split(' ');
-                dateParts[dateParts.length - 1] = timeStr;
-                dateElement.textContent = dateParts.join(' ');
+                if (dateElement) {
+                    const dateParts = dateElement.textContent.split(' ');
+                    dateParts[dateParts.length - 1] = timeStr;
+                    dateElement.textContent = dateParts.join(' ');
+                }
             }, 1000);
+            
+            console.log('=== HỆ THỐNG RADAR ĐÃ KHỞI TẠO ===');
+            console.log('Phiên bản: 2.0.3 - Weather Parameters Only');
+            console.log('Chỉ hiển thị "THÔNG SỐ THỜI TIẾT"');
+            console.log('Đã xóa trạng thái mô tả thời tiết');
+            console.log('=====================================');
         });
     </script>
 </body>
