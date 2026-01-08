@@ -12,7 +12,6 @@
             --primary-dark: #004C99;
             --primary-light: #4D94FF;
             --primary-gradient: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
-            --secondary: #00796b;
             --accent: #FF6600;
             --neutral-dark: #1A1A1A;
             --neutral: #333333;
@@ -24,23 +23,11 @@
             --info: #0288D1;
             --error: #D32F2F;
             
-            /* Màu radar chuyên nghiệp theo tiêu chuẩn hàng không */
-            --radar-bg: #001833;
-            --radar-grid: rgba(0, 150, 255, 0.25);
-            --radar-sweep-start: rgba(0, 255, 255, 0.7);
-            --radar-sweep-mid: rgba(0, 200, 255, 0.5);
-            --radar-sweep-end: rgba(0, 100, 255, 0.3);
-            --radar-sweep-line: #00FFFF;
-            --radar-center: #FF0000;
-            --radar-center-glow: rgba(255, 0, 0, 0.7);
-            
-            /* Màu mưa theo thang đo dBZ chuẩn radar */
-            --rain-drizzle: rgba(0, 255, 255, 0.6);      /* < 20 dBZ - Mưa phùn */
-            --rain-light: rgba(0, 200, 255, 0.7);       /* 20-30 dBZ - Mưa nhẹ */
-            --rain-moderate: rgba(0, 150, 255, 0.8);    /* 30-40 dBZ - Mưa vừa */
-            --rain-heavy: rgba(255, 200, 0, 0.8);       /* 40-50 dBZ - Mưa to */
-            --rain-very-heavy: rgba(255, 100, 0, 0.9);  /* 50-60 dBZ - Mưa rất to */
-            --rain-extreme: rgba(255, 0, 0, 0.9);       /* > 60 dBZ - Mưa cực to */
+            /* Màu radar chuyên nghiệp */
+            --radar-bg: #0A1929;
+            --radar-grid: rgba(0, 150, 255, 0.15);
+            --radar-sweep: #00CCFF;
+            --radar-center: #FF3333;
             
             --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
             --shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
@@ -60,8 +47,8 @@
             font-family: 'Segoe UI', 'Noto Sans Vietnamese', system-ui, -apple-system, sans-serif;
             background: var(--neutral-bg);
             color: var(--neutral-dark);
-            line-height: 1.5;
-            font-size: 14px;
+            line-height: 1.4;
+            font-size: 13px;
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
@@ -76,8 +63,8 @@
         /* ===== HEADER ===== */
         .header {
             background: var(--primary-gradient);
-            padding: 15px 0 10px;
-            margin-bottom: 20px;
+            padding: 12px 0 8px;
+            margin-bottom: 15px;
             box-shadow: var(--shadow);
             position: relative;
             border-bottom: 3px solid var(--accent);
@@ -93,16 +80,16 @@
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 10px;
+            gap: 12px;
+            margin-bottom: 8px;
         }
         
         .logo-img {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             background: var(--white);
-            border-radius: 10px;
-            padding: 8px;
+            border-radius: 8px;
+            padding: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -123,16 +110,15 @@
         
         .logo-text h1 {
             color: var(--white);
-            font-size: 22px;
+            font-size: 18px;
             font-weight: 700;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
             line-height: 1.2;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
         
         .logo-text h2 {
             color: rgba(255, 255, 255, 0.95);
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 500;
             line-height: 1.3;
         }
@@ -142,39 +128,39 @@
             justify-content: space-between;
             align-items: center;
             background: rgba(255, 255, 255, 0.15);
-            padding: 10px 15px;
+            padding: 8px 12px;
             border-radius: var(--radius);
             color: var(--white);
-            font-size: 13px;
+            font-size: 12px;
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             width: 100%;
-            margin-top: 10px;
+            margin-top: 8px;
         }
         
         .header-info-item {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
         
         .header-info-item i {
-            font-size: 13px;
+            font-size: 12px;
             opacity: 0.95;
         }
         
         /* ===== MAIN LAYOUT ===== */
         .main-content {
             display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 20px;
-            margin-bottom: 25px;
+            grid-template-columns: 260px 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
         }
         
         @media (max-width: 992px) {
             .main-content {
                 grid-template-columns: 1fr;
-                gap: 15px;
+                gap: 12px;
             }
         }
         
@@ -182,14 +168,14 @@
         .left-sidebar {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
         }
         
         /* Login Section */
         .login-section {
             background: var(--white);
             border-radius: var(--radius-md);
-            padding: 20px;
+            padding: 15px;
             box-shadow: var(--shadow);
             border: 2px solid var(--primary-light);
             position: relative;
@@ -209,18 +195,18 @@
         .section-title {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--neutral-light);
+            gap: 6px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--neutral-light);
         }
         
         .section-title i {
-            font-size: 16px;
+            font-size: 14px;
             color: var(--primary);
             background: rgba(0, 102, 204, 0.1);
-            width: 30px;
-            height: 30px;
+            width: 28px;
+            height: 28px;
             border-radius: 6px;
             display: flex;
             align-items: center;
@@ -229,7 +215,7 @@
         
         .section-title h3 {
             color: var(--primary);
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 700;
             margin: 0;
         }
@@ -237,29 +223,29 @@
         .login-form {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
         
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 4px;
         }
         
         .form-group label {
             color: var(--neutral);
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
         }
         
         .form-input {
-            padding: 10px 12px;
+            padding: 8px 10px;
             border: 2px solid var(--neutral-light);
             border-radius: var(--radius);
-            font-size: 14px;
+            font-size: 13px;
             transition: all 0.3s;
             background: var(--white);
             width: 100%;
@@ -273,15 +259,15 @@
         }
         
         .btn {
-            padding: 10px 15px;
+            padding: 8px 12px;
             border-radius: var(--radius);
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
             transition: all 0.3s;
             border: none;
             text-decoration: none;
@@ -296,21 +282,21 @@
         
         .btn-primary:hover {
             background: var(--primary-dark);
-            transform: translateY(-2px);
+            transform: translateY(-1px);
             box-shadow: var(--shadow);
         }
         
         .login-note {
             background: rgba(0, 102, 204, 0.08);
-            padding: 10px 12px;
+            padding: 8px 10px;
             border-radius: var(--radius);
-            margin-top: 12px;
+            margin-top: 10px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             border-left: 3px solid var(--primary);
             color: var(--neutral);
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 500;
         }
         
@@ -318,7 +304,7 @@
         .quick-stats {
             background: var(--white);
             border-radius: var(--radius-md);
-            padding: 20px;
+            padding: 15px;
             box-shadow: var(--shadow);
             border: 2px solid var(--neutral-light);
         }
@@ -326,43 +312,43 @@
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            gap: 10px;
         }
         
         .stat-item {
             background: var(--neutral-bg);
             border-radius: var(--radius);
-            padding: 15px 10px;
+            padding: 12px 8px;
             text-align: center;
-            border: 2px solid var(--neutral-light);
+            border: 1px solid var(--neutral-light);
             transition: all 0.3s ease;
         }
         
         .stat-item:hover {
             border-color: var(--primary);
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             box-shadow: var(--shadow-sm);
         }
         
         .stat-number {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 800;
             color: var(--primary);
-            margin-bottom: 4px;
+            margin-bottom: 2px;
             line-height: 1;
         }
         
         .stat-label {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--neutral);
             font-weight: 600;
         }
         
-        /* ===== WEATHER RADAR SECTION ===== */
+        /* ===== WEATHER RADAR SECTION - THIẾT KẾ MỚI ===== */
         .weather-radar-section {
             background: var(--white);
             border-radius: var(--radius-md);
-            padding: 20px;
+            padding: 15px;
             box-shadow: var(--shadow);
             border: 2px solid var(--neutral-light);
         }
@@ -371,23 +357,31 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
         
+        /* Radar Display - Thiết kế mới đẹp hơn */
         .weather-radar-display {
-            width: 240px;
-            height: 240px;
+            width: 220px;
+            height: 220px;
             position: relative;
-            background: var(--radar-bg);
+            background: 
+                radial-gradient(circle at center, 
+                    transparent 0%, 
+                    rgba(10, 25, 41, 0.3) 30%,
+                    rgba(10, 25, 41, 0.6) 70%,
+                    rgba(10, 25, 41, 0.9) 100%),
+                linear-gradient(135deg, #001122 0%, #003355 100%);
             border-radius: 50%;
-            border: 2px solid rgba(0, 100, 200, 0.5);
+            border: 2px solid rgba(0, 100, 200, 0.3);
             box-shadow: 
-                inset 0 0 50px rgba(0, 20, 40, 0.9),
-                0 0 25px rgba(0, 80, 160, 0.3);
+                inset 0 0 60px rgba(0, 40, 80, 0.8),
+                0 0 40px rgba(0, 80, 160, 0.2),
+                0 4px 12px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
         
-        /* Radar Grid với các vòng khoảng cách */
+        /* Radar Grid tinh tế */
         .radar-grid {
             position: absolute;
             top: 0;
@@ -449,7 +443,7 @@
             transform-origin: center;
         }
         
-        /* Radar Sweep */
+        /* Radar Sweep mượt mà hơn */
         .radar-sweep-container {
             position: absolute;
             top: 0;
@@ -469,12 +463,14 @@
             background: conic-gradient(
                 from 0deg,
                 transparent 0deg,
-                var(--radar-sweep-start) 90deg,
-                var(--radar-sweep-mid) 180deg,
-                var(--radar-sweep-end) 270deg,
+                rgba(0, 204, 255, 0.2) 60deg,
+                rgba(0, 204, 255, 0.4) 120deg,
+                rgba(0, 204, 255, 0.2) 180deg,
+                rgba(0, 204, 255, 0.1) 240deg,
+                transparent 300deg,
                 transparent 360deg
             );
-            animation: radarSweep 10s linear infinite;
+            animation: radarSweep 8s linear infinite;
             transform-origin: center;
         }
         
@@ -482,51 +478,67 @@
             position: absolute;
             top: 0;
             left: 50%;
-            width: 2px;
+            width: 1.5px;
             height: 50%;
             background: linear-gradient(to bottom, 
                 transparent 0%,
-                var(--radar-sweep-line) 10%,
-                var(--radar-sweep-line) 50%,
+                var(--radar-sweep) 20%,
+                var(--radar-sweep) 50%,
+                rgba(0, 204, 255, 0.3) 80%,
                 transparent 100%);
             transform-origin: bottom center;
-            animation: radarSweep 10s linear infinite;
+            animation: radarSweep 8s linear infinite;
             box-shadow: 
-                0 0 15px var(--radar-sweep-line),
-                0 0 30px rgba(0, 255, 255, 0.5);
+                0 0 10px var(--radar-sweep),
+                0 0 20px rgba(0, 204, 255, 0.4);
             z-index: 31;
         }
         
-        /* Radar Center */
+        /* Radar Center đẹp hơn */
         .radar-center {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
             background: var(--radar-center);
             border-radius: 50%;
             box-shadow: 
-                0 0 20px var(--radar-center-glow),
-                0 0 40px rgba(255, 0, 0, 0.4);
+                0 0 15px rgba(255, 51, 51, 0.8),
+                0 0 30px rgba(255, 51, 51, 0.4),
+                inset 0 0 10px rgba(255, 255, 255, 0.5);
             z-index: 40;
+        }
+        
+        .radar-center::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            z-index: 41;
         }
         
         .radar-center::after {
             content: 'HAN';
             position: absolute;
-            top: -25px;
+            top: -22px;
             left: 50%;
             transform: translateX(-50%);
-            color: #FF0000;
-            font-size: 10px;
+            color: var(--radar-center);
+            font-size: 9px;
             font-weight: bold;
-            text-shadow: 0 0 5px #000;
+            text-shadow: 0 0 8px rgba(255, 51, 51, 0.7);
             white-space: nowrap;
+            letter-spacing: 0.5px;
         }
         
-        /* Rain Precipitation Points */
+        /* Rain Points tinh tế hơn */
         .rain-point {
             position: absolute;
             border-radius: 50%;
@@ -542,108 +554,129 @@
             width: 100%;
             display: flex;
             justify-content: space-between;
-            padding: 0 15px;
+            padding: 0 12px;
             z-index: 50;
         }
         
         .radar-info-item {
-            background: rgba(0, 24, 51, 0.85);
-            color: #00FFFF;
-            padding: 3px 8px;
+            background: rgba(10, 25, 41, 0.85);
+            color: #00CCFF;
+            padding: 3px 6px;
             border-radius: 3px;
-            font-size: 9px;
+            font-size: 8px;
             font-weight: bold;
             display: flex;
             align-items: center;
-            gap: 4px;
-            border: 1px solid rgba(0, 150, 255, 0.3);
+            gap: 3px;
+            border: 1px solid rgba(0, 150, 255, 0.2);
+            letter-spacing: 0.3px;
         }
         
         .radar-info-item i {
-            font-size: 8px;
-            color: #00FFFF;
+            font-size: 7px;
+            color: #00CCFF;
         }
         
         /* Radar Range Display */
         .radar-range-display {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0, 24, 51, 0.85);
-            color: #00FFFF;
-            padding: 3px 6px;
+            top: 8px;
+            right: 8px;
+            background: rgba(10, 25, 41, 0.85);
+            color: #00CCFF;
+            padding: 3px 5px;
             border-radius: 3px;
-            font-size: 9px;
+            font-size: 8px;
             font-weight: bold;
             z-index: 50;
-            border: 1px solid rgba(0, 150, 255, 0.3);
+            border: 1px solid rgba(0, 150, 255, 0.2);
+            letter-spacing: 0.3px;
         }
         
-        /* Weather Info */
+        /* Weather Info - CHỈ 4 CHỈ SỐ */
         .weather-info {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             width: 100%;
         }
         
-        .weather-status {
+        .weather-header {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 14px;
+            gap: 6px;
+            font-size: 12px;
             font-weight: 800;
-            padding: 8px 15px;
+            padding: 6px 12px;
             border-radius: var(--radius);
-            border: 2px solid var(--primary);
-            background: var(--primary-gradient);
-            color: var(--white);
+            background: var(--neutral-bg);
+            color: var(--primary);
             text-align: center;
             width: 100%;
             justify-content: center;
-            text-transform: uppercase;
             letter-spacing: 0.5px;
-            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--neutral-light);
         }
         
-        .weather-indicator {
-            width: 10px;
-            height: 10px;
-            background: #FFFFFF;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
+        .weather-header i {
+            font-size: 12px;
+            color: var(--primary);
         }
         
+        /* Grid 4 chỉ số - layout đẹp */
         .weather-details-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            gap: 8px;
             width: 100%;
         }
         
         .weather-detail {
-            background: var(--neutral-bg);
+            background: linear-gradient(145deg, #f0f4f9, #ffffff);
             padding: 10px;
             border-radius: var(--radius);
             text-align: center;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             border: 1px solid var(--neutral-light);
+            box-shadow: var(--shadow-sm);
             transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
         }
         
         .weather-detail:hover {
             border-color: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-sm);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow);
+        }
+        
+        .weather-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: var(--white);
+            box-shadow: 0 2px 4px rgba(0, 102, 204, 0.2);
+        }
+        
+        .weather-label {
+            color: var(--neutral);
+            font-weight: 600;
         }
         
         .weather-value {
             font-weight: 800;
             color: var(--primary);
-            font-size: 14px;
-            margin-top: 5px;
+            font-size: 13px;
+            line-height: 1.2;
         }
         
         .radar-technical-info {
@@ -651,140 +684,58 @@
             justify-content: space-between;
             align-items: center;
             width: 100%;
-            font-size: 10px;
+            font-size: 9px;
             color: var(--neutral);
             font-weight: 500;
-            margin-top: 5px;
+            margin-top: 6px;
+            padding-top: 6px;
+            border-top: 1px solid var(--neutral-light);
         }
         
         .radar-timestamp {
-            font-size: 10px;
+            font-size: 9px;
             color: var(--neutral);
             text-align: center;
             width: 100%;
-            margin-top: 5px;
+            margin-top: 4px;
             font-weight: 500;
         }
         
-        /* Radar Legend */
+        /* Legend nhỏ gọn */
         .radar-legend {
             display: flex;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
-            margin-top: 5px;
+            margin-top: 6px;
         }
         
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 4px;
-            font-size: 9px;
+            gap: 3px;
+            font-size: 8px;
             color: var(--neutral);
         }
         
         .legend-color {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
-        }
-        
-        /* Data Source Info */
-        .data-source {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 10px;
-            color: var(--neutral);
-            margin-top: 10px;
-            padding: 8px;
-            background: rgba(0, 102, 204, 0.05);
-            border-radius: var(--radius);
-            border: 1px solid rgba(0, 102, 204, 0.1);
-        }
-        
-        .source-status {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .status-connected {
-            color: var(--success);
-            font-weight: 700;
-        }
-        
-        .status-disconnected {
-            color: var(--error);
-            font-weight: 700;
-        }
-        
-        /* API Controls */
-        .api-controls {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        
-        .api-btn {
-            padding: 6px 12px;
-            font-size: 11px;
-            border-radius: var(--radius);
-            background: var(--neutral-bg);
-            border: 1px solid var(--neutral-light);
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        
-        .api-btn:hover {
-            background: var(--primary);
-            color: var(--white);
-            border-color: var(--primary);
-        }
-        
-        /* Loading State */
-        .loading {
-            color: var(--neutral);
-            font-style: italic;
-        }
-        
-        /* Error State */
-        .error {
-            color: var(--error);
-            font-weight: bold;
-        }
-        
-        /* Data Values */
-        .data-value {
-            font-weight: 800;
-            color: var(--primary);
-            font-size: 14px;
-            margin-top: 5px;
-        }
-        
-        .data-value.loading {
-            color: var(--neutral);
-        }
-        
-        .data-value.error {
-            color: var(--error);
         }
         
         /* ===== RIGHT CONTENT ===== */
         .right-content {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
         }
         
         /* Search Section */
         .search-section {
             background: var(--white);
             border-radius: var(--radius-md);
-            padding: 20px;
+            padding: 15px;
             box-shadow: var(--shadow);
             border: 2px solid var(--neutral-light);
             position: relative;
@@ -804,20 +755,20 @@
         .search-container {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
         
         .search-box {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
         
         .search-input {
             flex: 1;
-            padding: 12px 15px;
+            padding: 8px 12px;
             border: 2px solid var(--neutral-light);
             border-radius: var(--radius);
-            font-size: 14px;
+            font-size: 13px;
             background: var(--white);
             transition: all 0.3s;
             font-weight: 500;
@@ -832,7 +783,7 @@
         .search-options {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
+            gap: 6px;
         }
         
         @media (max-width: 768px) {
@@ -842,11 +793,11 @@
         }
         
         .search-option {
-            padding: 8px 10px;
+            padding: 6px 8px;
             background: var(--neutral-bg);
             border: 2px solid var(--neutral-light);
             border-radius: var(--radius);
-            font-size: 13px;
+            font-size: 12px;
             color: var(--neutral);
             cursor: pointer;
             transition: all 0.3s;
@@ -858,14 +809,14 @@
             background: var(--primary);
             color: var(--white);
             border-color: var(--primary);
-            transform: translateY(-2px);
+            transform: translateY(-1px);
         }
         
         /* System Menu */
         .system-menu {
             background: var(--white);
             border-radius: var(--radius-md);
-            padding: 25px 20px 20px;
+            padding: 20px 15px 15px;
             box-shadow: var(--shadow);
             border: 2px solid var(--primary-light);
             position: relative;
@@ -884,30 +835,30 @@
         
         .menu-header {
             position: absolute;
-            top: -12px;
+            top: -10px;
             left: 50%;
             transform: translateX(-50%);
             background: var(--primary-gradient);
             color: var(--white);
-            padding: 8px 25px;
-            border-radius: 20px;
-            font-size: 16px;
+            padding: 6px 20px;
+            border-radius: 16px;
+            font-size: 14px;
             font-weight: 800;
             box-shadow: var(--shadow);
             white-space: nowrap;
             z-index: 2;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             border: 2px solid rgba(255, 255, 255, 0.3);
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
         }
         
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-top: 15px;
+            gap: 12px;
+            margin-top: 12px;
         }
         
         @media (max-width: 1100px) {
@@ -925,26 +876,26 @@
         .menu-card {
             background: var(--white);
             border-radius: var(--radius);
-            padding: 15px;
+            padding: 12px;
             text-decoration: none;
             color: inherit;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             transition: all 0.3s;
-            border: 2px solid var(--neutral-light);
+            border: 1px solid var(--neutral-light);
             text-align: center;
             height: 100%;
-            min-height: 130px;
+            min-height: 110px;
             position: relative;
             overflow: hidden;
         }
         
         .menu-card:hover {
             border-color: var(--primary);
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
         }
         
         .menu-card::before {
@@ -953,7 +904,7 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 4px;
+            height: 3px;
             background: var(--primary-gradient);
             transform: scaleX(0);
             transform-origin: left;
@@ -965,14 +916,14 @@
         }
         
         .menu-icon {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             background: var(--primary-gradient);
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            font-size: 16px;
             color: var(--white);
             box-shadow: var(--shadow-sm);
         }
@@ -981,12 +932,12 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 4px;
         }
         
         .menu-content h4 {
             color: var(--primary);
-            font-size: 15px;
+            font-size: 13px;
             font-weight: 800;
             margin: 0;
             line-height: 1.3;
@@ -994,26 +945,26 @@
         
         .menu-content p {
             color: var(--neutral);
-            font-size: 12px;
+            font-size: 11px;
             margin: 0;
-            line-height: 1.4;
+            line-height: 1.3;
             font-weight: 500;
         }
         
         .menu-status {
             display: flex;
             align-items: center;
-            gap: 6px;
-            padding-top: 8px;
-            border-top: 2px solid var(--neutral-light);
+            gap: 4px;
+            padding-top: 6px;
+            border-top: 1px solid var(--neutral-light);
             width: 100%;
             justify-content: center;
             margin-top: auto;
         }
         
         .status-dot {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
             box-shadow: 0 0 4px currentColor;
         }
@@ -1023,7 +974,7 @@
         .status-info { background: var(--info); }
         
         .status-text {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 700;
             letter-spacing: 0.2px;
         }
@@ -1031,8 +982,8 @@
         /* ===== FOOTER ===== */
         .footer {
             background: var(--primary-gradient);
-            padding: 20px 0 15px;
-            margin-top: 25px;
+            padding: 15px 0 12px;
+            margin-top: 20px;
             color: var(--white);
             border-top: 3px solid var(--accent);
             box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
@@ -1041,55 +992,55 @@
         .footer-content {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 25px;
-            margin-bottom: 15px;
+            gap: 20px;
+            margin-bottom: 12px;
         }
         
         @media (max-width: 768px) {
             .footer-content {
                 grid-template-columns: 1fr;
-                gap: 20px;
+                gap: 15px;
             }
         }
         
         .footer-section h4 {
             color: #FFD700;
-            font-size: 16px;
-            margin-bottom: 10px;
+            font-size: 14px;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             font-weight: 700;
         }
         
         .footer-info {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
         
         .info-item {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             color: rgba(255, 255, 255, 0.95);
-            font-size: 13px;
-            line-height: 1.4;
+            font-size: 12px;
+            line-height: 1.3;
             font-weight: 500;
         }
         
         .info-item i {
-            width: 15px;
+            width: 12px;
             color: #FFD700;
         }
         
         .copyright {
             text-align: center;
-            padding-top: 15px;
+            padding-top: 12px;
             border-top: 1px solid rgba(255, 255, 255, 0.3);
             color: rgba(255, 255, 255, 0.9);
-            font-size: 12px;
-            line-height: 1.4;
+            font-size: 11px;
+            line-height: 1.3;
             font-weight: 500;
         }
         
@@ -1097,11 +1048,6 @@
         @keyframes radarSweep {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
-        }
-        
-        @keyframes pulseCenter {
-            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
         }
         
         @keyframes pulse {
@@ -1114,44 +1060,17 @@
             50% { opacity: 0.7; transform: scale(1.1); }
         }
         
-        @keyframes rainFall {
-            0% { transform: translateY(-10px) scale(1); opacity: 0; }
-            10% { opacity: 0.7; }
-            90% { opacity: 0.7; }
-            100% { transform: translateY(10px) scale(0.9); opacity: 0; }
-        }
-        
         /* ===== UTILITIES ===== */
+        .mt-6 { margin-top: 6px; }
         .mt-8 { margin-top: 8px; }
-        .mt-10 { margin-top: 10px; }
-        .mb-10 { margin-bottom: 10px; }
-        
-        .equal-height {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-        
-        .text-bold {
-            font-weight: 700;
-        }
-        
-        .text-large {
-            font-size: 16px;
-        }
-        
-        .highlight {
-            background: rgba(255, 255, 0, 0.2);
-            padding: 2px 5px;
-            border-radius: 3px;
-            font-weight: 700;
-        }
+        .text-bold { font-weight: 700; }
+        .highlight { background: rgba(255, 255, 0, 0.2); padding: 1px 3px; border-radius: 2px; font-weight: 700; }
         
         /* Loading Spinner */
         .loading-spinner {
             display: inline-block;
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             border: 2px solid #f3f3f3;
             border-top: 2px solid var(--primary);
             border-radius: 50%;
@@ -1251,30 +1170,15 @@
                     </div>
                 </div>
                 
-                <!-- WEATHER RADAR VỚI DỮ LIỆU THỰC -->
+                <!-- WEATHER RADAR - THIẾT KẾ MỚI GỌN GÀNG -->
                 <div class="weather-radar-section">
                     <div class="section-title">
                         <i class="fas fa-satellite-dish"></i>
                         <h3>RADAR KHÍ TƯỢNG NỘI BÀI</h3>
                     </div>
                     
-                    <!-- Nguồn dữ liệu -->
-                    <div class="data-source">
-                        <div class="source-status">
-                            <i class="fas fa-database"></i>
-                            <span>Nguồn dữ liệu:</span>
-                            <select id="data-source-select" class="api-btn">
-                                <option value="demo">Dữ liệu thực tế Hà Nội</option>
-                                <option value="simulate">Mô phỏng thời tiết</option>
-                            </select>
-                        </div>
-                        <div class="source-status">
-                            <i class="fas fa-signal"></i>
-                            <span id="connection-status" class="status-connected">Đã kết nối</span>
-                        </div>
-                    </div>
-                    
                     <div class="weather-radar-container">
+                        <!-- Radar Display -->
                         <div class="weather-radar-display" id="radar-display">
                             <!-- Radar Grid -->
                             <div class="radar-grid">
@@ -1301,7 +1205,7 @@
                             <div class="radar-center"></div>
                             
                             <!-- Hiển thị thông tin phạm vi -->
-                            <div class="radar-range-display" id="radar-range">240km</div>
+                            <div class="radar-range-display">240km</div>
                             
                             <!-- Thông tin radar -->
                             <div class="radar-info-overlay">
@@ -1316,87 +1220,45 @@
                             </div>
                         </div>
                         
-                        <!-- Legend cho màu mưa -->
-                        <div class="radar-legend">
-                            <div class="legend-item">
-                                <div class="legend-color" style="background: var(--rain-drizzle);"></div>
-                                <span>&lt; 20dBZ</span>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-color" style="background: var(--rain-light);"></div>
-                                <span>20-30dBZ</span>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-color" style="background: var(--rain-moderate);"></div>
-                                <span>30-40dBZ</span>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-color" style="background: var(--rain-heavy);"></div>
-                                <span>40-50dBZ</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Thông tin thời tiết -->
+                        <!-- Thông tin thời tiết - CHỈ 4 CHỈ SỐ -->
                         <div class="weather-info">
-                            <!-- CHỈ HIỂN THỊ "THÔNG SỐ THỜI TIẾT" -->
-                            <div class="weather-status" id="weather-status">
-                                <div class="weather-indicator"></div>
+                            <div class="weather-header">
+                                <i class="fas fa-chart-bar"></i>
                                 <span>THÔNG SỐ THỜI TIẾT</span>
                             </div>
                             
-                            <!-- Hàng 1: Các chỉ số chính -->
+                            <!-- Grid 4 chỉ số -->
                             <div class="weather-details-grid">
                                 <div class="weather-detail">
-                                    <div><i class="fas fa-thermometer-half"></i> Nhiệt độ</div>
-                                    <div class="weather-value">
-                                        <span id="temperature" class="data-value loading">--</span>°C
+                                    <div class="weather-icon">
+                                        <i class="fas fa-thermometer-half"></i>
                                     </div>
+                                    <div class="weather-label">Nhiệt độ</div>
+                                    <div class="weather-value" id="temperature">--°C</div>
                                 </div>
+                                
                                 <div class="weather-detail">
-                                    <div><i class="fas fa-tint"></i> Độ ẩm</div>
-                                    <div class="weather-value">
-                                        <span id="humidity" class="data-value loading">--</span>%
+                                    <div class="weather-icon">
+                                        <i class="fas fa-tint"></i>
                                     </div>
+                                    <div class="weather-label">Độ ẩm</div>
+                                    <div class="weather-value" id="humidity">--%</div>
                                 </div>
+                                
                                 <div class="weather-detail">
-                                    <div><i class="fas fa-wind"></i> Gió</div>
-                                    <div class="weather-value">
-                                        <span id="wind-speed" class="data-value loading">--</span> kt
+                                    <div class="weather-icon">
+                                        <i class="fas fa-wind"></i>
                                     </div>
+                                    <div class="weather-label">Tốc độ gió</div>
+                                    <div class="weather-value" id="wind-speed">-- kt</div>
                                 </div>
+                                
                                 <div class="weather-detail">
-                                    <div><i class="fas fa-tachometer-alt"></i> Áp suất</div>
-                                    <div class="weather-value">
-                                        <span id="pressure" class="data-value loading">--</span> hPa
+                                    <div class="weather-icon">
+                                        <i class="fas fa-eye"></i>
                                     </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Hàng 2: Các chỉ số bổ sung -->
-                            <div class="weather-details-grid">
-                                <div class="weather-detail">
-                                    <div><i class="fas fa-eye"></i> Tầm nhìn</div>
-                                    <div class="weather-value">
-                                        <span id="visibility" class="data-value loading">--</span> km
-                                    </div>
-                                </div>
-                                <div class="weather-detail">
-                                    <div><i class="fas fa-cloud"></i> Mây</div>
-                                    <div class="weather-value">
-                                        <span id="clouds" class="data-value loading">--</span> %
-                                    </div>
-                                </div>
-                                <div class="weather-detail">
-                                    <div><i class="fas fa-temperature-high"></i> Cảm giác</div>
-                                    <div class="weather-value">
-                                        <span id="feels-like" class="data-value loading">--</span>°C
-                                    </div>
-                                </div>
-                                <div class="weather-detail">
-                                    <div><i class="fas fa-sun"></i> UV</div>
-                                    <div class="weather-value">
-                                        <span id="uv-index" class="data-value loading">--</span>
-                                    </div>
+                                    <div class="weather-label">Tầm nhìn</div>
+                                    <div class="weather-value" id="visibility">-- km</div>
                                 </div>
                             </div>
                             
@@ -1410,19 +1272,6 @@
                             <div class="radar-timestamp" id="radar-timestamp">
                                 <i class="fas fa-clock"></i> Cập nhật: --:--:--
                             </div>
-                        </div>
-                        
-                        <!-- Điều khiển API -->
-                        <div class="api-controls">
-                            <button id="refresh-btn" class="api-btn">
-                                <i class="fas fa-sync-alt"></i> Làm mới
-                            </button>
-                            <button id="simulate-weather-btn" class="api-btn">
-                                <i class="fas fa-cloud-sun"></i> Mô phỏng
-                            </button>
-                            <button id="radar-settings-btn" class="api-btn">
-                                <i class="fas fa-cog"></i> Cài đặt
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -1662,7 +1511,7 @@
                     <div class="footer-info">
                         <div class="info-item">
                             <i class="fas fa-code"></i>
-                            <span>Phiên bản: <strong>2.0.3</strong></span>
+                            <span>Phiên bản: <strong>1.0.0</strong></span>
                         </div>
                         <div class="info-item">
                             <i class="fas fa-calendar-check"></i>
@@ -1673,7 +1522,6 @@
             </div>
             <div class="copyright">
                 <p>© 2025 Đội thiết bị thông tin dẫn đường - Trung tâm Khai thác khu bay Nội Bài.</p>
-                <p class="mt-8"><i class="fas fa-info-circle"></i> Dữ liệu thời tiết được cập nhật theo thời gian thực</p>
             </div>
         </footer>
     </div>
@@ -1688,8 +1536,7 @@
                 month: 'long', 
                 day: 'numeric',
                 hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
+                minute: '2-digit'
             };
             const dateStr = now.toLocaleDateString('vi-VN', options);
             document.getElementById('current-date').textContent = dateStr;
@@ -1702,10 +1549,8 @@
             document.getElementById('visit-count').textContent = 
                 visitCount.toLocaleString('vi-VN');
             
-            // ================== WEATHER RADAR ĐƠN GIẢN ==================
+            // ================== RADAR ĐƠN GIẢN ==================
             const RADAR_PARAMS = {
-                frequency: 'S-Band',
-                rotationSpeed: 6,
                 maxRange: 240,
                 coordinates: {
                     lat: 21.2188,
@@ -1715,8 +1560,6 @@
                     iata: 'HAN'
                 }
             };
-            
-            let currentWeatherData = null;
             
             // Khởi tạo radar
             function initWeatherRadar() {
@@ -1739,33 +1582,18 @@
                     
                 } catch (error) {
                     console.error('Lỗi khởi tạo radar:', error);
-                    showNotification('Khởi tạo radar thất bại, sử dụng dữ liệu mẫu', 'error');
-                    useSampleData();
                 }
             }
             
             // Lấy dữ liệu thời tiết
             function fetchWeatherData() {
-                const source = document.getElementById('data-source-select').value;
-                
                 try {
-                    let weatherData;
-                    
-                    if (source === 'demo') {
-                        weatherData = getRealisticWeatherData();
-                    } else {
-                        weatherData = getSimulatedWeatherData();
-                    }
-                    
-                    currentWeatherData = weatherData;
+                    const weatherData = getRealisticWeatherData();
                     updateWeatherUI(weatherData);
-                    updateConnectionStatus('Đã kết nối', 'success');
-                    
                     return weatherData;
                     
                 } catch (error) {
                     console.error('Lỗi lấy dữ liệu:', error);
-                    updateConnectionStatus('Lỗi kết nối', 'error');
                     useSampleData();
                 }
             }
@@ -1797,88 +1625,28 @@
                 
                 // Tạo dữ liệu hoàn chỉnh
                 const temp = Math.round(baseTemp + (Math.random() * 2 - 1));
-                const feelsLike = Math.round(temp + (Math.random() * 3 - 1.5));
                 const windSpeed = Math.round(5 + Math.random() * 15);
-                const pressure = 1008 + Math.round(Math.random() * 10);
                 const visibility = hasRain ? (5 + Math.random() * 5) : (8 + Math.random() * 7);
-                const clouds = hasRain ? (60 + Math.random() * 35) : (20 + Math.random() * 50);
-                const uvIndex = Math.round(Math.random() * 8);
                 
                 return {
                     temperature: temp,
-                    feels_like: feelsLike,
                     humidity: Math.round(humidity),
-                    pressure: pressure,
                     wind_speed: windSpeed,
-                    clouds: Math.round(clouds),
                     visibility: visibility.toFixed(1),
-                    uv_index: uvIndex,
                     has_rain: hasRain,
                     rain_intensity: hasRain ? (humidity > 85 ? 'heavy' : humidity > 75 ? 'moderate' : 'light') : 'none'
                 };
             }
             
-            // Dữ liệu mô phỏng thời tiết
-            function getSimulatedWeatherData() {
-                const scenarios = [
-                    {
-                        temp: 26,
-                        humidity: 65,
-                        wind: 8,
-                        clouds: 15,
-                        visibility: 12
-                    },
-                    {
-                        temp: 25,
-                        humidity: 70,
-                        wind: 10,
-                        clouds: 35,
-                        visibility: 10
-                    },
-                    {
-                        temp: 24,
-                        humidity: 80,
-                        wind: 12,
-                        clouds: 65,
-                        visibility: 8
-                    },
-                    {
-                        temp: 23,
-                        humidity: 85,
-                        wind: 15,
-                        clouds: 85,
-                        visibility: 6
-                    },
-                    {
-                        temp: 22,
-                        humidity: 90,
-                        wind: 18,
-                        clouds: 95,
-                        visibility: 4
-                    }
-                ];
-                
-                const randomScenario = scenarios[Math.floor(Math.random() * scenarios.length)];
-                const hasRain = randomScenario.humidity > 80;
-                
-                return {
-                    temperature: randomScenario.temp,
-                    feels_like: Math.round(randomScenario.temp + (Math.random() * 2 - 1)),
-                    humidity: randomScenario.humidity,
-                    pressure: 1010 + Math.round(Math.random() * 10),
-                    wind_speed: randomScenario.wind,
-                    clouds: randomScenario.clouds,
-                    visibility: randomScenario.visibility,
-                    uv_index: hasRain ? Math.round(Math.random() * 3) : Math.round(3 + Math.random() * 5),
-                    has_rain: hasRain,
-                    rain_intensity: hasRain ? (randomScenario.humidity > 85 ? 'heavy' : 'moderate') : 'none'
-                };
-            }
-            
             // Sử dụng dữ liệu mẫu
             function useSampleData() {
-                const sampleData = getRealisticWeatherData();
-                currentWeatherData = sampleData;
+                const sampleData = {
+                    temperature: 26,
+                    humidity: 78,
+                    wind_speed: 12,
+                    visibility: 10.5,
+                    has_rain: false
+                };
                 updateWeatherUI(sampleData);
                 createRainPrecipitation();
             }
@@ -1886,28 +1654,22 @@
             // Cập nhật giao diện với dữ liệu
             function updateWeatherUI(data) {
                 // Hàm hiển thị giá trị an toàn
-                function safeDisplay(value, elementId, suffix = '') {
+                function safeDisplay(value, elementId) {
                     const element = document.getElementById(elementId);
                     if (element) {
                         if (value !== undefined && value !== null) {
                             element.textContent = value;
-                            element.className = 'data-value';
                         } else {
                             element.textContent = '--';
-                            element.className = 'data-value error';
                         }
                     }
                 }
                 
-                // Cập nhật tất cả các giá trị
-                safeDisplay(data.temperature, 'temperature');
-                safeDisplay(data.feels_like, 'feels-like');
-                safeDisplay(data.humidity, 'humidity');
-                safeDisplay(data.wind_speed, 'wind-speed');
-                safeDisplay(data.pressure, 'pressure');
-                safeDisplay(data.clouds, 'clouds');
-                safeDisplay(data.visibility, 'visibility');
-                safeDisplay(data.uv_index, 'uv-index');
+                // Cập nhật 4 giá trị chính
+                safeDisplay(data.temperature + '°C', 'temperature');
+                safeDisplay(data.humidity + '%', 'humidity');
+                safeDisplay(data.wind_speed + ' kt', 'wind-speed');
+                safeDisplay(data.visibility + ' km', 'visibility');
             }
             
             // Tạo hiệu ứng mưa
@@ -1917,41 +1679,17 @@
                 
                 rainContainer.innerHTML = '';
                 
-                if (!currentWeatherData || !currentWeatherData.has_rain) return;
-                
                 const radarDisplay = document.getElementById('radar-display');
                 if (!radarDisplay) return;
                 
-                const displayWidth = radarDisplay.clientWidth || 240;
-                const displayHeight = radarDisplay.clientHeight || 240;
+                const displayWidth = radarDisplay.clientWidth || 220;
+                const displayHeight = radarDisplay.clientHeight || 220;
                 const centerX = displayWidth / 2;
                 const centerY = displayHeight / 2;
                 const maxRadius = Math.min(centerX, centerY) * 0.8;
                 
-                // Số lượng điểm mưa dựa trên cường độ
-                let rainCount;
-                let color, size;
-                
-                switch(currentWeatherData.rain_intensity) {
-                    case 'heavy':
-                        rainCount = 20;
-                        color = 'var(--rain-heavy)';
-                        size = 20;
-                        break;
-                    case 'moderate':
-                        rainCount = 12;
-                        color = 'var(--rain-moderate)';
-                        size = 15;
-                        break;
-                    case 'light':
-                    default:
-                        rainCount = 8;
-                        color = 'var(--rain-light)';
-                        size = 10;
-                        break;
-                }
-                
-                for (let i = 0; i < rainCount; i++) {
+                // Tạo một số điểm mưa ngẫu nhiên
+                for (let i = 0; i < 15; i++) {
                     const distanceKm = 10 + Math.random() * 230;
                     const distancePixels = (distanceKm / RADAR_PARAMS.maxRange) * maxRadius;
                     
@@ -1961,34 +1699,24 @@
                     const x = centerX + Math.cos(azimuthRad) * distancePixels;
                     const y = centerY + Math.sin(azimuthRad) * distancePixels;
                     
-                    const finalSize = size * (0.8 + Math.random() * 0.4);
+                    const size = 5 + Math.random() * 10;
                     
                     const rainPoint = document.createElement('div');
                     rainPoint.className = 'rain-point';
                     rainPoint.style.cssText = `
                         position: absolute;
-                        left: ${x - finalSize/2}px;
-                        top: ${y - finalSize/2}px;
-                        width: ${finalSize}px;
-                        height: ${finalSize}px;
-                        background: ${color};
-                        box-shadow: 0 0 ${finalSize}px ${color};
+                        left: ${x - size/2}px;
+                        top: ${y - size/2}px;
+                        width: ${size}px;
+                        height: ${size}px;
+                        background: rgba(0, 200, 255, 0.4);
+                        box-shadow: 0 0 ${size}px rgba(0, 200, 255, 0.6);
                         animation-delay: ${Math.random() * 2}s;
                         z-index: 20;
                     `;
                     
                     rainContainer.appendChild(rainPoint);
                 }
-            }
-            
-            // Cập nhật trạng thái kết nối
-            function updateConnectionStatus(message, type) {
-                const statusElement = document.getElementById('connection-status');
-                if (!statusElement) return;
-                
-                statusElement.textContent = message;
-                statusElement.className = type === 'success' ? 'status-connected' : 
-                                         type === 'error' ? 'status-disconnected' : '';
             }
             
             // Cập nhật timestamp
@@ -2004,46 +1732,6 @@
                     element.textContent = `Cập nhật: ${timeStr}`;
                 }
             }
-            
-            // ================== XỬ LÝ SỰ KIỆN ==================
-            
-            // Refresh button
-            document.getElementById('refresh-btn').addEventListener('click', function() {
-                const btn = this;
-                const originalText = btn.innerHTML;
-                btn.innerHTML = '<div class="loading-spinner"></div> Đang cập nhật...';
-                btn.disabled = true;
-                
-                setTimeout(() => {
-                    fetchWeatherData();
-                    createRainPrecipitation();
-                    updateTimestamp();
-                    showNotification('Dữ liệu đã được làm mới', 'success');
-                    
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
-                }, 800);
-            });
-            
-            // Simulate weather button
-            document.getElementById('simulate-weather-btn').addEventListener('click', function() {
-                const weatherData = getSimulatedWeatherData();
-                currentWeatherData = weatherData;
-                updateWeatherUI(weatherData);
-                createRainPrecipitation();
-                showNotification('Đã mô phỏng thời tiết mới', 'info');
-            });
-            
-            // Radar settings button
-            document.getElementById('radar-settings-btn').addEventListener('click', function() {
-                showNotification('Chức năng cài đặt đang phát triển', 'info');
-            });
-            
-            // Data source change
-            document.getElementById('data-source-select').addEventListener('change', function() {
-                fetchWeatherData();
-                showNotification(`Đã chuyển sang: ${this.options[this.selectedIndex].text}`, 'info');
-            });
             
             // ================== XỬ LÝ ĐĂNG NHẬP & TÌM KIẾM ==================
             
@@ -2133,8 +1821,7 @@
             // Khởi tạo radar
             setTimeout(() => {
                 initWeatherRadar();
-                showNotification('Hệ thống radar đã sẵn sàng', 'success');
-            }, 1500);
+            }, 1000);
             
             // Hàm hiển thị thông báo
             function showNotification(message, type = 'info') {
@@ -2165,34 +1852,34 @@
                 
                 notification.style.cssText = `
                     position: fixed;
-                    top: 20px;
-                    right: 20px;
+                    top: 15px;
+                    right: 15px;
                     background: ${colors[type]};
                     color: white;
-                    padding: 12px 16px;
+                    padding: 10px 14px;
                     border-radius: var(--radius);
-                    box-shadow: var(--shadow-lg);
+                    box-shadow: var(--shadow);
                     z-index: 9999;
                     font-weight: 600;
-                    max-width: 350px;
-                    animation: slideIn 0.4s ease;
-                    font-size: 14px;
-                    border-left: 4px solid rgba(255, 255, 255, 0.7);
+                    max-width: 300px;
+                    animation: slideIn 0.3s ease;
+                    font-size: 13px;
+                    border-left: 3px solid rgba(255, 255, 255, 0.7);
                     display: flex;
                     align-items: center;
-                    gap: 10px;
+                    gap: 8px;
                 `;
                 
                 document.body.appendChild(notification);
                 
                 setTimeout(() => {
-                    notification.style.animation = 'slideOut 0.4s ease';
+                    notification.style.animation = 'slideOut 0.3s ease';
                     setTimeout(() => {
                         if (notification.parentNode) {
                             document.body.removeChild(notification);
                         }
-                    }, 400);
-                }, 4000);
+                    }, 300);
+                }, 3000);
             }
             
             // Thêm style cho animation thông báo
@@ -2219,12 +1906,12 @@
                     dateParts[dateParts.length - 1] = timeStr;
                     dateElement.textContent = dateParts.join(' ');
                 }
-            }, 1000);
+            }, 60000); // 1 phút
             
             console.log('=== HỆ THỐNG RADAR ĐÃ KHỞI TẠO ===');
-            console.log('Phiên bản: 2.0.3 - Weather Parameters Only');
-            console.log('Chỉ hiển thị "THÔNG SỐ THỜI TIẾT"');
-            console.log('Đã xóa trạng thái mô tả thời tiết');
+            console.log('Phiên bản: 1.0.0 - Clean Design');
+            console.log('Chỉ hiển thị 4 chỉ số: Nhiệt độ, Độ ẩm, Gió, Tầm nhìn');
+            console.log('Design mới: Ngăn nắp, gọn gàng, chuyên nghiệp');
             console.log('=====================================');
         });
     </script>
