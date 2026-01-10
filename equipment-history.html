@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ thống ILS - Hệ thống QLKT Nội Bài</title>
+    <title>Hệ thống ILS - Chương trình Quản lý kỹ thuật - Đội Thiết bị thông tin dẫn đường</title>
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -49,7 +49,6 @@
         .admin-controls {
             display: flex;
             justify-content: flex-end;
-            align-items: center;
             gap: 15px;
             margin: 15px 30px;
         }
@@ -82,113 +81,6 @@
             display: flex;
             align-items: center;
             gap: 5px;
-        }
-        
-        .admin-user {
-            background: #3498db;
-            padding: 5px 12px;
-            border-radius: 4px;
-            color: white;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        /* Login Modal */
-        .login-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1001;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .login-content {
-            background: white;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 400px;
-            padding: 30px;
-            position: relative;
-        }
-        
-        .login-title {
-            text-align: center;
-            margin-bottom: 25px;
-            color: #1a2980;
-        }
-        
-        .login-title h3 {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        
-        .login-form-group {
-            margin-bottom: 20px;
-        }
-        
-        .login-form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #2c3e50;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .login-input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-        
-        .login-input:focus {
-            border-color: #1a2980;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(26, 41, 128, 0.1);
-        }
-        
-        .login-btn {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(to right, #1a2980, #26d0ce);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 16px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: all 0.3s;
-            margin-top: 10px;
-        }
-        
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(26, 41, 128, 0.3);
-        }
-        
-        .login-error {
-            color: #e74c3c;
-            font-size: 13px;
-            margin-top: 5px;
-            display: none;
         }
         
         /* Airport Layout */
@@ -493,14 +385,11 @@
 
         <!-- ADMIN CONTROLS -->
         <div class="admin-controls">
-            <div id="adminUserInfo" class="admin-user" style="display: none;">
-                <i class="fas fa-user"></i> <span id="currentAdminEmail"></span>
-            </div>
             <div id="adminModeIndicator" class="admin-mode" style="display: none;">
                 <i class="fas fa-user-shield"></i> CHẾ ĐỘ ADMIN
             </div>
             <button class="admin-toggle-btn" id="toggleAdminBtn">
-                <i class="fas fa-key"></i> ĐĂNG NHẬP ADMIN
+                <i class="fas fa-key"></i> BẬT CHẾ ĐỘ ADMIN
             </button>
         </div>
 
@@ -526,15 +415,10 @@
             
             <div class="stat-card">
                 <h3><i class="fas fa-calendar-check"></i> SẮP KIỂM ĐỊNH</h3>
-                <div class="stat-number">2</div>
+                <div class="stat-number">0</div>
                 <p>Thiết bị</p>
             </div>
-            
-            <div class="stat-card">
-                <h3><i class="fas fa-route"></i> GLIDEPATH</h3>
-                <div class="stat-number">4</div>
-                <p>Hệ thống</p>
-            </div>
+                        
         </div>
 
         <!-- AIRPORT LAYOUT -->
@@ -554,7 +438,7 @@
                     </div>
                     
                     <div style="margin-top: 15px; font-size: 14px; color: #666;">
-                        <p><strong>Đầu 11L:</strong> 1 Localizer, 1 Glidepath, 1 DME, 01 Midle Marker, 01 Outer Marker</p>
+                        <p><strong>Đầu 11L:</strong> 1 Localizer, 1 Glidepath, 1 DME, 1 Midle Marker, 1 Outer Marker</p>
                         <p><strong>Đầu 29R:</strong> 1 Localizer, 1 Glidepath, 1 DME</p>
                     </div>
                 </div>
@@ -630,42 +514,6 @@
             </div>
         </div>
 
-        <!-- LOGIN MODAL -->
-        <div class="login-modal" id="loginModal">
-            <div class="login-content">
-                <div class="login-title">
-                    <h3><i class="fas fa-user-shield"></i> ĐĂNG NHẬP ADMIN</h3>
-                    <p>Nhập thông tin tài khoản quản trị</p>
-                </div>
-                
-                <form id="adminLoginForm">
-                    <div class="login-form-group">
-                        <label for="adminEmail"><i class="fas fa-envelope"></i> Email</label>
-                        <input type="email" id="adminEmail" class="login-input" placeholder="email@admin.com" required>
-                    </div>
-                    
-                    <div class="login-form-group">
-                        <label for="adminPassword"><i class="fas fa-lock"></i> Mật khẩu</label>
-                        <input type="password" id="adminPassword" class="login-input" placeholder="••••••••" required>
-                    </div>
-                    
-                    <div class="login-error" id="loginError">
-                        <i class="fas fa-exclamation-circle"></i> Email hoặc mật khẩu không đúng
-                    </div>
-                    
-                    <button type="submit" class="login-btn">
-                        <i class="fas fa-sign-in-alt"></i> ĐĂNG NHẬP
-                    </button>
-                    
-                    <div style="margin-top: 15px; font-size: 12px; color: #666; text-align: center;">
-                        <p><strong>Thông tin đăng nhập mặc định:</strong></p>
-                        <p>Email: naoc.cns@gmail.com</p>
-                        <p>Password: Naoc@Cns</p>
-                    </div>
-                </form>
-            </div>
-        </div>
-
         <!-- EDIT MODAL -->
         <div class="modal" id="editModal">
             <div class="modal-content">
@@ -693,8 +541,8 @@
             <div class="footer-info">
                 <div class="contact-info">
                     <h4><i class="fas fa-headset"></i> HỖ TRỢ KỸ THUẬT ILS</h4>
-                    <p><i class="fas fa-phone"></i> Hotline: <strong>091992xx68</strong></p>
-                    <p><i class="fas fa-envelope"></i> Email: <strong>naoc.cnsh@gmail.com</strong></p>
+                    <p><i class="fas fa-phone"></i> Hotline: <strong>0919 xxx x86</strong></p>
+                    <p><i class="fas fa-envelope"></i> Email: <strong>naoc.cns@gmail.com</strong></p>
                 </div>
                 <div class="system-info">
                     <p><i class="fas fa-print"></i> <a href="#" onclick="printILSReport()" style="color: white; text-decoration: underline;">In báo cáo ILS</a></p>
@@ -709,15 +557,8 @@
     </div>
 
     <script>
-        // Thông tin đăng nhập Admin
-        const ADMIN_CREDENTIALS = {
-            email: "naoc.cns@gmail.com",
-            password: "Naoc@Cns"
-        };
-
         // Kiểm tra quyền admin
         let isAdminMode = false;
-        let currentAdminEmail = "";
         
         // ILS Equipment Data
         const ilsEquipment = [
@@ -735,7 +576,7 @@
                 status: "active",
                 nextInspection: "10/06/2025",
                 location: "Khu vực ILS 11L",
-                personInCharge: "Lê Văn Quang",
+                personInCharge: "Nguyễn Tuấn Anh",
                 angle: "3°",
                 range: "25NM"
             },
@@ -752,7 +593,7 @@
                 status: "active",
                 nextInspection: "20/04/2025",
                 location: "Khu vực ILS 29R",
-                personInCharge: "Nguyễn Mạnh Cường",
+                personInCharge: "Nguyễn Tuấn Anh",
                 angle: "3°",
                 range: "25NM"
             },
@@ -771,7 +612,7 @@
                 status: "active",
                 nextInspection: "15/05/2025",
                 location: "Khu vực ILS 11R",
-                personInCharge: "Nguyễn Văn Long",
+                personInCharge: "Nguyễn Tuấn Anh",
                 angle: "3°",
                 range: "25NM"
             },
@@ -788,7 +629,7 @@
                 status: "maintenance",
                 nextInspection: "15/03/2025",
                 location: "Khu vực ILS 29L",
-                personInCharge: "Nguyễn Ngọc Linh",
+                personInCharge: "Nguyễn Tuấn Anh",
                 angle: "3°",
                 range: "25NM"
             },
@@ -807,7 +648,7 @@
                 status: "active",
                 nextInspection: "22/07/2025",
                 location: "Khu vực Glidepath 11L",
-                personInCharge: "Trần Văn Hải",
+                personInCharge: "Nguyễn Tuấn Anh",
                 angle: "3°",
                 range: "10NM"
             },
@@ -824,7 +665,7 @@
                 status: "active",
                 nextInspection: "10/08/2025",
                 location: "Khu vực Glidepath 29R",
-                personInCharge: "Lê Minh Tuấn",
+                personInCharge: "Nguyễn Tuấn Anh",
                 angle: "3°",
                 range: "10NM"
             },
@@ -843,7 +684,7 @@
                 status: "active",
                 nextInspection: "18/06/2025",
                 location: "Khu vực Glidepath 11R",
-                personInCharge: "Phạm Đình Dũng",
+                personInCharge: "Nguyễn Tuấn Anh",
                 angle: "3°",
                 range: "10NM"
             },
@@ -860,7 +701,7 @@
                 status: "active",
                 nextInspection: "05/09/2025",
                 location: "Khu vực Glidepath 29L",
-                personInCharge: "Nguyễn Hoàng Nam",
+                personInCharge: "Nguyễn Tuấn Anh",
                 angle: "3°",
                 range: "10NM"
             },
@@ -879,7 +720,7 @@
                 status: "active",
                 nextInspection: "22/08/2025",
                 location: "Khu vực ILS 11L",
-                personInCharge: "Lê Văn Quang"
+                personInCharge: "Nguyễn Tuấn Anh"
             },
             {
                 id: 10,
@@ -894,7 +735,7 @@
                 status: "active",
                 nextInspection: "10/09/2025",
                 location: "Khu vực ILS 29R",
-                personInCharge: "Nguyễn Mạnh Cường"
+                personInCharge: "Nguyễn Tuấn Anh"
             },
             
             // DMEs - Đường băng 11R/29L
@@ -911,7 +752,7 @@
                 status: "active",
                 nextInspection: "18/07/2025",
                 location: "Khu vực ILS 11R",
-                personInCharge: "Nguyễn Văn Long"
+                personInCharge: "Nguyễn Tuấn Anh"
             },
             {
                 id: 12,
@@ -926,7 +767,7 @@
                 status: "active",
                 nextInspection: "05/10/2025",
                 location: "Khu vực ILS 29L",
-                personInCharge: "Nguyễn Ngọc Linh"
+                personInCharge: "Nguyễn Tuấn Anh"
             },
             
             // MARKERS - Đường băng 11L/29R (Chỉ ở đầu 11L)
@@ -943,7 +784,7 @@
                 status: "active",
                 nextInspection: "12/05/2025",
                 location: "Khu vực Marker 11L",
-                personInCharge: "Khúc Trường Sơn"
+                personInCharge: "Nguyễn Tuấn Anh"
             },
             {
                 id: 14,
@@ -958,7 +799,7 @@
                 status: "active",
                 nextInspection: "15/06/2025",
                 location: "Khu vực Marker 11L",
-                personInCharge: "Khúc Trường Sơn"
+                personInCharge: "Phạm Minh Quang"
             }
         ];
 
@@ -1087,81 +928,30 @@
             return card;
         }
 
-        // Show login modal
-        function showLoginModal() {
-            document.getElementById('loginModal').style.display = 'flex';
-            document.getElementById('adminEmail').focus();
-        }
-
-        // Hide login modal
-        function hideLoginModal() {
-            document.getElementById('loginModal').style.display = 'none';
-            document.getElementById('loginError').style.display = 'none';
-            document.getElementById('adminLoginForm').reset();
-        }
-
-        // Handle admin login
-        function handleAdminLogin(event) {
-            event.preventDefault();
-            
-            const email = document.getElementById('adminEmail').value.trim();
-            const password = document.getElementById('adminPassword').value.trim();
-            const errorElement = document.getElementById('loginError');
-            
-            // Kiểm tra thông tin đăng nhập
-            if (email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password) {
-                // Đăng nhập thành công
-                isAdminMode = true;
-                currentAdminEmail = email;
-                
-                // Cập nhật giao diện
-                updateAdminUI();
-                
-                // Đóng modal
-                hideLoginModal();
-                
-                // Hiển thị thông báo
-                showNotification('Đăng nhập ADMIN thành công!', 'success');
-                
-            } else {
-                // Hiển thị lỗi
-                errorElement.style.display = 'block';
-                document.getElementById('adminPassword').value = '';
-                document.getElementById('adminPassword').focus();
-            }
-        }
-
-        // Logout admin
-        function logoutAdmin() {
-            isAdminMode = false;
-            currentAdminEmail = "";
-            updateAdminUI();
-            renderEquipment();
-            showNotification('Đã đăng xuất khỏi chế độ ADMIN.', 'info');
-        }
-
-        // Update admin UI
-        function updateAdminUI() {
+        // Toggle admin mode
+        function toggleAdminMode() {
+            isAdminMode = !isAdminMode;
             const adminBtn = document.getElementById('toggleAdminBtn');
             const adminIndicator = document.getElementById('adminModeIndicator');
-            const adminUserInfo = document.getElementById('adminUserInfo');
-            const currentAdminEmailSpan = document.getElementById('currentAdminEmail');
             
             if (isAdminMode) {
-                adminBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> ĐĂNG XUẤT';
-                adminBtn.style.background = '#e74c3c';
-                adminBtn.onclick = logoutAdmin;
-                
-                adminIndicator.style.display = 'flex';
-                adminUserInfo.style.display = 'flex';
-                currentAdminEmailSpan.textContent = currentAdminEmail;
+                // Hiển thị mật khẩu admin
+                const password = prompt("Nhập mật khẩu ADMIN để tiếp tục:");
+                if (password === "admin123") { // Mật khẩu mặc định
+                    adminBtn.innerHTML = '<i class="fas fa-user-shield"></i> TẮT CHẾ ĐỘ ADMIN';
+                    adminBtn.style.background = '#e74c3c';
+                    adminIndicator.style.display = 'flex';
+                    alert("Đã kích hoạt chế độ ADMIN. Bạn có quyền chỉnh sửa thiết bị.");
+                } else {
+                    alert("Mật khẩu không đúng!");
+                    isAdminMode = false;
+                    return;
+                }
             } else {
-                adminBtn.innerHTML = '<i class="fas fa-key"></i> ĐĂNG NHẬP ADMIN';
+                adminBtn.innerHTML = '<i class="fas fa-key"></i> BẬT CHẾ ĐỘ ADMIN';
                 adminBtn.style.background = '#3498db';
-                adminBtn.onclick = showLoginModal;
-                
                 adminIndicator.style.display = 'none';
-                adminUserInfo.style.display = 'none';
+                alert("Đã tắt chế độ ADMIN.");
             }
             
             // Re-render equipment cards to show/hide edit buttons
@@ -1171,7 +961,7 @@
         // Edit equipment function
         function editEquipment(id) {
             if (!isAdminMode) {
-                alert("Vui lòng đăng nhập với quyền ADMIN để chỉnh sửa thiết bị!");
+                alert("Chỉ quản trị viên mới có quyền chỉnh sửa thiết bị!");
                 return;
             }
             
@@ -1304,7 +1094,7 @@
                 renderEquipment();
                 
                 // Show success message
-                showNotification('Đã cập nhật thông tin thiết bị thành công!', 'success');
+                alert('Đã cập nhật thông tin thiết bị thành công!');
                 
                 // Close modal
                 closeEditModal();
@@ -1444,7 +1234,7 @@
                         </div>
                         <div style="display: flex; margin-bottom: 10px;">
                             <div style="font-weight: bold; min-width: 150px;">Liên hệ:</div>
-                            <div>0912 xxx xxx</div>
+                            <div>0919926586</div>
                         </div>
                     </div>
                 </div>
@@ -1514,7 +1304,7 @@
             // Handle form submission
             document.getElementById('maintenanceForm').addEventListener('submit', function(e) {
                 e.preventDefault();
-                showNotification('Đã lưu thông tin bảo trì! Trạng thái thiết bị đã được cập nhật.', 'success');
+                alert('Đã lưu thông tin bảo trì!\nTrạng thái thiết bị đã được cập nhật.');
                 equipment.status = 'active';
                 renderEquipment();
                 closeModal();
@@ -1549,60 +1339,16 @@
             document.getElementById('detailModal').style.display = 'flex';
         }
 
-        // Show notification
-        function showNotification(message, type = 'info') {
-            const colors = {
-                success: '#27ae60',
-                warning: '#f39c12',
-                info: '#3498db',
-                error: '#e74c3c'
-            };
-            
-            const notification = document.createElement('div');
-            notification.textContent = message;
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: ${colors[type]};
-                color: white;
-                padding: 12px 20px;
-                border-radius: 6px;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-                z-index: 1002;
-                font-weight: 600;
-                max-width: 300px;
-                animation: slideIn 0.3s ease;
-                font-size: 14px;
-            `;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.animation = 'slideOut 0.3s ease';
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
-            }, 3000);
-        }
+        // Other functions remain the same...
 
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', function() {
             renderEquipment();
             
-            // Setup admin login button
-            document.getElementById('toggleAdminBtn').addEventListener('click', showLoginModal);
-            
-            // Setup login form
-            document.getElementById('adminLoginForm').addEventListener('submit', handleAdminLogin);
+            // Setup admin toggle button
+            document.getElementById('toggleAdminBtn').addEventListener('click', toggleAdminMode);
             
             // Close modals when clicking outside
-            document.getElementById('loginModal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    hideLoginModal();
-                }
-            });
-            
             document.getElementById('editModal').addEventListener('click', function(e) {
                 if (e.target === this) {
                     closeEditModal();
@@ -1614,23 +1360,11 @@
                     closeModal();
                 }
             });
-            
-            // Add CSS for animations
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes slideIn {
-                    from { transform: translateX(100%); opacity: 0; }
-                    to { transform: translateX(0); opacity: 1; }
-                }
-                @keyframes slideOut {
-                    from { transform: translateX(0); opacity: 1; }
-                    to { transform: translateX(100%); opacity: 0; }
-                }
-            `;
-            document.head.appendChild(style);
         });
     </script>
 </body>
 </html>
+
+
 
 
