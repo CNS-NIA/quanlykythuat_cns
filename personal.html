@@ -657,36 +657,41 @@
                     <input type="text" class="filter-input" id="search-name" placeholder="🔍 Tìm theo tên hoặc mã NV...">
                     
                     <select class="filter-select" id="filter-team">
-                        <option value="">👥 Tất cả</option>
-						<option value="Ban Giám đốc">Ban GĐ</option>
+                        <option value="">👥 Tất cả các đơn vị</option>
+						<option value="Ban Giám đốc">Ban giám đốc</option>
 						<option value="Văn phòng Trung tâm">Văn phòng TT</option>
-						<option value="Đội Thiết bị Cơ điện đèn sân bay">Đội Thiết bị CĐĐSB</option>
-						<option value="Đội Bảo trì sân đường">Đội BTSĐ</option>
-						<option value="Đội Môi trường khu bay">Đội MTKB</option>
-                        <option value="Đội Thiết bị TTDĐ">Đội Thiết bị TTDĐ</option>
+						<option value="Đội Thiết bị TTDĐ">Đội Thiết bị TTDĐ</option>
+                        <option value="Đội Thiết bị Cơ điện đèn sân bay">Đội Thiết bị CĐĐ</option>
                         <option value="Tổ Kỹ thuật dẫn đường">Tổ Kỹ thuật dẫn đường</option>
                         <option value="Tổ Đài dẫn đường">Tổ Đài dẫn đường</option>
                         <option value="Tổ Thông tin và đường dây">Tổ Thông tin và đường dây</option>
+						<option value="Đội Bảo trì sân đường">Đội BTSĐ</option>
+						<option value="Đội Môi trường khu bay">Đội MTKB</option>
                     </select>
                     
                     <select class="filter-select" id="filter-position">
                         <option value="">🎖️ Tất cả chức vụ</option>
-						<option value="Đội trưởng">Giám đốc</option>
-						<option value="Đội trưởng">Phó Giám đốc</option>
+						<option value="Giám đốc">Giám đốc</option>
+						<option value="Phó Giám đốc">Phó Giám đốc</option>
 						<option value="Trưởng Văn phòng">Trưởng VP</option>
 						<option value="Phó trưởng Văn phòng">Phó trưởng VP</option>
                         <option value="Đội trưởng">Đội trưởng</option>
-                        <option value="Phó đội trưởng/Tổ trưởng">Phó đội trưởng kiêm Tổ trưởng</option>
-                        <option value="Chuyên viên">Chuyên viên</option>
-                        <option value="Phó tổ trưởng">Phó tổ trưởng</option>
-                        <option value="Nhân viên">Nhân viên</option>
+                        <option value="Phó đội trưởng/Tổ trưởng">Phó đội trưởng/Tổ trưởng</option>
+						<option value="Chuyên viên">Chuyên viên</option>
+                        <option value="Kỹ sư khai thác, bảo trì trang thiết bị khu bay">Kỹ sư khai thác, bảo trì</option>
+                        <option value="Nhân viên bảo trì trang thiết bị khu bay">Nhân viên bảo trì</option>
+                        <option value="Nhân viên vận hành trang thiết bị khu bay">Nhân viên vận hành</option>
                     </select>
                     
                     <select class="filter-select" id="filter-title">
                         <option value="">🎓 Tất cả chức danh</option>
+						<option value="Giám đốc Trung tâm">Giám đốc TT</option>
+						<option value="Phó Giám đốc Trung tâm">Phó Giám đốc TT</option>
+						<option value="Trưởng Văn phòng Trung tâm">Trưởng VPTT</option>
+						<option value="Phó trưởng Văn phòng Trung tâm">Phó trưởng VPTT</option>
+						<option value="Chuyên viên">Chuyên viên</option>
                         <option value="Kỹ sư">Kỹ sư</option>
                         <option value="Kỹ thuật viên">Kỹ thuật viên</option>
-                        <option value="Chuyên viên">Chuyên viên</option>
                     </select>
                     
                     <select class="filter-select" id="filter-education">
@@ -695,8 +700,6 @@
                         <option value="Đại học">Đại học</option>
                         <option value="Cao đẳng">Cao đẳng</option>
                         <option value="Trung cấp">Trung cấp</option>
-						<option value="Sơ cấp">Sơ cấp</option>
-						<option value="Lao động phổ thông">Lao động phổ thông</option>
                     </select>
                 </div>
             </div>
@@ -786,6 +789,9 @@
                         </button>
                         <button onclick="exportToExcel()" style="background: var(--light); border: 1px solid var(--border); padding: 10px 15px; border-radius: 6px; cursor: pointer;">
                             <i class="fas fa-file-excel"></i> Xuất Excel
+                        </button>
+                        <button onclick="saveAllData()" style="background: linear-gradient(135deg, var(--success), #2ecc71); color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer;">
+                            <i class="fas fa-save"></i> Lưu dữ liệu
                         </button>
                     </div>
                     <p style="margin: 15px 0 0 0; font-size: 13px; color: var(--gray);"><i class="fas fa-database"></i> Cập nhật lần cuối: <strong id="update-date"></strong></p>
@@ -888,7 +894,7 @@
                 name: "PHẠM MINH QUANG",
                 dateOfBirth: "05/04/1975",
                 gender: "Nam",
-                team: "Tổ Đài dẫn đường",
+                team: "Đội Thiết bị TTDĐ",
                 position: "Phó đội trưởng/Tổ trưởng tổ Đài dẫn đường",
                 partyPosition: "Chi ủy viên",
                 unionPosition: "Phó chủ tịch CĐCS/Chủ tích CĐBP",
@@ -912,8 +918,8 @@
                 name: "NGUYỄN THƯỢNG HIỀN",
                 dateOfBirth: "01/11/1982",
                 gender: "Nam",
-                team: "Tổ Thông tin và đường dây",
-                position: "Phó đội trưởng/Tổ trưởng tổThông tin và đường dây",
+                team: "Đội Thiết bị TTDĐ",
+                position: "Phó đội trưởng/Tổ trưởng tổ Thông tin và đường dây",
                 partyPosition: "Đảng viên",
                 unionPosition: "Đoàn viên công đoàn",
                 title: "Kỹ sư",
@@ -1392,7 +1398,7 @@
                 name: "NGUYỄN HOÀNG DƯƠNG",
                 dateOfBirth: "21/07/1999",
                 gender: "Nam",
-                team: "",
+                team: "Đội Thiết bị TTDĐ",
                 position: "Nhân viên vận hành trang thiết bị khu bay",
                 partyPosition: "",
                 unionPosition: "Đoàn viên công đoàn",
@@ -1409,6 +1415,30 @@
                 note: "",
                 avatar: null,
                 avatarColor: "#8e44ad"
+            },
+            {
+                id: 26,
+                employeeCode: "017855",
+                name: "NGUYỄN VĂN MINH",
+                dateOfBirth: "15/03/1998",
+                gender: "Nam",
+                team: "Tổ Đài dẫn đường",
+                position: "Nhân viên bảo trì trang thiết bị khu bay",
+                partyPosition: "",
+                unionPosition: "Đoàn viên công đoàn",
+                title: "Kỹ thuật viên",
+                education: "Đại học",
+                birthplace: "Xã Xuân Hòa - Thành Phố Hà Nội",
+                hometown: "Xã Xuân Hòa - Thành Phố Hà Nội",
+                address: "Thôn Xuân Hòa - Xã Xuân Hòa - Thành Phố Hà Nội",
+                residence: "Thôn Xuân Hòa - Xã Xuân Hòa - Thành Phố Hà Nội",
+                idCard: "001098015789",
+                idCardDate: "15/08/2023",
+                phone: "0912345678",
+                specialty: "HLV Bảo dưỡng, sửa chữa trang thiết bị ILS/DME/Marker và NDB",
+                note: "Nhân viên mới",
+                avatar: null,
+                avatarColor: "#3498db"
             }
         ];
 
@@ -1416,13 +1446,20 @@
         function initializeStorage() {
             if (!localStorage.getItem('personnelData')) {
                 localStorage.setItem('personnelData', JSON.stringify(personnelData));
+            } else {
+                // Load saved data from localStorage
+                const savedData = localStorage.getItem('personnelData');
+                if (savedData) {
+                    personnelData = JSON.parse(savedData);
+                }
             }
+            
             if (!localStorage.getItem('lastUpdate')) {
                 localStorage.setItem('lastUpdate', new Date().toLocaleDateString('vi-VN'));
             }
             
-            personnelData = JSON.parse(localStorage.getItem('personnelData'));
             document.getElementById('update-date').textContent = localStorage.getItem('lastUpdate');
+            updateStats();
         }
 
         // Save data
@@ -1431,6 +1468,16 @@
             localStorage.setItem('lastUpdate', new Date().toLocaleDateString('vi-VN'));
             document.getElementById('update-date').textContent = localStorage.getItem('lastUpdate');
             updateStats();
+            return true;
+        }
+
+        // Save all data (manual save)
+        function saveAllData() {
+            if (savePersonnelData()) {
+                showNotification('Đã lưu dữ liệu thành công!', 'success');
+            } else {
+                showNotification('Lỗi khi lưu dữ liệu!', 'error');
+            }
         }
 
         // Get avatar color
@@ -1517,7 +1564,8 @@
         // Logout admin
         function logoutAdmin() {
             isAdmin = false;
-            document.getElementById('adminLogoutBtn').remove();
+            const logoutBtn = document.getElementById('adminLogoutBtn');
+            if (logoutBtn) logoutBtn.remove();
             document.getElementById('adminLoginBtn').style.display = 'flex';
             document.getElementById('userDisplayName').textContent = 'Khách';
             setupUserPermissions();
@@ -1573,9 +1621,10 @@
                         const personIndex = personnelData.findIndex(p => p.id === personId);
                         if (personIndex !== -1) {
                             personnelData[personIndex].avatar = e.target.result;
-                            savePersonnelData();
-                            renderPersonnelTable();
-                            showNotification('Đã upload ảnh thành công!', 'success');
+                            if (savePersonnelData()) {
+                                renderPersonnelTable();
+                                showNotification('Đã upload ảnh thành công!', 'success');
+                            }
                         }
                     };
                     reader.readAsDataURL(file);
@@ -1589,6 +1638,16 @@
         function renderPersonnelTable() {
             const tableBody = document.getElementById('personnel-table-body');
             
+            // Reset filters on first load
+            if (!window.filtersInitialized) {
+                document.getElementById('filter-team').value = '';
+                document.getElementById('filter-position').value = '';
+                document.getElementById('filter-title').value = '';
+                document.getElementById('filter-education').value = '';
+                document.getElementById('search-name').value = '';
+                window.filtersInitialized = true;
+            }
+            
             // Apply filters
             let filteredData = [...personnelData];
             const team = document.getElementById('filter-team').value;
@@ -1597,8 +1656,8 @@
             const education = document.getElementById('filter-education').value;
             const searchName = document.getElementById('search-name').value.toLowerCase();
             
-            if (team) filteredData = filteredData.filter(p => p.team === team);
-            if (position) filteredData = filteredData.filter(p => p.position.includes(position));
+            if (team) filteredData = filteredData.filter(p => p.team && p.team.includes(team));
+            if (position) filteredData = filteredData.filter(p => p.position && p.position.includes(position));
             if (title) filteredData = filteredData.filter(p => p.title === title);
             if (education) filteredData = filteredData.filter(p => p.education === education);
             if (searchName) filteredData = filteredData.filter(p => 
@@ -1622,14 +1681,15 @@
             
             // Render
             tableBody.innerHTML = '';
-            document.getElementById('display-count').textContent = pageData.length;
+            document.getElementById('display-count').textContent = filteredData.length;
             
-            if (pageData.length === 0) {
+            if (filteredData.length === 0) {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td colspan="23" style="text-align: center; padding: 60px 20px; color: var(--gray);">
                         <i class="fas fa-users-slash" style="font-size: 48px; margin-bottom: 20px; display: block;"></i>
                         <h3>Không tìm thấy nhân sự</h3>
+                        <p>Thử thay đổi bộ lọc hoặc tìm kiếm</p>
                     </td>
                 `;
                 tableBody.appendChild(row);
@@ -1932,7 +1992,7 @@
             currentAvatarFile = null;
         }
 
-        // Edit personnel - ĐÃ SỬA VỚI CÁC LỰA CHỌN ĐẦY ĐỦ
+        // Edit personnel
         function editPersonnel(id) {
             if (!isAdmin) {
                 showNotification('Chỉ quản trị viên mới có quyền chỉnh sửa!', 'error');
@@ -1995,14 +2055,9 @@
                     
                     <div class="form-row">
                         <div class="form-group">
-                            <label><i class="fas fa-users"></i> Đội/tổ *</label>
-                            <select id="edit-team" required>
+                            <label><i class="fas fa-users"></i> Đội/tổ</label>
+                            <select id="edit-team">
                                 <option value="">Chọn đội/tổ</option>
-                                <option value="Ban Giám đốc" ${person.team === 'Ban Giám đốc' ? 'selected' : ''}>Ban Giám đốc</option>
-                                <option value="Văn phòng Trung tâm" ${person.team === 'Văn phòng Trung tâm' ? 'selected' : ''}>Văn phòng Trung tâm</option>
-                                <option value="Đội Thiết bị Cơ điện đèn sân bay" ${person.team === 'Đội Thiết bị Cơ điện đèn sân bay' ? 'selected' : ''}>Đội Thiết bị Cơ điện đèn sân bay</option>
-                                <option value="Đội Bảo trì sân đường" ${person.team === 'Đội Bảo trì sân đường' ? 'selected' : ''}>Đội Bảo trì sân đường</option>
-                                <option value="Đội Môi trường khu bay" ${person.team === 'Đội Môi trường khu bay' ? 'selected' : ''}>Đội Môi trường khu bay</option>
                                 <option value="Đội Thiết bị TTDĐ" ${person.team === 'Đội Thiết bị TTDĐ' ? 'selected' : ''}>Đội Thiết bị TTDĐ</option>
                                 <option value="Tổ Kỹ thuật dẫn đường" ${person.team === 'Tổ Kỹ thuật dẫn đường' ? 'selected' : ''}>Tổ Kỹ thuật dẫn đường</option>
                                 <option value="Tổ Đài dẫn đường" ${person.team === 'Tổ Đài dẫn đường' ? 'selected' : ''}>Tổ Đài dẫn đường</option>
@@ -2011,18 +2066,7 @@
                         </div>
                         <div class="form-group">
                             <label><i class="fas fa-briefcase"></i> Chức vụ (Chính quyền)</label>
-                            <select id="edit-position">
-                                <option value="">Chọn chức vụ</option>
-                                <option value="Giám đốc" ${person.position === 'Giám đốc' ? 'selected' : ''}>Giám đốc</option>
-                                <option value="Phó Giám đốc" ${person.position === 'Phó Giám đốc' ? 'selected' : ''}>Phó Giám đốc</option>
-                                <option value="Trưởng Văn phòng" ${person.position === 'Trưởng Văn phòng' ? 'selected' : ''}>Trưởng Văn phòng</option>
-                                <option value="Phó trưởng Văn phòng" ${person.position === 'Phó trưởng Văn phòng' ? 'selected' : ''}>Phó trưởng Văn phòng</option>
-                                <option value="Đội trưởng" ${person.position === 'Đội trưởng' ? 'selected' : ''}>Đội trưởng</option>
-                                <option value="Phó đội trưởng/Tổ trưởng" ${person.position === 'Phó đội trưởng/Tổ trưởng' ? 'selected' : ''}>Phó đội trưởng/Tổ trưởng</option>
-                                <option value="Chuyên viên" ${person.position === 'Chuyên viên' ? 'selected' : ''}>Chuyên viên</option>
-                                <option value="Phó tổ trưởng" ${person.position === 'Phó tổ trưởng' ? 'selected' : ''}>Phó tổ trưởng</option>
-                                <option value="Nhân viên" ${person.position === 'Nhân viên' ? 'selected' : ''}>Nhân viên</option>
-                            </select>
+                            <input type="text" id="edit-position" value="${person.position || ''}" placeholder="Nhập chức vụ">
                         </div>
                     </div>
                     
@@ -2033,19 +2077,15 @@
                                 <option value="">Chọn chức danh</option>
                                 <option value="Kỹ sư" ${person.title === 'Kỹ sư' ? 'selected' : ''}>Kỹ sư</option>
                                 <option value="Kỹ thuật viên" ${person.title === 'Kỹ thuật viên' ? 'selected' : ''}>Kỹ thuật viên</option>
-                                <option value="Chuyên viên" ${person.title === 'Chuyên viên' ? 'selected' : ''}>Chuyên viên</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label><i class="fas fa-graduation-cap"></i> Trình độ</label>
                             <select id="edit-education">
                                 <option value="">Chọn trình độ</option>
-                                <option value="Trên Đại học" ${person.education === 'Trên Đại học' ? 'selected' : ''}>Trên Đại học</option>
                                 <option value="Đại học" ${person.education === 'Đại học' ? 'selected' : ''}>Đại học</option>
                                 <option value="Cao đẳng" ${person.education === 'Cao đẳng' ? 'selected' : ''}>Cao đẳng</option>
                                 <option value="Trung cấp" ${person.education === 'Trung cấp' ? 'selected' : ''}>Trung cấp</option>
-                                <option value="Sơ cấp" ${person.education === 'Sơ cấp' ? 'selected' : ''}>Sơ cấp</option>
-                                <option value="Lao động phổ thông" ${person.education === 'Lao động phổ thông' ? 'selected' : ''}>Lao động phổ thông</option>
                             </select>
                         </div>
                     </div>
@@ -2088,37 +2128,21 @@
                             <label><i class="fas fa-phone"></i> Số điện thoại</label>
                             <input type="text" id="edit-phone" value="${person.phone || ''}" placeholder="Nhập số điện thoại">
                         </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-graduation-cap"></i> Chuyên môn đào tạo</label>
+                            <textarea id="edit-specialty" rows="3">${person.specialty || ''}</textarea>
+                        </div>
                     </div>
                     
                     <div class="form-row">
                         <div class="form-group">
                             <label><i class="fas fa-flag" style="color: #c0392b;"></i> Chức vụ Đảng</label>
-                            <select id="edit-partyPosition">
-                                <option value="" ${!person.partyPosition ? 'selected' : ''}>Không có</option>
-                                <option value="Bí thư Đảng ủy" ${person.partyPosition === 'Bí thư Đảng ủy' ? 'selected' : ''}>Bí thư Đảng ủy</option>
-                                <option value="Phó Bí thư Đảng ủy" ${person.partyPosition === 'Phó Bí thư Đảng ủy' ? 'selected' : ''}>Phó Bí thư Đảng ủy</option>
-                                <option value="Đảng Ủy viên" ${person.partyPosition === 'Đảng Ủy viên' ? 'selected' : ''}>Đảng Ủy viên</option>
-                                <option value="Bí thư chi bộ" ${person.partyPosition === 'Bí thư chi bộ' ? 'selected' : ''}>Bí thư chi bộ</option>
-                                <option value="Phó Bí thư chi bộ" ${person.partyPosition === 'Phó Bí thư chi bộ' ? 'selected' : ''}>Phó Bí thư chi bộ</option>
-                                <option value="Chi ủy viên" ${person.partyPosition === 'Chi ủy viên' ? 'selected' : ''}>Chi ủy viên</option>
-                                <option value="Đảng viên" ${person.partyPosition === 'Đảng viên' ? 'selected' : ''}>Đảng viên</option>
-                            </select>
+                            <input type="text" id="edit-partyPosition" value="${person.partyPosition || ''}" placeholder="Nhập chức vụ Đảng">
                         </div>
                         <div class="form-group">
                             <label><i class="fas fa-handshake" style="color: #27ae60;"></i> Chức vụ Công đoàn</label>
-                            <select id="edit-unionPosition">
-                                <option value="" ${!person.unionPosition ? 'selected' : ''}>Không có</option>
-                                <option value="Đoàn viên công đoàn" ${person.unionPosition === 'Đoàn viên công đoàn' ? 'selected' : ''}>Đoàn viên công đoàn</option>
-                                <option value="Tổ trưởng tổ công đoàn" ${person.unionPosition === 'Tổ trưởng tổ công đoàn' ? 'selected' : ''}>Tổ trưởng tổ công đoàn</option>
-                                <option value="Ủy viên BCH CĐBP" ${person.unionPosition === 'Ủy viên BCH CĐBP' ? 'selected' : ''}>Ủy viên BCH CĐBP</option>
-                                <option value="Phó chủ tịch CĐCS/Chủ tích CĐBP" ${person.unionPosition === 'Phó chủ tịch CĐCS/Chủ tích CĐBP' ? 'selected' : ''}>Phó chủ tịch CĐCS/Chủ tích CĐBP</option>
-                            </select>
+                            <input type="text" id="edit-unionPosition" value="${person.unionPosition || ''}" placeholder="Nhập chức vụ Công đoàn">
                         </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label><i class="fas fa-book"></i> Chuyên môn đào tạo, huấn luyện</label>
-                        <textarea id="edit-specialty" rows="4">${person.specialty || ''}</textarea>
                     </div>
                     
                     <div class="form-group">
@@ -2206,16 +2230,15 @@
             personnelData[index] = updatedPerson;
             
             // Save to localStorage
-            savePersonnelData();
-            
-            // Update display
-            renderPersonnelTable();
-            closeModal();
-            
-            showNotification(`Đã cập nhật thông tin thành công!`, 'success');
+            if (savePersonnelData()) {
+                // Update display
+                renderPersonnelTable();
+                closeModal();
+                showNotification(`Đã cập nhật thông tin thành công!`, 'success');
+            }
         }
 
-        // Open add form - ĐÃ SỬA VỚI CÁC LỰA CHỌN ĐẦY ĐỦ
+        // Open add form
         function openAddForm() {
             if (!isAdmin) {
                 showNotification('Chỉ quản trị viên mới có quyền thêm nhân sự!', 'error');
@@ -2269,14 +2292,9 @@
                     
                     <div class="form-row">
                         <div class="form-group">
-                            <label><i class="fas fa-users"></i> Đội/tổ *</label>
-                            <select id="add-team" required>
+                            <label><i class="fas fa-users"></i> Đội/tổ</label>
+                            <select id="add-team">
                                 <option value="">Chọn đội/tổ</option>
-                                <option value="Ban Giám đốc">Ban Giám đốc</option>
-                                <option value="Văn phòng Trung tâm">Văn phòng Trung tâm</option>
-                                <option value="Đội Thiết bị Cơ điện đèn sân bay">Đội Thiết bị Cơ điện đèn sân bay</option>
-                                <option value="Đội Bảo trì sân đường">Đội Bảo trì sân đường</option>
-                                <option value="Đội Môi trường khu bay">Đội Môi trường khu bay</option>
                                 <option value="Đội Thiết bị TTDĐ">Đội Thiết bị TTDĐ</option>
                                 <option value="Tổ Kỹ thuật dẫn đường">Tổ Kỹ thuật dẫn đường</option>
                                 <option value="Tổ Đài dẫn đường">Tổ Đài dẫn đường</option>
@@ -2285,18 +2303,7 @@
                         </div>
                         <div class="form-group">
                             <label><i class="fas fa-briefcase"></i> Chức vụ (Chính quyền)</label>
-                            <select id="add-position">
-                                <option value="">Chọn chức vụ</option>
-                                <option value="Giám đốc">Giám đốc</option>
-                                <option value="Phó Giám đốc">Phó Giám đốc</option>
-                                <option value="Trưởng Văn phòng">Trưởng Văn phòng</option>
-                                <option value="Phó trưởng Văn phòng">Phó trưởng Văn phòng</option>
-                                <option value="Đội trưởng">Đội trưởng</option>
-                                <option value="Phó đội trưởng/Tổ trưởng">Phó đội trưởng/Tổ trưởng</option>
-                                <option value="Chuyên viên">Chuyên viên</option>
-                                <option value="Phó tổ trưởng">Phó tổ trưởng</option>
-                                <option value="Nhân viên">Nhân viên</option>
-                            </select>
+                            <input type="text" id="add-position" placeholder="Nhập chức vụ">
                         </div>
                     </div>
                     
@@ -2307,19 +2314,15 @@
                                 <option value="">Chọn chức danh</option>
                                 <option value="Kỹ sư">Kỹ sư</option>
                                 <option value="Kỹ thuật viên">Kỹ thuật viên</option>
-                                <option value="Chuyên viên">Chuyên viên</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label><i class="fas fa-graduation-cap"></i> Trình độ</label>
                             <select id="add-education">
                                 <option value="">Chọn trình độ</option>
-                                <option value="Trên Đại học">Trên Đại học</option>
                                 <option value="Đại học">Đại học</option>
                                 <option value="Cao đẳng">Cao đẳng</option>
                                 <option value="Trung cấp">Trung cấp</option>
-                                <option value="Sơ cấp">Sơ cấp</option>
-                                <option value="Lao động phổ thông">Lao động phổ thông</option>
                             </select>
                         </div>
                     </div>
@@ -2362,37 +2365,21 @@
                             <label><i class="fas fa-phone"></i> Số điện thoại</label>
                             <input type="text" id="add-phone" placeholder="Nhập số điện thoại">
                         </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-graduation-cap"></i> Chuyên môn đào tạo</label>
+                            <textarea id="add-specialty" rows="3" placeholder="Nhập chuyên môn đào tạo"></textarea>
+                        </div>
                     </div>
                     
                     <div class="form-row">
                         <div class="form-group">
                             <label><i class="fas fa-flag" style="color: #c0392b;"></i> Chức vụ Đảng</label>
-                            <select id="add-partyPosition">
-                                <option value="">Chọn chức vụ</option>
-                                <option value="Bí thư Đảng ủy">Bí thư Đảng ủy</option>
-                                <option value="Phó Bí thư Đảng ủy">Phó Bí thư Đảng ủy</option>
-                                <option value="Đảng Ủy viên">Đảng Ủy viên</option>
-                                <option value="Bí thư chi bộ">Bí thư chi bộ</option>
-                                <option value="Phó Bí thư chi bộ">Phó Bí thư chi bộ</option>
-                                <option value="Chi ủy viên">Chi ủy viên</option>
-                                <option value="Đảng viên">Đảng viên</option>
-                            </select>
+                            <input type="text" id="add-partyPosition" placeholder="Nhập chức vụ Đảng">
                         </div>
                         <div class="form-group">
                             <label><i class="fas fa-handshake" style="color: #27ae60;"></i> Chức vụ Công đoàn</label>
-                            <select id="add-unionPosition">
-                                <option value="">Không có</option>
-                                <option value="Đoàn viên công đoàn">Đoàn viên công đoàn</option>
-                                <option value="Tổ trưởng tổ công đoàn">Tổ trưởng tổ công đoàn</option>
-                                <option value="Ủy viên BCH CĐBP">Ủy viên BCH CĐBP</option>
-                                <option value="Phó chủ tịch CĐCS/Chủ tích CĐBP">Phó chủ tịch CĐCS/Chủ tích CĐBP</option>
-                            </select>
+                            <input type="text" id="add-unionPosition" placeholder="Nhập chức vụ Công đoàn">
                         </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label><i class="fas fa-book"></i> Chuyên môn đào tạo, huấn luyện</label>
-                        <textarea id="add-specialty" rows="4" placeholder="Nhập chuyên môn đào tạo"></textarea>
                     </div>
                     
                     <div class="form-group">
@@ -2469,11 +2456,11 @@
             };
             
             personnelData.push(newPerson);
-            savePersonnelData();
-            renderPersonnelTable();
-            closeModal();
-            
-            showNotification(`Đã thêm nhân sự "${newPerson.name}" thành công!`, 'success');
+            if (savePersonnelData()) {
+                renderPersonnelTable();
+                closeModal();
+                showNotification(`Đã thêm nhân sự "${newPerson.name}" thành công!`, 'success');
+            }
         }
 
         // Delete personnel
@@ -2497,10 +2484,10 @@
             }
             
             personnelData.splice(index, 1);
-            savePersonnelData();
-            renderPersonnelTable();
-            
-            showNotification(`Đã xóa nhân sự "${personName}" thành công!`, 'success');
+            if (savePersonnelData()) {
+                renderPersonnelTable();
+                showNotification(`Đã xóa nhân sự "${personName}" thành công!`, 'success');
+            }
         }
 
         // Print
@@ -2571,7 +2558,6 @@
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             initializeStorage();
-            updateStats();
             renderPersonnelTable();
             
             // Event listeners for filters
