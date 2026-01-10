@@ -687,9 +687,9 @@
                         <option value="Đội trưởng">Đội trưởng</option>
                         <option value="Phó đội trưởng/Tổ trưởng">Phó đội trưởng/Tổ trưởng</option>
                         <option value="Chuyên viên">Chuyên viên</option>
-                        <option value="Kỹ sư khai thác, bảo trì trang thiết bị khu bay">Kỹ sư khai thác, bảo trì</option>
-                        <option value="Nhân viên bảo trì trang thiết bị khu bay">Nhân viên bảo trì</option>
-                        <option value="Nhân viên vận hành trang thiết bị khu bay">Nhân viên vận hành</option>
+                        <option value="Kỹ sư">Kỹ sư</option>
+						<option value="Kỹ thuật viên">Kỹ thuật viên</option>
+                        <option value="Nhân viên">Nhân viên</option>
                     </select>
                     
                     <select class="filter-select" id="filter-title">
@@ -2077,8 +2077,17 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label><i class="fas fa-briefcase"></i> Chức vụ (Chính quyền)</label>
-                            <input type="text" id="edit-position" value="${person.position || ''}" placeholder="Nhập chức vụ">
+                            <label><i class="fas fa-briefcase"></i> Chức vụ Chính quyền</label>
+                            <select id="edit-title">
+                                <option value="">Chọn chức danh</option>
+								<option value="Giám đốc Trung tâm">Giám đốc TT</option>
+								<option value="Phó Giám đốc Trung tâm">Phó Giám đốc TT</option>
+								<option value="Trưởng Văn phòng Trung tâm">Trưởng VPTT</option>
+								<option value="Phó trưởng Văn phòng Trung tâm">Phó trưởng VPTT</option>
+								<option value="Chuyên viên">Chuyên viên</option>
+								<option value="Kỹ sư">Kỹ sư</option>
+								<option value="Kỹ thuật viên">Kỹ thuật viên</option>
+								<option value="Nhân viên bảo trì">Nhân viên bảo trì</option>
                         </div>
                     </div>
                     
@@ -2087,17 +2096,22 @@
                             <label><i class="fas fa-graduation-cap"></i> Chức danh</label>
                             <select id="edit-title">
                                 <option value="">Chọn chức danh</option>
+								<option value="Chuyên viên" ${person.title === 'Chuyên viên' ? 'selected' : ''}>Chuyên viên</option>
                                 <option value="Kỹ sư" ${person.title === 'Kỹ sư' ? 'selected' : ''}>Kỹ sư</option>
                                 <option value="Kỹ thuật viên" ${person.title === 'Kỹ thuật viên' ? 'selected' : ''}>Kỹ thuật viên</option>
+								<option value="Lao động phổ thông" ${person.title === 'Lao động phổ thông' ? 'selected' : ''}>Lao động phổ thông</option>
+								<option value="Hợp đồng thời vụ/Thử việc" ${person.title === 'Hợp đồng thời vụ/Thử việc' ? 'selected' : ''}>Hợp đồng thời vụ/Thử việc</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label><i class="fas fa-graduation-cap"></i> Trình độ</label>
                             <select id="edit-education">
                                 <option value="">Chọn trình độ</option>
-                                <option value="Đại học" ${person.education === 'Đại học' ? 'selected' : ''}>Đại học</option>
+                                <option value="Đại học" ${person.education === 'Trên Đại học' ? 'selected' : ''}>Trên Đại học</option>
+								<option value="Đại học" ${person.education === 'Đại học' ? 'selected' : ''}>Đại học</option>
                                 <option value="Cao đẳng" ${person.education === 'Cao đẳng' ? 'selected' : ''}>Cao đẳng</option>
                                 <option value="Trung cấp" ${person.education === 'Trung cấp' ? 'selected' : ''}>Trung cấp</option>
+								<option value="Đại học" ${person.education === 'Sơ cấp/chứng chỉ nghề' ? 'selected' : ''}>Sơ cấp/chứng chỉ nghề</option>
                             </select>
                         </div>
                     </div>
@@ -2324,7 +2338,8 @@
                             <label><i class="fas fa-graduation-cap"></i> Chức danh</label>
                             <select id="add-title">
                                 <option value="">Chọn chức danh</option>
-                                <option value="Kỹ sư">Kỹ sư</option>
+                                <option value="Kỹ sư">Chuyên viên</option>
+								<option value="Kỹ sư">Kỹ sư</option>
                                 <option value="Kỹ thuật viên">Kỹ thuật viên</option>
                             </select>
                         </div>
@@ -2332,9 +2347,11 @@
                             <label><i class="fas fa-graduation-cap"></i> Trình độ</label>
                             <select id="add-education">
                                 <option value="">Chọn trình độ</option>
-                                <option value="Đại học">Đại học</option>
+                                <option value="Trên Đại học">Trên Đại học</option>
+								<option value="Đại học">Đại học</option>
                                 <option value="Cao đẳng">Cao đẳng</option>
                                 <option value="Trung cấp">Trung cấp</option>
+								<option value="Sơ cấp/chứng chỉ nghề">Sơ cấp/chứng chỉ nghề</option>
                             </select>
                         </div>
                     </div>
@@ -2387,6 +2404,12 @@
                         <div class="form-group">
                             <label><i class="fas fa-flag" style="color: #c0392b;"></i> Chức vụ Đảng</label>
                             <input type="text" id="add-partyPosition" placeholder="Nhập chức vụ Đảng">
+							<option value="Bí thư Đảng ủy">Bí thư Đảng ủy</option>
+							<option value="Phó Bí thư Đảng ủy">Phó Bí thư Đảng ủy</option>
+							<option value="Đảng ủy viên">Đảng ủy viên</option>
+							<option value="Bí thư Chi bộ">Bí thư Chi bộ</option>
+							<option value="Chi ủy viên">Chi ủy viên</option>
+							<option value="Đảng viên">Đảng viên</option>
                         </div>
                         <div class="form-group">
                             <label><i class="fas fa-handshake" style="color: #27ae60;"></i> Chức vụ Công đoàn</label>
@@ -2605,4 +2628,3 @@
     </script>
 </body>
 </html>
-
