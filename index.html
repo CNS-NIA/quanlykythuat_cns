@@ -2615,10 +2615,14 @@ document.querySelectorAll('.menu-card').forEach(card => {
 
 // ===== STRICT VIEWER MODE (NO EDIT) =====
 function enforceViewOnly() {
-    if (!currentUser || currentUser.role !== 'Admin') {
+    // Chỉ khóa SAU KHI đã đăng nhập nhưng KHÔNG phải Admin
+    if (currentUser && currentUser.role !== 'Admin') {
+        // Không khóa khu vực đăng nhập
         document.querySelectorAll('input, textarea, select, button').forEach(el => {
-            el.setAttribute('readonly', true);
-            el.setAttribute('disabled', true);
+            if (!el.closest('#loginForm')) {
+                el.setAttribute('readonly', true);
+                el.setAttribute('disabled', true);
+            }
         });
 
         document.addEventListener('dragstart', e => e.preventDefault());
