@@ -2612,6 +2612,25 @@ document.querySelectorAll('.menu-card').forEach(card => {
     });
 });
 
+
+// ===== STRICT VIEWER MODE (NO EDIT) =====
+function enforceViewOnly() {
+    if (!currentUser || currentUser.role !== 'Admin') {
+        document.querySelectorAll('input, textarea, select, button').forEach(el => {
+            el.setAttribute('readonly', true);
+            el.setAttribute('disabled', true);
+        });
+
+        document.addEventListener('dragstart', e => e.preventDefault());
+        document.addEventListener('drop', e => e.preventDefault());
+
+        document.querySelectorAll('[contenteditable]').forEach(el => {
+            el.setAttribute('contenteditable', 'false');
+        });
+    }
+}
+document.addEventListener('DOMContentLoaded', enforceViewOnly);
+
 </script>
 </body>
 </html>
