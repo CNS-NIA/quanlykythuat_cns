@@ -2645,6 +2645,20 @@ document.addEventListener('click', function(e){
     }
 });
 
+
+// ===== SAFE NAVIGATION (DO NOT BLOCK DEFAULT LINKS) =====
+document.addEventListener('click', function(e){
+    const a = e.target.closest('a[href]');
+    if (a) {
+        // allow browser default navigation
+        return;
+    }
+    const btn = e.target.closest('button[data-href]');
+    if (btn) {
+        window.location.href = btn.getAttribute('data-href');
+    }
+});
+
 </script>
 </body>
 </html>
