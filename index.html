@@ -2618,7 +2618,8 @@ function enforceViewOnly() {
     // Chỉ khóa SAU KHI đã đăng nhập nhưng KHÔNG phải Admin
     if (currentUser && currentUser.role !== 'Admin') {
         // Không khóa khu vực đăng nhập
-        document.querySelectorAll('input, textarea, select, button').forEach(el => {
+        // Chỉ khóa INPUT chỉnh sửa, KHÔNG khóa link / điều hướng
+        document.querySelectorAll('input, textarea, select').forEach(el => {
             if (!el.closest('#loginForm')) {
                 el.setAttribute('readonly', true);
                 el.setAttribute('disabled', true);
@@ -2634,6 +2635,15 @@ function enforceViewOnly() {
     }
 }
 document.addEventListener('DOMContentLoaded', enforceViewOnly);
+
+
+// ===== ALLOW ALL PAGE NAVIGATION (VIEW MODE) =====
+document.addEventListener('click', function(e){
+    const link = e.target.closest('a');
+    if (link && link.href) {
+        window.location.href = link.href;
+    }
+});
 
 </script>
 </body>
